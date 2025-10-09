@@ -1,4 +1,4 @@
-# 第一部分 html 面试题 
+# 第一部分 html 面试题
 
 ---
 
@@ -218,5 +218,272 @@
 -  （1）页面太宽 → 被压缩缩放显示 : 控制页面布局宽度 , 适配不同屏幕
 -  （2）字太小，用户体验差 : 控制缩放比例 , 提升用户体验
 
-# 第二部分 html 面试题 
+# 第二部分 html 面试题
 
+---
+
+> ### 加载图片的过程是怎样的？
+
+**答：**
+
+1. HTML 解析到 `<img>` 标签；
+2. 发起图片资源请求；
+3. 图片下载完成后解码、绘制到页面；
+4. 图片解码在浏览器中是异步的，不会阻塞主线程。
+
+> ### 加载失败如何处理？
+
+**答：**
+
+-  使用 `alt` 文本；
+-  使用 JS 监听 `onerror`；
+
+   ```html
+   <img src="xxx.jpg" onerror="this.src='backup.jpg'" />
+   ```
+
+-  后端返回默认图片。
+   > ### 2️⃣ `<img>` 的常见属性有哪些？
+
+**答：**
+
+| 属性               | 作用                                   |
+| ------------------ | -------------------------------------- |
+| `src`              | 图片路径                               |
+| `alt`              | 图片加载失败时显示的替代文字           |
+| `width` / `height` | 显示尺寸（不影响原图）                 |
+| `loading`          | 懒加载（如 `loading="lazy"`）          |
+| `srcset` / `sizes` | 响应式加载不同分辨率的图片             |
+| `crossorigin`      | 允许跨域访问图片（如配合 canvas 使用） |
+
+---
+
+## ⚙️ 二、性能优化篇
+
+> ### 4️⃣ 图片太多，加载太慢怎么办？
+
+**答：** 常见优化手段：
+
+1. ✅ **懒加载（Lazy Load）**
+
+   ```html
+   <img src="..." loading="lazy" />
+   ```
+
+   或使用 IntersectionObserver。
+
+2. ✅ **使用 CDN 加速**
+3. ✅ **压缩图片（TinyPNG、ImageOptim）**
+4. ✅ **图片格式优化（WebP、AVIF）**
+5. ✅ **使用雪碧图（Sprite）** 减少 HTTP 请求。
+6. ✅ **预加载关键图片**
+
+   ```html
+   <link rel="preload" as="image" href="banner.jpg" />
+   ```
+
+---
+
+> ### 5️⃣ 图片懒加载原理？
+
+**答：**
+
+-  当图片进入视口（可见区域）时，才真正加载。
+   实现方式：
+
+```js
+const imgs = document.querySelectorAll("img[data-src]");
+const observer = new IntersectionObserver((entries) => {
+   entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+         const img = entry.target;
+         img.src = img.dataset.src;
+         observer.unobserve(img);
+      }
+   });
+});
+imgs.forEach((img) => observer.observe(img));
+```
+
+---
+
+> ### 6️⃣ 响应式图片如何实现？
+
+**答：**
+有两种方式：
+
+1. **`srcset + sizes`**
+
+   ```html
+   <img
+      src="small.jpg"
+      srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
+      sizes="(max-width: 600px) 480px, 800px"
+   />
+   ```
+
+   浏览器会根据视口宽度自动选择合适的图片。
+
+2. **`<picture>` 标签**
+
+   ```html
+   <picture>
+      <source media="(min-width:800px)" srcset="large.jpg" />
+      <img src="small.jpg" alt="demo" />
+   </picture>
+   ```
+
+---
+
+## 🎨 三、格式与编码篇
+
+> ### 7️⃣ 常见图片格式区别？
+
+| 格式         | 特点                 | 适用场景         |
+| ------------ | -------------------- | ---------------- |
+| **JPEG/JPG** | 有损压缩，小体积     | 照片类图片       |
+| **PNG**      | 无损压缩，支持透明   | 图标、Logo       |
+| **GIF**      | 动图，最多 256 色    | 表情、动效       |
+| **SVG**      | 矢量图，可缩放       | 图标、Logo       |
+| **WebP**     | 体积小、支持透明     | 现代 Web（推荐） |
+| **AVIF**     | 新一代格式，压缩更强 | 高性能网站       |
+
+---
+
+> ### 8️⃣ WebP 与 PNG 的区别？
+
+**答：**
+
+| 对比项     | WebP                                  | PNG          |
+| ---------- | ------------------------------------- | ------------ |
+| 压缩方式   | 有损 / 无损                           | 无损         |
+| 透明度     | 支持                                  | 支持         |
+| 动图       | 支持（WebP 动图）                     | 支持（APNG） |
+| 文件大小   | 通常更小                              | 相对大       |
+| 浏览器支持 | 新版 Chrome / Edge / Firefox / Safari | 全支持       |
+
+---
+
+> ### 9️⃣ Base64 图片是什么？优缺点？
+
+**答：**
+Base64 是把图片二进制数据编码成文本（ASCII 字符串）：
+
+```html
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUg..." />
+```
+
+✅ 优点：
+
+-  减少 HTTP 请求（适合小图标）
+   ❌ 缺点：
+-  会增大体积（大约 +30%）
+-  无法缓存（嵌入 HTML 里）
+
+---
+
+> ### 🔟 雪碧图（Sprite）原理？
+
+**答：**
+
+-  把多个小图标拼成一张大图；
+-  用 `background-position` 来定位显示哪个部分；
+
+```css
+.icon {
+   background-image: url(sprite.png);
+   width: 20px;
+   height: 20px;
+}
+.icon-home {
+   background-position: -20px -40px;
+}
+```
+
+✅ 优点：减少请求数
+❌ 缺点：维护成本高。
+
+---
+
+> ### 🧩 四、Canvas / 图片处理篇
+
+### 11️⃣ 如何使用 Canvas 压缩图片？
+
+```js
+function compressImage(img, quality = 0.7) {
+   const canvas = document.createElement("canvas");
+   const ctx = canvas.getContext("2d");
+   canvas.width = img.width;
+   canvas.height = img.height;
+   ctx.drawImage(img, 0, 0);
+   return canvas.toDataURL("image/jpeg", quality);
+}
+```
+
+---
+
+> ### 12 如何判断一张图片是否加载完成？
+
+**答：**
+
+```js
+const img = new Image();
+img.onload = () => console.log("加载完成");
+img.onerror = () => console.log("加载失败");
+img.src = "test.jpg";
+```
+
+---
+
+> ### 13️ 图片跨域 Canvas 报错如何解决？
+
+**答：**
+
+1. 在前端设置：
+
+   ```js
+   const img = new Image();
+   img.crossOrigin = "anonymous";
+   img.src = "https://example.com/test.jpg";
+   ```
+
+2. 服务器端添加 CORS 响应头：
+
+   ```
+   Access-Control-Allow-Origin: *
+   ```
+
+---
+
+> ### 💡 五、开放题（常考思维题）
+
+### 14️⃣ 如何实现一个图片懒加载组件？
+
+考察点：
+
+-  IntersectionObserver
+-  React/Vue 组件封装
+-  loading 状态
+
+---
+
+> ### 15️⃣ 如果需要上传图片前进行压缩，你会怎么做？
+
+考察点：
+
+-  FileReader 读取图片
+-  Canvas 画图 + toDataURL 输出
+-  Blob 转 File 再上传
+
+---
+
+> ### 16️⃣ 前端如何做图片优化策略？
+
+**答：**
+
+1. 格式优化（WebP、AVIF）
+2. 分辨率自适应（响应式）
+3. 懒加载
+4. CDN 分发
+5. 小图转 Base64
+6. 关键图优先加载（preload）
