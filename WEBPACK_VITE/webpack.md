@@ -1,5 +1,3 @@
-
-
 ## 🧩 一、Webpack 基础篇
 
 ### 1. 什么是 Webpack？解决了什么问题？
@@ -8,34 +6,33 @@
 
 **它解决的问题：**
 
-* 模块化开发；
-* 依赖管理；
-* 浏览器兼容性；
-* 性能优化（压缩、Tree Shaking、懒加载）。
+-  模块化开发；
+-  依赖管理；
+-  浏览器兼容性；
+-  性能优化（压缩、Tree Shaking、懒加载）。
 
 ---
 
 ### 2. Webpack 的核心概念有哪些？
 
-| 核心概念   | 说明                           |
-| ------ | ---------------------------- |
-| Entry  | 入口，Webpack 从哪个文件开始打包         |
-| Output | 出口，打包文件输出到哪里                 |
-| Loader | 模块转换器，把非 JS 文件转成可识别模块        |
-| Plugin | 插件，扩展 Webpack 功能（如压缩、注入环境变量） |
-| Module | 每个文件都是一个模块                   |
-| Chunk  | 多个模块组成的代码块                   |
+| 核心概念 | 说明                                            |
+| -------- | ----------------------------------------------- |
+| Entry    | 入口，Webpack 从哪个文件开始打包                |
+| Output   | 出口，打包文件输出到哪里                        |
+| Loader   | 模块转换器，把非 JS 文件转成可识别模块          |
+| Plugin   | 插件，扩展 Webpack 功能（如压缩、注入环境变量） |
+| Module   | 每个文件都是一个模块                            |
+| Chunk    | 多个模块组成的代码块                            |
 
 ---
 
 ### 3. Loader 和 Plugin 的区别？
 
-| 对比 | Loader   | Plugin          |
-| -- | -------- | --------------- |
-| 作用 | 转换文件类型   | 扩展 Webpack 功能   |
-| 时机 | 模块加载阶段   | 整个编译生命周期        |
+| 对比 | Loader           | Plugin                |
+| ---- | ---------------- | --------------------- |
+| 作用 | 转换文件类型     | 扩展 Webpack 功能     |
+| 时机 | 模块加载阶段     | 整个编译生命周期      |
 | 写法 | 函数（链式执行） | 类（有 `apply` 方法） |
-
 
 ---
 
@@ -59,7 +56,7 @@
 ### 5. 常见的 Webpack Loader 有哪些？
 
 | 类型    | Loader                                                     |
-| ----- | ---------------------------------------------------------- |
+| ------- | ---------------------------------------------------------- |
 | JS 编译 | `babel-loader`, `ts-loader`                                |
 | 样式    | `css-loader`, `style-loader`, `sass-loader`, `less-loader` |
 | 图片    | `url-loader`, `file-loader`, `image-webpack-loader`        |
@@ -69,15 +66,15 @@
 
 ### 6. 常见的 Webpack Plugin 有哪些？
 
-| 插件                         | 功能              |
-| -------------------------- | --------------- |
+| 插件                       | 功能                     |
+| -------------------------- | ------------------------ |
 | `HtmlWebpackPlugin`        | 自动生成 HTML 并引入资源 |
-| `DefinePlugin`             | 定义全局变量          |
-| `MiniCssExtractPlugin`     | 抽离 CSS 文件       |
-| `CleanWebpackPlugin`       | 清理打包目录          |
-| `CopyWebpackPlugin`        | 拷贝静态资源          |
-| `CompressionWebpackPlugin` | gzip 压缩         |
-| `BundleAnalyzerPlugin`     | 打包体积分析          |
+| `DefinePlugin`             | 定义全局变量             |
+| `MiniCssExtractPlugin`     | 抽离 CSS 文件            |
+| `CleanWebpackPlugin`       | 清理打包目录             |
+| `CopyWebpackPlugin`        | 拷贝静态资源             |
+| `CompressionWebpackPlugin` | gzip 压缩                |
+| `BundleAnalyzerPlugin`     | 打包体积分析             |
 
 ---
 
@@ -87,20 +84,25 @@
 
 1. **使用缓存：**
 
-   * `cache: { type: 'filesystem' }`
-   * Babel 缓存：`babel-loader?cacheDirectory`
+   -  `cache: { type: 'filesystem' }`
+   -  Babel 缓存：`babel-loader?cacheDirectory`
+
 2. **多进程构建：**
 
-   * `thread-loader` / `parallel-webpack`
+   -  `thread-loader` / `parallel-webpack`
+
 3. **分包策略：**
 
-   * `SplitChunksPlugin`
+   -  `SplitChunksPlugin`
+
 4. **按需加载：**
 
-   * 动态 `import()`
+   -  动态 `import()`
+
 5. **忽略大型库：**
 
-   * `externals`
+   -  `externals`
+
 6. **使用新版本 Node/Webpack**
 
 ---
@@ -111,8 +113,9 @@
 2. **代码分割（Code Splitting）**
 3. **压缩混淆：**
 
-   * JS: `TerserPlugin`
-   * CSS: `CssMinimizerPlugin`
+   -  JS: `TerserPlugin`
+   -  CSS: `CssMinimizerPlugin`
+
 4. **CDN 引入第三方库**
 5. **图片压缩：** `image-webpack-loader`
 6. **懒加载组件：** 动态 import
@@ -125,9 +128,9 @@
 
 **要求：**
 
-* 使用 ES6 模块语法；
-* `mode: 'production'`；
-* 配置 `"sideEffects": false`。
+-  使用 ES6 模块语法；
+-  `mode: 'production'`；
+-  配置 `"sideEffects": false`。
 
 ---
 
@@ -143,6 +146,7 @@
    ```js
    import('./module').then(...)
    ```
+
 3. `SplitChunksPlugin` 自动提取公共依赖。
 
 ---
@@ -151,8 +155,8 @@
 
 ```js
 button.onclick = () => {
-  import('./module.js').then(({ default: fn }) => fn());
-}
+   import("./module.js").then(({ default: fn }) => fn());
+};
 ```
 
 ✅ Webpack 会自动生成一个新的 Chunk。
@@ -165,10 +169,10 @@ button.onclick = () => {
 
 **原理：**
 
-* Webpack DevServer 建立 WebSocket 连接；
-* 文件变化 → 通知浏览器；
-* 浏览器只替换变化的模块；
-* 状态不丢失。
+-  Webpack DevServer 建立 WebSocket 连接；
+-  文件变化 → 通知浏览器；
+-  浏览器只替换变化的模块；
+-  状态不丢失。
 
 ---
 
@@ -179,8 +183,8 @@ button.onclick = () => {
 **常用配置：**
 
 ```js
-devtool: 'source-map'       // 生产环境
-devtool: 'eval-source-map'  // 开发环境
+devtool: "source-map"; // 生产环境
+devtool: "eval-source-map"; // 开发环境
 ```
 
 ---
@@ -189,22 +193,22 @@ devtool: 'eval-source-map'  // 开发环境
 
 ```js
 // webpack.config.js
-mode: 'development'  // 或 'production'
+mode: "development"; // 或 'production'
 ```
 
 **区别：**
 
-* 开发：不压缩代码，保留 Source Map；
-* 生产：自动 Tree Shaking + 压缩。
+-  开发：不压缩代码，保留 Source Map；
+-  生产：自动 Tree Shaking + 压缩。
 
 ---
 
 ### 15. Webpack 如何实现文件指纹？
 
-| 类型          | 方式             | 示例                        |
-| ----------- | -------------- | ------------------------- |
+| 类型        | 方式                    | 示例                      |
+| ----------- | ----------------------- | ------------------------- |
 | Hash        | 整个项目变动生成新 hash | `bundle.[hash].js`        |
-| ChunkHash   | 每个入口单独计算       | `app.[chunkhash].js`      |
+| ChunkHash   | 每个入口单独计算        | `app.[chunkhash].js`      |
 | ContentHash | 文件内容变化时变化      | `style.[contenthash].css` |
 
 ---
@@ -239,17 +243,17 @@ mode: 'development'  // 或 'production'
 
 ### 18. Webpack 的 Plugin 原理？
 
-* Plugin 是一个带有 `apply(compiler)` 方法的类；
-* 通过 `compiler` 注册钩子；
-* 在生命周期内执行自定义逻辑。
+-  Plugin 是一个带有 `apply(compiler)` 方法的类；
+-  通过 `compiler` 注册钩子；
+-  在生命周期内执行自定义逻辑。
 
 ```js
 class MyPlugin {
-  apply(compiler) {
-    compiler.hooks.done.tap('MyPlugin', () => {
-      console.log('Build done!');
-    });
-  }
+   apply(compiler) {
+      compiler.hooks.done.tap("MyPlugin", () => {
+         console.log("Build done!");
+      });
+   }
 }
 ```
 
@@ -257,14 +261,14 @@ class MyPlugin {
 
 ### 19. Webpack 与 Vite 的区别？
 
-| 对比项    | Webpack | Vite                   |
-| ------ | ------- | ---------------------- |
-| 核心原理   | 打包构建    | 原生 ESM                 |
-| 启动速度   | 随项目变大变慢 | 几乎瞬间                   |
-| 依赖处理   | 全量构建    | 按需加载                   |
-| HMR 速度 | 慢       | 快                      |
-| 构建工具   | 自身实现    | 开发 esbuild + 生产 Rollup |
-| 生态     | 成熟      | 新兴                     |
+| 对比项   | Webpack        | Vite                       |
+| -------- | -------------- | -------------------------- |
+| 核心原理 | 打包构建       | 原生 ESM                   |
+| 启动速度 | 随项目变大变慢 | 几乎瞬间                   |
+| 依赖处理 | 全量构建       | 按需加载                   |
+| HMR 速度 | 慢             | 快                         |
+| 构建工具 | 自身实现       | 开发 esbuild + 生产 Rollup |
+| 生态     | 成熟           | 新兴                       |
 
 ---
 
@@ -280,14 +284,14 @@ class MyPlugin {
 
 ## 💡 四、加分题（高频深挖）
 
-| 问题                                 | 考察点                     |
-| ---------------------------------- | ----------------------- |
-| Webpack 如何实现 Tree Shaking？         | 静态依赖分析 + sideEffects    |
-| Loader 是如何工作的？                     | 从右向左执行，返回 JS 模块         |
-| Plugin 的生命周期有哪些？                   | run, emit, done, seal 等 |
-| Webpack 如何处理依赖图？                   | 使用 AST 递归构建             |
-| Webpack 如何优化多页面应用？                 | 多入口 + SplitChunks       |
-| Webpack5 的 Module Federation 有何用途？ | 微前端共享依赖                 |
+| 问题                                     | 考察点                     |
+| ---------------------------------------- | -------------------------- |
+| Webpack 如何实现 Tree Shaking？          | 静态依赖分析 + sideEffects |
+| Loader 是如何工作的？                    | 从右向左执行，返回 JS 模块 |
+| Plugin 的生命周期有哪些？                | run, emit, done, seal 等   |
+| Webpack 如何处理依赖图？                 | 使用 AST 递归构建          |
+| Webpack 如何优化多页面应用？             | 多入口 + SplitChunks       |
+| Webpack5 的 Module Federation 有何用途？ | 微前端共享依赖             |
 
 ---
 
@@ -299,7 +303,77 @@ class MyPlugin {
 4. Loader 是如何链式执行的？
 5. Webpack 如何实现按需加载？
 
+# TreeShaking
+
+> TreeShaking 的原理及实现条件
+
+这题是前端性能优化的经典面试题 ✅，尤其涉及 **打包工具（Webpack、Rollup、Vite）** 的原理。下面整理成面试简答版 + 原理解析。
+
 ---
 
-是否希望我帮你整理一个 ✅ **「Webpack vs Vite 面试对比速查表（带图）」**？
-可以让你在面试中 1 分钟高效回答对比题。
+## 💡 1. 什么是 Tree Shaking
+
+> Tree Shaking（摇树优化）是一种 **移除未使用代码（dead code elimination）** 的技术，用于减小打包后的文件体积。
+
+-  原理名称来自 **摇掉树上的死叶子**，只保留用到的代码。
+-  最常用在 ES6 模块化中（`import` / `export`）。
+
+---
+
+## ⚙️ 2. Tree Shaking 的原理
+
+1. **静态分析模块依赖**
+
+   -  ES6 模块是 **静态结构**，导入导出在编译时就能确定。
+   -  Webpack / Rollup 会分析哪些 export 被使用。
+
+2. **标记未使用代码**
+
+   -  编译器标记哪些函数、变量、类、常量未被引用。
+
+3. **删除未使用代码**
+
+   -  通过 **代码压缩工具（如 Terser）** 删除未使用代码，减小最终包体积。
+
+**示意图：**
+
+```js
+// utils.js
+export function add(a, b) {
+   return a + b;
+}
+export function sub(a, b) {
+   return a - b;
+}
+
+// index.js
+import { add } from "./utils";
+console.log(add(1, 2));
+```
+
+> 打包后，`sub` 函数会被删除，只保留 `add`。
+
+---
+
+## 🔹 3. Tree Shaking 实现条件
+
+| 条件                         | 说明                                                                                                        |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **必须使用 ES6 模块化**      | `import/export`，不支持 CommonJS（require/module.exports）静态分析                                          |
+| **编译环境支持**             | Webpack 2+、Rollup、Vite 默认支持 ES6 模块分析                                                              |
+| **开启生产环境优化**         | Webpack: `mode: 'production'` + Terser，Rollup 默认会摇掉未使用代码                                         |
+| **代码是“纯函数”或无副作用** | 对有副作用的模块，Tree Shaking 默认不会删除，需在 package.json 设置 `"sideEffects": false` 或标记副作用文件 |
+
+---
+
+## 📝 4. 面试简答模板
+
+> Tree Shaking 是通过静态分析 ES6 模块导入导出，删除未使用代码以减小打包体积的一种优化技术。
+> 条件：
+>
+> 1. 使用 ES6 模块化 `import/export`；
+> 2. 编译工具支持 Tree Shaking（Webpack、Rollup、Vite）；
+> 3. 生产环境打包并使用压缩工具；
+> 4. 模块无副作用，或者正确配置 `sideEffects`。
+
+

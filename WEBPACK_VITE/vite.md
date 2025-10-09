@@ -288,3 +288,97 @@ npm install -D vite-plugin-checker
 
 > ✅ 「Vite 面试题速记表（PDF版）」
 > 可以直接打印或在面试前速读？
+
+# vite的分包
+
+这题属于前端性能优化 + Vite 原理类面试题 ✅，下面整理成面试易答版。
+
+---
+
+## 💡 1. 什么是 Vite 分包（Code Splitting）
+
+> 分包是指将应用的代码拆分成多个小文件，按需加载，减少首屏加载体积，提高性能。
+
+* Vite 基于 **ESM + Rollup** 实现按需分包。
+* 常见场景：
+
+  1. **动态 import** 按路由懒加载。
+  2. **第三方库分包**（vendor chunk）。
+
+---
+
+## ⚙️ 2. Vite 分包实现原理
+
+### 2.1 基于 Rollup 的静态分析
+
+* Vite 使用 Rollup 做构建。
+* Rollup 会分析模块依赖关系，生成 **依赖图**。
+* 将公共依赖抽取成独立的 chunk（如 `vendor.js`）。
+
+### 2.2 按需加载
+
+* 对动态 `import()` 的模块，生成独立文件。
+
+```js
+// 路由懒加载示例
+import { createRouter } from 'vue-router'
+
+const routes = [
+  { path: '/home', component: () => import('./views/Home.vue') },
+  { path: '/about', component: () => import('./views/About.vue') }
+]
+```
+
+* 打包后：
+
+  * `/home` 对应 `home.[hash].js`
+  * `/about` 对应 `about.[hash].js`
+* 用户访问 `/home` 时只加载 `home.js`，减少首屏请求体积。
+
+### 2.3 公共依赖抽取
+
+* Vite 会将多个模块共同依赖的库打包成 **vendor chunk**：
+
+```js
+import _ from 'lodash'
+import axios from 'axios'
+```
+
+* 这样多个页面共享 `lodash` 和 `axios`，避免重复打包。
+
+---
+
+## 🔹 3. 配置分包策略（vite.config.js）
+
+```js
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor'; // 把第三方库打成 vendor.js
+          }
+        }
+      }
+    }
+  }
+})
+```
+
+* `manualChunks`：手动指定分包逻辑。
+* 动态 import 会自动拆分 chunk。
+
+---
+
+## 📝 4. 面试简答模板
+
+> Vite 的分包是通过 Rollup 静态分析模块依赖生成多个 chunk 实现的。
+> 核心点：
+>
+> 1. 动态 `import()` 按路由或模块拆分，实现懒加载；
+> 2. 公共依赖抽取为 vendor chunk，避免重复打包；
+> 3. 可通过 `rollupOptions.output.manualChunks` 配置自定义分包策略；
+> 4. 目的：减少首屏请求体积，提高性能。
