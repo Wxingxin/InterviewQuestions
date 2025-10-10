@@ -1,4 +1,5 @@
-# ajax 的get的使用
+# ajax 的 get 的使用
+
 ```js
 const xhr = new XMLHttpRequest();
 
@@ -18,7 +19,9 @@ xhr.onreadystatechange = function () {
   }
 };
 ```
-# ajax post的使用
+
+# ajax post 的使用
+
 ```js
 // 创建XMLHttpRequest对象
 const xhr = new XMLHttpRequest();
@@ -57,60 +60,79 @@ xhr.onreadystatechange = function () {
   }
 };
 ```
-# 
+
+# 功能
+
+| 功能点       | 原版实现 | 优化建议              |
+| ------------ | -------- | --------------------- |
+| 默认配置     | ✅       | ✅                    |
+| GET 参数拼接 | ✅       | ✅                    |
+| POST 提交    | ✅       | 支持 JSON             |
+| 回调函数     | ✅       | 改为 Promise          |
+| 错误处理     | ❌       | ✅ 网络错误、超时     |
+| 请求头       | ❌       | ✅ 支持自定义 headers |
+
+# 代码解释
+
 ```js
 function ajax(options) {
-  // 1  创建 XMLHttpRequest 对象
-  const xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    // 1-1 创建xhr
+    const xhr = new XMLHttpRequest();
+    // 1-2 创建默认值
+    const defaults = {
+      url: "",
+      method: "GET",
+      data: null,
+      headers: {},
+    };
 
-  //  2-1  设置默认值
-  const defaults = {
-    url: "",
-    method: "GET",
-    data: null,
-    success: function () {},
-    error: function () {},
-  };
+    // 2-1 合并配置
+    const opts = Object.assign({}, defaults, options);
 
-  // 2-2 合并配置
-  const opts = Object.assign({}, defaults, options);
-
-  // 2-3-get 处理 GET 请求参数
-  //如果是 GET 请求，并且有 data：
-  //把 data 对象转换成查询字符串，例如 { id: 1, name: 'Tom' } → "id=1&name=Tom"。
-  //拼接到 url 后面，例如 "/api/user" → "/api/user?id=1&name=Tom"。
-  if (opts.method.toUpperCase() === "GET" && opts.data) {
-    const params = new URLSearchParams(opts.data).toString();
-    opts.url += (opts.url.includes("?") ? "&" : "?") + params;
-  }
-
-  // 2-3-post 设置请求头（POST 请求需要）
-  if (opts.method.toUpperCase() === "POST") {
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  }
-
-  // 2-4 初始化请求
-  xhr.open(opts.method, opts.url, true);
-
-  // 发送请求
-  xhr.send(
-    opts.method.toUpperCase() === "POST"
-      ? new URLSearchParams(opts.data).toString()
-      : null
-  );
-
-  // 处理响应
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        // 请求成功
-        opts.success(JSON.parse(xhr.responseText));
-      } else {
-        // 请求失败
-        opts.error(xhr.status, xhr.statusText);
-      }
+    //2-2 get 处理 GET 请求参数
+    //如果是 GET 请求，并且有 data：
+    //把 data 对象转换成查询字符串，例如 { id: 1, name: 'Tom' } → "id=1&name=Tom"。
+    //拼接到 url 后面，例如 "/api/user" → "/api/user?id=1&name=Tom"。
+    if (opts.method.toUpperCase() === "GET" && opts.data) {
+      const params = new URLSearchParams(opts.data).toString();
+      opts.url += (opts.url.includes("?") ? "&" : "?") + params;
     }
-  };
+
+    // 2-3 设置请求头
+    for (const key in opts.headers) {
+      xhr.setRequestHeader(key, opts.headers[key]);
+    }
+
+    // 2-4 初始化请求
+    xhr.open(opts.method, opts.url, true);
+
+    // 3 发送请求
+    xhr.send(
+      opts.method.toUpperCase() === "POST"
+        ? new URLSearchParams(opts.data).toString()
+        : null
+    );
+
+    // 4-1 处理响应
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            resolve(JSON.parse(xhr.responseText));
+          } catch {
+            resolve(xhr.responseText);
+          }
+        } else {
+          reject({ status: xhr.status, message: xhr.statusText });
+        }
+      }
+    };
+
+    // 4-2 错误处理
+    xhr.onerror = () =>
+      reject({ status: xhr.status, message: "Network Error" });
+  });
 }
 ```
 

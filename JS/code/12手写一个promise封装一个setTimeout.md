@@ -21,21 +21,6 @@ delay(2000).then((res) => {
 
 ---
 
-## ✅ 支持 async/await
-
-```js
-async function run() {
-  console.log("开始");
-  await delay(1000);
-  console.log("1 秒后打印");
-  await delay(2000);
-  console.log("再等 2 秒后打印");
-}
-
-run();
-```
-
----
 
 ## ✅ 进阶：带取消功能
 
@@ -66,7 +51,3 @@ setTimeout(() => {
 ## 🎯 面试答法（简版）
 
 > 可以用 `new Promise` 包装 `setTimeout`，在 `resolve` 里返回结果，就能通过 `then` 或 `async/await` 等待异步执行。还可以扩展取消功能，类似于定时任务的控制。
-
----
-
-要不要我帮你把 **封装 setTimeout 的 Promise 和手写 sleep 工具函数的常见面试变体**（比如支持并发执行、链式调用）也整理出来？

@@ -25,10 +25,3 @@ function myInstanceof(obj, constructor) {
 }
 ```
 
-```js
-
-```
-
-```js
-
-```
