@@ -1,3 +1,37 @@
+# 基础语法与选择器
+
+> ### **CSS 单位有哪些？px、em、rem、%、vh/vw 区别？**
+
+- px：绝对单位
+- em：相对父元素字体大小
+- rem：相对根元素字体大小
+- %：相对父元素宽/高
+- vh/vw：相对视口高度/宽度
+
+> ### 说说设备像素，css 像素，设备独立像素，dpr，ppi 之间的区别
+
+1. 备像素（Device Pixel）：
+
+- 设备像素是物理屏幕上的一个点，是显示器或移动设备屏幕的最小单位。设备像素的数量决定了屏幕的分辨率。
+
+2. CSS 像素（CSS Pixel）：
+
+- CSS 像素是 Web 开发中使用的抽象单位，它与设备像素之间存在一定的关系，但并不直接映射到具体的物理像素上。浏览器会根据设备像素比（简称 DPR）将 CSS 像素转换为实际的设备像素。
+
+3. 设备独立像素（也称为密度无关像素）：
+
+- 设备独立像素是一个抽象的单位，用来在不同设备上保持一致的显示效果。在 CSS 中，1 个设备独立像素通常等于 1 个 CSS 像素。设备独立像素的概念有助于实现响应式设计和跨设备兼容性。
+
+4. 设备像素比（DPR）：
+
+- 物理像素 (Physical Pixels) 和 CSS 像素 (CSS Pixels / Logical Pixels) 之间的比率。如果一个设备的 DPR 为 2，那么 1 个 CSS 像素将对应 4 个设备像素（2x2）。
+
+> ### link 和 @import 的区别
+
+- link 是 xhtml 标签，除了引入 css 外，还可以加载库，框架，工具等；@import 属于 css 范畴，只能加载 css
+- link 引用 css 的时候，在页面载入时同时加载。 @import 需要页面完全加载完成后加载
+- link 是 xhtml 标签，无兼容问题，@import 是 css2 提出来的，低版本的浏览器不支持
+
 # 布局
 
 ---
@@ -37,12 +71,12 @@
 
 > ## CSS Grid 布局大全
 
--  **Grid** 是二维布局系统，可以同时控制 **行（row）** 和 **列（column）**。
--  **容器（container）**：使用 `display: grid` 定义。
--  **网格项（item）**：Grid 容器的直接子元素。
--  **轨道（track）**：行或列。
--  **单元格（cell）**：行列交叉形成的矩形区域。
--  **区域（area）**：多个单元格组合形成的矩形区域。
+- **Grid** 是二维布局系统，可以同时控制 **行（row）** 和 **列（column）**。
+- **容器（container）**：使用 `display: grid` 定义。
+- **网格项（item）**：Grid 容器的直接子元素。
+- **轨道（track）**：行或列。
+- **单元格（cell）**：行列交叉形成的矩形区域。
+- **区域（area）**：多个单元格组合形成的矩形区域。
 
 ---
 
@@ -98,8 +132,8 @@
 }
 ```
 
-* 特点：简单，但需要清除浮动（`clearfix`）。
-* 不适合复杂响应式布局。
+- 特点：简单，但需要清除浮动（`clearfix`）。
+- 不适合复杂响应式布局。
 
 ```css
 .container::after {
@@ -125,8 +159,8 @@
 }
 ```
 
-* 特点：响应式好，顺序可调整，支持对齐和伸缩。
-* 面试加分点：可以用 `justify-content` 和 `align-items` 控制对齐。
+- 特点：响应式好，顺序可调整，支持对齐和伸缩。
+- 面试加分点：可以用 `justify-content` 和 `align-items` 控制对齐。
 
 ---
 
@@ -145,15 +179,16 @@
 }
 ```
 
-* 特点：更适合复杂网格布局，精确控制行列大小。
-* 面试加分点：可以轻松扩展到多行多列。
+- 特点：更适合复杂网格布局，精确控制行列大小。
+- 面试加分点：可以轻松扩展到多行多列。
 
 ---
 
 ## 4️⃣ inline-block 布局
 
 ```css
-.left, .right {
+.left,
+.right {
   display: inline-block;
   vertical-align: top;
 }
@@ -165,7 +200,7 @@
 }
 ```
 
-* 特点：兼容性好，但会有 **空白间隙问题**。
+- 特点：兼容性好，但会有 **空白间隙问题**。
 
 ---
 
@@ -187,7 +222,7 @@
 }
 ```
 
-* 特点：固定位置，容易覆盖，不适合响应式。
+- 特点：固定位置，容易覆盖，不适合响应式。
 
 ---
 
@@ -206,7 +241,6 @@
 我可以帮你画一张 **“两栏布局方法对比图 + 优缺点”**，一张图面试就能讲清楚所有实现方式。
 
 你希望我画吗？
-
 
 > ## css 的三布局怎么实现
 
@@ -241,8 +275,8 @@
 }
 ```
 
-* 特点：经典老方法，需清除浮动。
-* 不易实现响应式。
+- 特点：经典老方法，需清除浮动。
+- 不易实现响应式。
 
 ---
 
@@ -263,8 +297,8 @@
 }
 ```
 
-* 特点：响应式好，顺序可调整。
-* 面试加分点：可用 `order` 改变显示顺序，`justify-content`/`align-items` 控制对齐。
+- 特点：响应式好，顺序可调整。
+- 面试加分点：可用 `order` 改变显示顺序，`justify-content`/`align-items` 控制对齐。
 
 ---
 
@@ -276,36 +310,52 @@
   grid-template-columns: 20% 60% 20%;
   gap: 10px; /* 可选列间距 */
 }
-.left { grid-column: 1; }
-.center { grid-column: 2; }
-.right { grid-column: 3; }
+.left {
+  grid-column: 1;
+}
+.center {
+  grid-column: 2;
+}
+.right {
+  grid-column: 3;
+}
 ```
 
-* 特点：精确控制列宽、间距和响应式。
-* 面试加分点：可以轻松扩展为多行多列复杂布局。
+- 特点：精确控制列宽、间距和响应式。
+- 面试加分点：可以轻松扩展为多行多列复杂布局。
 
 ---
 
 ## 4️⃣ inline-block 布局
 
 ```css
-.left, .center, .right {
+.left,
+.center,
+.right {
   display: inline-block;
   vertical-align: top;
 }
-.left { width: 20%; }
-.center { width: 60%; }
-.right { width: 20%; }
+.left {
+  width: 20%;
+}
+.center {
+  width: 60%;
+}
+.right {
+  width: 20%;
+}
 ```
 
-* 特点：兼容性好，但存在 **空白间隙问题**。
+- 特点：兼容性好，但存在 **空白间隙问题**。
 
 ---
 
 ## 5️⃣ 绝对定位布局（面试中可提）
 
 ```css
-.container { position: relative; }
+.container {
+  position: relative;
+}
 .left {
   position: absolute;
   left: 0;
@@ -323,7 +373,7 @@
 }
 ```
 
-* 特点：固定布局，不利于响应式，不推荐。
+- 特点：固定布局，不利于响应式，不推荐。
 
 ---
 
@@ -337,17 +387,6 @@
 > 4. **Inline-block**：兼容性好，但有空白间隙问题；
 > 5. **绝对定位**：固定布局，不适合响应式。
 
----
-
-我可以帮你画一张 **“三栏布局方法对比图 + 优缺点 + 响应式示意”**，一张图面试就能讲清楚各种方法。
-
-你希望我画吗？
-
-
-# 选择器
-
----
-
 # BFC
 
 ---
@@ -356,9 +395,7 @@
 
 ---
 
-# scss tailwind
-
-# other
+# 关于文本
 
 > ## div 的文本溢出如何解决
 
@@ -366,14 +403,14 @@
 
 ---
 
-## 1️⃣ 单行文本溢出显示省略号
+### 1️⃣ 单行文本溢出显示省略号
 
 ```css
 div {
-   width: 200px; /* 固定宽度 */
-   white-space: nowrap; /* 不换行 */
-   overflow: hidden; /* 超出隐藏 */
-   text-overflow: ellipsis; /* 超出显示省略号 */
+  width: 200px; /* 固定宽度 */
+  white-space: nowrap; /* 不换行 */
+  overflow: hidden; /* 超出隐藏 */
+  text-overflow: ellipsis; /* 超出显示省略号 */
 }
 ```
 
@@ -383,14 +420,14 @@ div {
 
 ---
 
-## 2️⃣ 多行文本溢出显示省略号
+### 2️⃣ 多行文本溢出显示省略号
 
 ```css
 div {
-   display: -webkit-box;
-   -webkit-box-orient: vertical;
-   -webkit-line-clamp: 3; /* 限制显示 3 行 */
-   overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 限制显示 3 行 */
+  overflow: hidden;
 }
 ```
 
@@ -401,13 +438,13 @@ div {
 
 ---
 
-## 3️⃣ 超出滚动显示
+### 3️⃣ 超出滚动显示
 
 ```css
 div {
-   width: 200px;
-   height: 50px;
-   overflow: auto; /* 超出显示滚动条 */
+  width: 200px;
+  height: 50px;
+  overflow: auto; /* 超出显示滚动条 */
 }
 ```
 
@@ -417,15 +454,59 @@ div {
 
 ---
 
-## 4️⃣ 面试简答模板
+### 4️⃣ 面试简答模板
 
-> 解决 div 文本溢出主要有三种方式：
->
-> 1. 单行文本：`white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
-> 2. 多行文本：使用 `-webkit-line-clamp` 限制行数 + 隐藏溢出
-> 3. 超出滚动：`overflow: auto` 或 `scroll` 显示滚动条
+- 解决 div 文本溢出主要有三种方式：
+- 1. 单行文本：`white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
+- 2. 多行文本：使用 `-webkit-line-clamp` 限制行数 + 隐藏溢出
+- 3. 超出滚动：`overflow: auto` 或 `scroll` 显示滚动条
 
-## 分析css代码阻塞怎么办
+> ## line-height: 120% 和 line-height: 1.2 有什么区别?
+
+- 当你使用百分比值时，子元素会继承计算后的行高值；而当你使用数值时，子元素会继承这个数值，并根据 自己的字体大小重新计算行高。
+
+> ## css 文本水平居中（块级元素和行内块级元素）
+
+`text-align: center`
+
+> ## css 文本垂直居中（块级元素和行内块级元素）
+
+- line-height （单行文本） 将行高 (line-height) 设置为与父容器高度相同。
+
+> ## 如何实现字体小于 12px?
+
+- (最常用也是效果最好的方法)渲染了一个正常大小的字体，然后过 CSS 的 transform 属性对其进行视觉上的缩小，因此不会有字体渲染模糊的问题
+
+- 使用图片代替 (针对少量固定文本)
+
+- 使用 SVG
+
+> ## 为什么浏览器默认最小字体是 12px？
+
+- 可读性： 12px 通常被认为是 PC 端屏幕上文字可读性的一个经验下限。小于 12px 的字体在大多数显示器上会变得难以辨认，影响用户体验。
+
+- 兼容性： 早期浏览器在处理小于 12px 的字体时，可能会出现渲染问题或显示效果不佳。为了统一和保证基本的可读性，大多数浏览器设定了最小字体大小。
+
+- 防止滥用： 限制最小字体大小可以防止开发者过度使用极小的字体，从而损害用户体验。
+
+> ##
+
+# 响应式与兼容性
+
+> ## 响应式设计是什么？原理？
+
+- 是什么 是一个网站能够兼容多个终端，而不是为每一个终端做一个特定的版本
+
+- 为什么 通过媒体查询检测不同设备屏幕尺寸做处理。
+
+- 怎么触发 页面头部必须有 meta 声明 viewport
+  > ##
+
+# scss tailwind
+
+# other
+
+## 分析 css 代码阻塞怎么办
 
 这是前端面试中常考的性能优化题 💡 ——「**CSS 代码阻塞加载怎么办？**」
 我们来分两步讲清楚：**原理 + 解决方案**，最后附上面试简答模板。
@@ -443,8 +524,8 @@ div {
 
 ⚠️ 所以：
 
-* **外部 CSS** 会阻塞页面的渲染（Render Tree 依赖 CSSOM）；
-* **JS 执行** 也会被 CSS 阻塞（浏览器要等 CSSOM 构建完再执行 JS，避免修改样式导致回流）。
+- **外部 CSS** 会阻塞页面的渲染（Render Tree 依赖 CSSOM）；
+- **JS 执行** 也会被 CSS 阻塞（浏览器要等 CSSOM 构建完再执行 JS，避免修改样式导致回流）。
 
 ---
 
@@ -454,9 +535,9 @@ div {
 2. 查看 CSS 文件加载顺序与阻塞时间；
 3. 检查：
 
-   * 是否放在 `<head>`；
-   * 是否存在 render-blocking（渲染阻塞）标签；
-   * 是否可延迟加载的 CSS。
+   - 是否放在 `<head>`；
+   - 是否存在 render-blocking（渲染阻塞）标签；
+   - 是否可延迟加载的 CSS。
 
 ---
 
@@ -470,21 +551,28 @@ div {
 <head>
   <style>
     /* 关键部分样式 */
-    body { font-family: sans-serif; }
+    body {
+      font-family: sans-serif;
+    }
   </style>
 </head>
 ```
 
-* 只加载必要的样式；
-* 非关键部分延迟加载。
+- 只加载必要的样式；
+- 非关键部分延迟加载。
 
 ---
 
 ### ✅ 2. **异步加载非关键 CSS**
 
 ```html
-<link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="style.css"></noscript>
+<link
+  rel="preload"
+  href="style.css"
+  as="style"
+  onload="this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="style.css" /></noscript>
 ```
 
 > `preload` 先加载但不阻塞，`onload` 后再应用。
@@ -493,11 +581,11 @@ div {
 
 ### ✅ 3. **分离首屏与非首屏样式**
 
-* 用构建工具（Webpack、Vite）提取关键 CSS；
-* 首屏内联，剩余样式延迟加载：
+- 用构建工具（Webpack、Vite）提取关键 CSS；
+- 首屏内联，剩余样式延迟加载：
 
   ```js
-  import(/* webpackPrefetch: true */ './lazy.css');
+  import(/* webpackPrefetch: true */ "./lazy.css");
   ```
 
 ---
@@ -505,17 +593,17 @@ div {
 ### ✅ 4. **使用媒体查询延迟加载**
 
 ```html
-<link rel="stylesheet" href="print.css" media="print">
-<link rel="stylesheet" href="mobile.css" media="(max-width: 600px)">
+<link rel="stylesheet" href="print.css" media="print" />
+<link rel="stylesheet" href="mobile.css" media="(max-width: 600px)" />
 ```
 
-* 只有匹配时才加载，其他情况不会阻塞。
+- 只有匹配时才加载，其他情况不会阻塞。
 
 ---
 
 ### ✅ 5. **减少 CSS 文件体积**
 
-* 合并文件、压缩（minify）、去除未使用样式（Tree Shaking）。
+- 合并文件、压缩（minify）、去除未使用样式（Tree Shaking）。
 
 ---
 

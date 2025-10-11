@@ -1,77 +1,183 @@
-好的，我们来整理一份 **JavaScript 对象面试题大全**（不含代码实现），覆盖基础概念、方法理解、性能、陷阱与高级应用，适合面试复盘。
+好的，我帮你整理一份 **CSS 面试题大全**，覆盖 **基础、布局、选择器、动画、性能、兼容性、现代 CSS 技术** 等各类常见面试点，并附面试要点和简要示例。内容偏向前端面试实战，适合系统复习。
 
 ---
 
-## 🧩 一、基础概念类
+# **CSS 面试题大全**
 
-1. JavaScript 中对象是什么？
-2. 对象和数组有什么区别？
-3. 如何判断一个变量是否是对象？
-4. 对象的属性有哪些类型？
-5. 对象的 key 可以是哪些类型？
-6. 对象的 value 可以是哪些类型？
-7. 什么是对象的可枚举性（enumerable）？
-8. 什么是对象的可配置性（configurable）？
-9. 什么是对象的可写性（writable）？
-10. 对象的原型（prototype）是什么？
+## **一、基础语法与选择器**
 
----
+1. **CSS 选择器有哪些？优先级如何计算？**
 
-## ⚙️ 二、常用方法理解
+   * 标签选择器、类选择器、ID选择器、属性选择器、伪类/伪元素
+   * 优先级：`inline > ID > class/attribute/pseudo-class > element/pseudo-element`
+   * !important 可以覆盖优先级
 
-1. Object.keys、Object.values、Object.entries 的区别？
-2. Object.assign 与展开运算符（...）有什么区别？
-3. Object.create、Object.setPrototypeOf、Object.getPrototypeOf 的区别？
-4. Object.freeze、Object.seal、Object.preventExtensions 区别？
-5. hasOwnProperty 与 in 操作符的区别？
-6. Object.is 与 === 的区别？
-7. delete 删除对象属性的行为？
-8. 对象浅拷贝与深拷贝的区别？
-9. for...in 与 for...of 遍历对象的区别？
-10. JSON.stringify 对象有哪些限制？
+2. 
+
+3. **CSS 层叠和继承机制是什么？**
+
+   * 层叠：冲突规则按权重 + 顺序
+   * 继承：字体、color 等可继承属性
+
+4. **盒模型及其区别？**
+
+   * content-box（默认）：width/height 不包含 padding/border
+   * border-box：width/height 包含 padding/border
+   * `box-sizing: border-box` 可简化布局
 
 ---
 
-## ⚡ 三、性能与优化
+## **二、布局相关**
 
-1. 对象访问性能和数组访问性能差异？
-2. 对象大数据量时如何优化性能？
-3. 原型链查找性能和直接对象属性访问性能差异？
-4. 对象属性频繁增删改对性能有影响吗？
-5. 对象的动态属性与静态属性性能差异？
-6. 如何避免对象导致内存泄漏？
-7. 使用 Map 与普通对象存储大量 key/value 的性能差异？
-8. 对象合并（assign/扩展运算符）大对象性能优化方法？
-9. 如何用对象缓存计算结果（Memoization）？
-10. 如何避免对象访问冲突或覆盖？
+5. **如何实现两栏布局/三栏布局？**
+
+   * float + margin（老方法）
+   * flexbox（推荐）
+   * grid（现代方法）
+
+6. **Flex 布局常用属性**
+
+   * 父元素：`display: flex; flex-direction; justify-content; align-items; flex-wrap`
+   * 子元素：`flex: 1 1 auto; align-self`
+
+7. **Grid 布局基础属性**
+
+   * 父元素：`display: grid; grid-template-columns/rows; gap`
+   * 子元素：`grid-column/row; justify-self/align-self`
+
+8. **垂直居中实现方法**
+
+   * line-height = height
+   * flex: `align-items: center; justify-content: center`
+   * grid: `place-items: center`
+   * absolute + transform: `top: 50%; left: 50%; transform: translate(-50%, -50%)`
+
+9. **清除浮动的方式有哪些？**
+
+   * `clearfix`
+   * 父元素 `overflow: hidden`
+   * 使用 flex/grid 替代 float
 
 ---
 
-## 🔍 四、陷阱与易错点
+## **三、选择器与伪类**
 
-1. 对象属性名为数字或特殊字符会有什么影响？
-2. 原型链覆盖属性会产生什么问题？
-3. 对象引用与浅拷贝修改原对象的影响？
-4. 使用 for...in 遍历对象可能产生的问题？
-5. 对象属性可枚举性和 for...in 遍历的关系？
-6. 使用 delete 后对象的内存是否立即释放？
-7. Object.freeze 后对象属性能否被修改？
-8. 对象包含函数时，浅拷贝是否安全？
-9. Symbol 类型作为 key 的特点？
-10. 对象序列化和反序列化的限制（JSON）？
+10. **:nth-child 和 :nth-of-type 区别？**
+
+    * nth-child：按父元素所有子元素计数
+    * nth-of-type：按类型计数
+
+11. **CSS 优先级与继承冲突如何解决？**
+
+    * inline style > id > class > element
+    * !important
+    * 更具体的选择器
+
+12. **伪类和伪元素区别？**
+
+    * 伪类（:hover, :focus）改变元素状态
+    * 伪元素 (::before, ::after) 创建虚拟元素
 
 ---
 
-## 🧠 五、高级应用
+## **四、CSS 动画与过渡**
 
-1. 如何实现对象深拷贝？
-2. 如何实现对象属性监听（Proxy / defineProperty）？
-3. 如何用对象实现哈希表功能？
-4. 如何实现对象的合并去重？
-5. 如何实现对象的防抖/节流缓存？
-6. 如何判断两个对象是否相等？
-7. 如何将对象转成数组，或数组转回对象？
-8. 如何实现对象多层嵌套访问安全（可选链 / get 方法）？
-9. 对象在前端状态管理中的典型应用（Redux、Vuex）？
-10. 如何用对象模拟类和私有属性？
+13. **transition 与 animation 区别？**
 
+    * transition：状态变化触发
+    * animation：可循环播放、关键帧控制
+
+14. **关键帧动画使用方法**
+
+```css
+@keyframes slide {
+  from { transform: translateX(0); }
+  to { transform: translateX(100px); }
+}
+div { animation: slide 2s infinite; }
+```
+
+15. **GPU 加速属性有哪些？**
+
+    * transform, opacity, filter
+    * 避免频繁修改 layout、paint 属性（如 width/height）
+
+---
+
+## **五、CSS 性能优化**
+
+16. **避免重绘与回流的方法？**
+
+    * 尽量修改 transform/opacity 而非 layout
+    * 合并多次 DOM 修改
+    * 使用 documentFragment 或 requestAnimationFrame
+
+17. **如何减少 CSS 体积？**
+
+    * 使用 CSS Modules / Tree Shaking / PostCSS purge
+    * 合理拆分文件和按需加载
+
+---
+
+## **六、响应式与兼容性**
+
+18. **如何实现响应式布局？**
+
+    * media query
+    * rem/vw/vh 单位
+    * flex/grid 自适应
+
+19. **常见浏览器兼容问题及解决方案**
+
+    * 前缀：-webkit- / -moz- / -ms-
+    * box-sizing 不同默认值
+    * flex/grid 老版本兼容（-ms- 前缀）
+
+---
+
+## **七、现代 CSS 技术**
+
+20. **CSS Variables（自定义属性）使用方法**
+
+```css
+:root { --main-color: #3498db; }
+div { color: var(--main-color); }
+```
+
+21. **CSS 函数使用**
+
+* calc(): `width: calc(100% - 20px)`
+* clamp(): 限制范围 `font-size: clamp(14px, 2vw, 18px)`
+
+22. **CSS Houdini 简介**
+
+* JS 控制 CSS 渲染、布局、动画
+* 提供自定义 paint/layout/animation worklets
+
+23. **CSS Modules / BEM / Tailwind CSS**
+
+* 避免命名冲突
+* 提高可维护性
+
+---
+
+## **八、常见面试考点汇总**
+
+* **定位与层叠**：position、z-index、overflow、display
+* **浮动与清除**：float、clearfix、flex/grid 替代
+* **文本与字体**：line-height、letter-spacing、text-overflow
+* **背景与渐变**：linear-gradient、radial-gradient
+* **过渡与动画**：transition、animation、transform、opacity
+* **性能与优化**：repaint、reflow、GPU 加速、减少选择器复杂度
+* **现代 CSS**：flex、grid、变量、函数、Houdini
+
+---
+
+如果你需要，我可以帮你整理 **一份完整的《前端 CSS 面试全套题库 PDF》**：
+
+* 包含 **100+ 高频题**
+* 每题附 **面试要点、代码示例、图解**
+* 覆盖 **基础/布局/动画/性能/现代 CSS**
+* 适合系统复习和打印备考
+
+你希望我帮你整理吗？
