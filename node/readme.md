@@ -1,86 +1,185 @@
-# node 中间件
-
-> ## node 中间件的原理
-
-非常经典的后端面试题 ✅
-下面我来用**通俗讲解 + 原理图 + 源码思想**帮你彻底搞懂：
-
-> “Node.js 中间件的原理”。
+好的，我帮你整理一份 **Node.js 面试题大全**，涵盖基础、模块、异步、性能、安全、调试等方面。内容分门别类，方便快速复习。
 
 ---
 
-## 🚀 一、什么是中间件（Middleware）
+## **一、基础概念**
 
-中间件就是在请求到达最终处理函数（路由）之前，对请求进行**预处理**或**拦截处理**的函数。
-它是 **一个函数链（函数洋葱模型）**，请求会**依次经过中间件**，最终到达业务逻辑。
+1. **Node.js 是什么？**
 
----
+   * Node.js 是基于 **Chrome V8 引擎** 的 **JavaScript 运行环境**，用于服务器端开发。
+   * 特点：单线程、事件驱动、非阻塞 I/O。
 
-## ⚙️ 三、Node 中间件的核心原理
+2. **Node.js 与前端 JS 的区别？**
 
-### 🔹1. 注册阶段
+   * Node.js 没有 DOM、BOM。
+   * Node.js 支持文件系统、网络、进程等服务器 API。
+   * 模块化机制不同：Node.js 使用 CommonJS / ES Modules。
 
-所有中间件函数会被依次注册到一个数组中：
+3. **Node.js 单线程为什么能处理高并发？**
 
-```js
-middlewares.push(fn);
-```
+   * 事件循环 + 异步 I/O（非阻塞）
+   * 单线程处理事件队列，I/O 操作由内核或线程池完成。
 
-### 🔹2. 调用阶段
+4. **事件循环（Event Loop）原理？**
 
-通过 `next()` 控制流向下一个中间件：
-
--  当前中间件执行 `await next()` → 执行下一个中间件；
--  当最后一个中间件执行完后，流程再“返回”上一个中间件。
-
-### 🔹3. 异步支持
-
-Express、Koa 中间件都是异步函数，执行链使用 **Promise** 控制流。
+   * phases：timers → pending callbacks → idle/prepare → poll → check → close callbacks
+   * 微任务队列：`process.nextTick` > `Promise.then` > `queueMicrotask`
 
 ---
 
-## 💡 五、Express 和 Koa 的中间件区别
+## **二、模块系统**
 
-| 特点       | Express            | Koa                 |
-| ---------- | ------------------ | ------------------- |
-| 编程风格   | 回调式             | async/await         |
-| 控制流     | 通过 `next()` 调用 | 通过 `await next()` |
-| 洋葱模型   | 不完全支持         | 完全支持            |
-| 中间件机制 | 层层匹配路由       | 函数组合执行        |
+1. **CommonJS 与 ES Module 的区别？**
 
----
+   | 特性    | CommonJS         | ES Module              |
+   | ----- | ---------------- | ---------------------- |
+   | 导出    | `module.exports` | `export`               |
+   | 导入    | `require()`      | `import`               |
+   | 执行方式  | 同步               | 异步（支持 tree-shaking）    |
+   | 文件扩展名 | .js              | .mjs 或 "type":"module" |
 
-## 🧠 六、常见中间件类型
+2. **Node.js 如何实现模块加载？**
 
-| 类型           | 作用           | 示例                      |
-| -------------- | -------------- | ------------------------- |
-| 应用级中间件   | 每次请求都执行 | `app.use(logger)`         |
-| 路由级中间件   | 只针对某个路由 | `router.use('/user', fn)` |
-| 内置中间件     | Express 自带的 | `express.static()`        |
-| 第三方中间件   | 第三方扩展     | `body-parser`, `cors`     |
-| 错误处理中间件 | 捕获错误       | `(err, req, res, next)`   |
+   * 模块缓存
+   * 路径解析
+   * require() → 读取文件 → 包装 → 执行 → 缓存
 
----
+3. **__dirname 与 __filename 区别？**
 
-## 🔍 七、面试高频问法总结
-
-### ✅ 1. “说一下中间件的执行原理？”
-
-> 中间件是一个函数链结构，通过 next() 串联执行，每个中间件在执行时可以对请求/响应进行加工、拦截或放行。
-> 当调用 next() 时，执行流进入下一个中间件；当下一个中间件执行完毕后再回到当前中间件形成洋葱模型。
+   * `__dirname`：当前文件所在目录
+   * `__filename`：当前文件完整路径
 
 ---
 
-### ✅ 2. “Express 和 Koa 的中间件机制有什么不同？”
+## **三、文件系统与流**
 
--  Express 使用回调风格的 `next()`；
--  Koa 使用基于 Promise 的 `async/await`；
--  Koa 实现了完整的**洋葱模型**。
+1. **fs.readFile 与 fs.createReadStream 区别？**
+
+   * readFile：一次性读取整个文件（阻塞/异步）
+   * createReadStream：流式读取，适合大文件
+
+2. **stream 有哪些类型？**
+
+   * Readable / Writable / Duplex / Transform / PassThrough
+   * 常用于文件、HTTP、网络操作
+
+3. **管道（pipe）原理？**
+
+   * Readable → Transform → Writable
+   * 事件驱动，减少内存消耗
 
 ---
 
+## **四、异步与事件**
+
+1. **process.nextTick 与 setImmediate 区别？**
+
+   * nextTick：当前阶段微任务队列，优先执行
+   * setImmediate：进入下一个事件循环阶段
+
+2. **Promise、async/await 在 Node.js 中的应用**
+
+   * 异步编程的主要方式
+   * 错误捕获：`.catch()` / try...catch
+
+3. **EventEmitter**
+
+   * 基础事件注册/触发机制
+
+   ```js
+   const EventEmitter = require('events');
+   const emitter = new EventEmitter();
+   emitter.on('msg', data => console.log(data));
+   emitter.emit('msg', 'hello');
+   ```
 
 ---
 
-是否要我帮你画一张 **“Node 中间件执行原理洋葱模型图（含代码流程）”**？
-📘 可以直接放进面试 PPT 或笔记中，一张图彻底掌握。
+## **五、HTTP 与网络**
+
+1. **http.createServer 与 Express 区别？**
+
+   * createServer：原生 Node.js HTTP 服务器
+   * Express：封装路由、中间件、请求/响应工具
+
+2. **Node.js 支持哪些协议？**
+
+   * HTTP / HTTPS / TCP / UDP / WebSocket
+
+3. **WebSocket 在 Node.js 中如何使用？**
+
+   * `ws` 库，`socket.on('message', callback)`
+
+---
+
+## **六、性能优化**
+
+1. **Node.js 如何处理高并发？**
+
+   * 非阻塞 I/O
+   * 单线程 + 事件循环
+   * 使用集群（cluster 模块）或 PM2 多进程
+
+2. **内存泄漏常见原因**
+
+   * 全局变量未释放
+   * 事件监听未移除
+   * 缓存无限增长
+
+3. **性能调优**
+
+   * profiler、heap snapshot
+   * stream 替代 buffer
+   * 使用缓存（memory / redis）
+
+---
+
+## **七、安全相关**
+
+1. **防止命令注入**
+
+   * 使用 child_process.spawn 替代 exec
+   * 参数化输入
+
+2. **防止 XSS / CSRF**
+
+   * 输入过滤
+   * 使用中间件（helmet, csurf）
+
+3. **环境隔离**
+
+   * 不在生产环境暴露敏感信息（process.env）
+
+---
+
+## **八、调试与测试**
+
+1. **调试方法**
+
+   * Node 内置 `--inspect`
+   * VSCode 调试
+   * console.log / debugger
+
+2. **单元测试**
+
+   * 常用框架：Mocha / Jest / AVA
+   * 异步测试需返回 Promise 或 done
+
+---
+
+## **九、进阶题目（面试高频）**
+
+1. Node.js 的事件循环 + setTimeout / setImmediate / nextTick 执行顺序？
+2. Node.js 如何处理 CPU 密集型任务？
+3. cluster 与 child_process 区别？
+4. Node.js 如何处理 uncaughtException 与 unhandledRejection？
+5. Buffer 与 ArrayBuffer、TypedArray 区别？
+6. 如何实现一个简单的模块热更新（HMR）？
+7. Stream 的 backpressure 原理？
+
+---
+
+如果你愿意，我可以帮你整理一份 **Node.js 面试题思维导图**，
+把 **基础/模块/异步/网络/性能/安全/调试** 全部可视化，面试复习更高效。
+
+你希望我画吗？

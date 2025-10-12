@@ -3,6 +3,7 @@ function deepclone(obj) {
     return obj;
   }
 
+
   if (obj instanceof Date) {
     return new Date(obj);
   }
