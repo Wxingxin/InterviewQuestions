@@ -1,7 +1,4 @@
-非常好 👍，`手写 Array.prototype.map` 是 JavaScript 手写题中最常见的一道。
-我们来一步步讲清楚：它的**原理、实现、对比与优化版本**。
 
----
 
 ## 🧠 一、`map` 是什么？
 
@@ -128,6 +125,3 @@ Array.prototype.myMap = function (fn, thisArg) {
 | 如何实现 map？         | 用 for 或 reduce 遍历数组，执行回调。                            |
 
 ---
-
-是否希望我接着帮你写一个 **`手写 filter`（带空位处理 + this 绑定）**？
-👉 它和 map 逻辑相似，但更注重条件筛选，是很多笔试题的“连环题”。
