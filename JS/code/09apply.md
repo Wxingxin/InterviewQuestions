@@ -1,38 +1,43 @@
-好嘞 👍 我来帮你详细解释这段 **手写实现 `Function.prototype.apply`** 的代码，并给你案例演示。
-
----
 
 ## 📌 代码解释
 
 ```js
 Function.prototype.myApply = function (context, args) {
-  // 如果不是函数调用，直接抛错
+  // 1. 确保 this 是函数
   if (typeof this !== "function") {
     throw new TypeError("myApply must be called on a function");
   }
 
-  // 默认绑定 globalThis
-  context = context || globalThis;
+  // 2. 默认绑定 globalThis，或包装原始值为对象
+  context = context ?? globalThis;
+  context = Object(context);
 
-  // 唯一 key，避免覆盖
-  const fnSymbol = Symbol();
-  context[fnSymbol] = this;
+  // 3. 用 Symbol 作为唯一键，避免覆盖已有属性
+  const fnKey = Symbol("fn");
+  context[fnKey] = this;
 
-  // 处理参数，要求必须是数组或类数组
+  // 4. 执行函数并返回结果
   let result;
-  if (args != null) {
-    if (!Array.isArray(args)) {
-      throw new TypeError("Second argument to myApply must be an array");
+  try {
+    if (args == null) {
+      // 没有参数，直接调用
+      result = context[fnKey]();
+    } else {
+      // 确保 args 是数组或类数组
+      if (!Array.isArray(args)) {
+        throw new TypeError(
+          "Second argument to myApply must be an array or array-like"
+        );
+      }
+      result = context[fnKey](...args);
     }
-    result = context[fnSymbol](...args);
-  } else {
-    result = context[fnSymbol]();
+  } finally {
+    // 5. 删除临时属性，避免污染 context
+    delete context[fnKey];
   }
 
-  delete context[fnSymbol];
   return result;
 };
-
 ```
 
 ---
@@ -104,7 +109,7 @@ function add(a, b) {
   return a + b;
 }
 
-console.log(add.myApply(null, [10, 20])); 
+console.log(add.myApply(null, [10, 20]));
 // 输出: 30
 ```
 
@@ -114,9 +119,9 @@ console.log(add.myApply(null, [10, 20]));
 
 📌 总结：
 
-* `myApply` 的核心就是 **在目标对象上临时挂载函数并执行**。
-* `context` 决定 `this` 的指向。
-* 参数要用数组形式传入。
+- `myApply` 的核心就是 **在目标对象上临时挂载函数并执行**。
+- `context` 决定 `this` 的指向。
+- 参数要用数组形式传入。
 
 ---
 
