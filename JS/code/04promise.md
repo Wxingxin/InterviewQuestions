@@ -125,7 +125,7 @@ class MyPromise {
       return new MyPromise((resolve) => {
          let results = [];
          let count = 0;
-
+         
          promises.forEach((p, i) => {
             MyPromise.resolve(p).then(
                (value) => {
@@ -183,6 +183,11 @@ class MyPromise {
       });
    }
 
+   // catch 方法: 只是简化了 rejection 的处理
+   catch(onRejected) {
+      return this.then(null, onRejected);
+   }
+
    // 用于统一把值包装成 MyPromise
    static resolve(value) {
       if (value instanceof MyPromise) return value;
@@ -195,4 +200,3 @@ class MyPromise {
 }
 ```
 
-# 讲解
