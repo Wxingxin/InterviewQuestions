@@ -4,8 +4,8 @@
 
 > # HTML5 为什么需要写`<!DOCTYPE HTML>`？
 
--  使浏览器进入标准模式，阻止进入混杂模式
--  让浏览器使用最新的 HTML5 标准来解析渲染页面
+- 使浏览器进入标准模式，阻止进入混杂模式
+- 让浏览器使用最新的 HTML5 标准来解析渲染页面
 
 > # HTML5 新特性
 
@@ -37,38 +37,38 @@
 
 ```html
 <body>
-   <header>网站头部</header>
-   <nav>导航栏</nav>
-   <main>
-      <section>
-         <article>
-            <h2>标题</h2>
-            <p>正文内容</p>
-         </article>
-      </section>
-      <aside>侧边栏</aside>
-   </main>
-   <footer>版权信息</footer>
+  <header>网站头部</header>
+  <nav>导航栏</nav>
+  <main>
+    <section>
+      <article>
+        <h2>标题</h2>
+        <p>正文内容</p>
+      </article>
+    </section>
+    <aside>侧边栏</aside>
+  </main>
+  <footer>版权信息</footer>
 </body>
 ```
 
 > # 简述一下你对 HTML 语义化的理解。
 
--  （1）使用语义化的标签来创建页面结构，如 header,footer,nav，从标签上即可以直观的知道这个标签的作用
--  （2）HTML 语义化让页面的内容结构化，结构更清晰，利于开发和维护，而不是滥用 div；
--  （3）搜索引擎的爬虫也依赖于 HTML 不同标签来确定不同的权重，有利于 SEO；
+- （1）使用语义化的标签来创建页面结构，如 header,footer,nav，从标签上即可以直观的知道这个标签的作用
+- （2）HTML 语义化让页面的内容结构化，结构更清晰，利于开发和维护，而不是滥用 div；
+- （3）搜索引擎的爬虫也依赖于 HTML 不同标签来确定不同的权重，有利于 SEO；
 
 > # 为什么利用多个域名来存储网站资源会更有效
 
--  安全：资源独立缓存，避免冲突
--  方便: CDN 缓存更方便，节省了 cookie
--  快速：突破浏览器的并发链接限制，提升页面首屏渲染速度
+- 安全：资源独立缓存，避免冲突
+- 方便: CDN 缓存更方便，节省了 cookie
+- 快速：突破浏览器的并发链接限制，提升页面首屏渲染速度
 
 > # 浏览器页面由哪三层构成
 
--  结构层：HTML 构建文档结构
--  表示层：css 设置文档的表现效果
--  行为层： js 和 dom 脚本 实现文档行为
+- 结构层：HTML 构建文档结构
+- 表示层：css 设置文档的表现效果
+- 行为层： js 和 dom 脚本 实现文档行为
 
 ---
 
@@ -98,21 +98,21 @@
 
 1. `<script>`
 
--  默认是**同步加载 + 同步执行**
--  在加载和执行脚本时，**浏览器会暂停解析 HTML**
--  ❗ 可能阻塞页面加载
+- 默认是**同步加载 + 同步执行**
+- 在加载和执行脚本时，**浏览器会暂停解析 HTML**
+- ❗ 可能阻塞页面加载
 
 2. `<script async>`
 
--  是**异步加载**，但**加载完成后立即执行**
--  **不保证执行顺序**
--  适合不依赖其他脚本的独立脚本（如统计、广告）
+- 是**异步加载**，但**加载完成后立即执行**
+- **不保证执行顺序**
+- 适合不依赖其他脚本的独立脚本（如统计、广告）
 
 3. `<script defer>`
 
--  也是**异步加载**
--  **等 DOM 构建完毕后再顺序执行**
--  最推荐的方式之一，适合放在 `<head>` 中而不阻塞 HTML 渲染
+- 也是**异步加载**
+- **等 DOM 构建完毕后再顺序执行**
+- 最推荐的方式之一，适合放在 `<head>` 中而不阻塞 HTML 渲染
 
 ---
 
@@ -124,9 +124,9 @@
 <script src="c.js" defer></script>
 ```
 
--  `a.js` 会**立即加载并执行**（阻塞后续 HTML）
--  `b.js` 会**并行加载**，加载完立刻执行（可能在 `a.js` 前或后执行）
--  `c.js` 会并行加载，但**等 HTML 解析完再按顺序执行**
+- `a.js` 会**立即加载并执行**（阻塞后续 HTML）
+- `b.js` 会**并行加载**，加载完立刻执行（可能在 `a.js` 前或后执行）
+- `c.js` 会并行加载，但**等 HTML 解析完再按顺序执行**
 
 ---
 
@@ -134,18 +134,18 @@
 
 #### 常见块级元素：
 
--  `<div>`
--  `<p>`
--  `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, `<h6>`
--  `<section>`
--  `<article>`
--  `<header>`
--  `<footer>`
--  `<main>`
--  `<ul>`, `<ol>`, `<li>`
--  `<form>`
--  `<table>`
--  `<header>`, `<footer>`, `<nav>`
+- `<div>`
+- `<p>`
+- `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, `<h6>`
+- `<section>`
+- `<article>`
+- `<header>`
+- `<footer>`
+- `<main>`
+- `<ul>`, `<ol>`, `<li>`
+- `<form>`
+- `<table>`
+- `<header>`, `<footer>`, `<nav>`
 
 #### 特点：
 
@@ -155,17 +155,17 @@
 
 > # 常见行级元素：
 
--  `<span>`
--  `<a>`
--  `<strong>`
--  `<em>`
--  `<b>`
--  `<i>`
--  `<img>`
--  `<abbr>`
--  `<code>`
--  `<label>`
--  `<q>`
+- `<span>`
+- `<a>`
+- `<strong>`
+- `<em>`
+- `<b>`
+- `<i>`
+- `<img>`
+- `<abbr>`
+- `<code>`
+- `<label>`
+- `<q>`
 
 ### 特点：
 
@@ -179,44 +179,44 @@
 
 1. **嵌套外部内容**：
 
-   -  可以轻松嵌入其他网站或网页内容，比如广告、视频、地图等。
+   - 可以轻松嵌入其他网站或网页内容，比如广告、视频、地图等。
 
 1. **隔离性**：
 
-   -  `iframe` 中的内容与主页面隔离，提供了独立的环境，这有助于避免主页面和嵌入页面的 CSS、JavaScript 等冲突。
+   - `iframe` 中的内容与主页面隔离，提供了独立的环境，这有助于避免主页面和嵌入页面的 CSS、JavaScript 等冲突。
 
 1. **增强页面功能**：
 
-   -  可以在不刷新整个页面的情况下嵌入动态内容，增强用户体验。例如，可以用 `iframe` 嵌入视频播放器、聊天框等。
+   - 可以在不刷新整个页面的情况下嵌入动态内容，增强用户体验。例如，可以用 `iframe` 嵌入视频播放器、聊天框等。
 
 1. **减少页面负载**：
 
-   -  使用 `iframe` 加载外部页面，可以将外部资源和主页面的加载分开，减轻主页面的负担。
+   - 使用 `iframe` 加载外部页面，可以将外部资源和主页面的加载分开，减轻主页面的负担。
 
 #### **缺点**：
 
 1. **影响性能**：
 
-   -  嵌入多个 `iframe` 可能增加浏览器的资源消耗，导致页面加载变慢，尤其是当每个 `iframe` 加载的内容较多时。
+   - 嵌入多个 `iframe` 可能增加浏览器的资源消耗，导致页面加载变慢，尤其是当每个 `iframe` 加载的内容较多时。
 
 1. **SEO 不友好**：
 
-   -  搜索引擎通常不会索引 `iframe` 中的内容，这可能影响页面的 SEO（搜索引擎优化）表现。
+   - 搜索引擎通常不会索引 `iframe` 中的内容，这可能影响页面的 SEO（搜索引擎优化）表现。
 
 1. **跨域问题**：
 
-   -  由于安全性原因，浏览器限制了 `iframe` 内的脚本与主页面脚本的交互，跨域时尤其需要特别处理（如使用 postMessage）。
+   - 由于安全性原因，浏览器限制了 `iframe` 内的脚本与主页面脚本的交互，跨域时尤其需要特别处理（如使用 postMessage）。
 
 1. **布局问题**：
 
-   -  在某些情况下，`iframe` 可能对布局产生影响，需要特别注意 `iframe` 的大小和滚动条等问题。
+   - 在某些情况下，`iframe` 可能对布局产生影响，需要特别注意 `iframe` 的大小和滚动条等问题。
 
 > # viewport
 
--  `<meta name="viewport">` 是移动端网页开发中非常关键的标签，用于控制网页在移动设备上的**缩放与布局行为**。
--  解决问题：
--  （1）页面太宽 → 被压缩缩放显示 : 控制页面布局宽度 , 适配不同屏幕
--  （2）字太小，用户体验差 : 控制缩放比例 , 提升用户体验
+- `<meta name="viewport">` 是移动端网页开发中非常关键的标签，用于控制网页在移动设备上的**缩放与布局行为**。
+- 解决问题：
+- （1）页面太宽 → 被压缩缩放显示 : 控制页面布局宽度 , 适配不同屏幕
+- （2）字太小，用户体验差 : 控制缩放比例 , 提升用户体验
 
 # 第二部分 html 面试题
 
@@ -235,15 +235,15 @@
 
 **答：**
 
--  使用 `alt` 文本；
--  使用 JS 监听 `onerror`；
+- 使用 `alt` 文本；
+- 使用 JS 监听 `onerror`；
 
-   ```html
-   <img src="xxx.jpg" onerror="this.src='backup.jpg'" />
-   ```
+  ```html
+  <img src="xxx.jpg" onerror="this.src='backup.jpg'" />
+  ```
 
--  后端返回默认图片。
-   > ### 2️⃣ `<img>` 的常见属性有哪些？
+- 后端返回默认图片。
+  > ### 2️⃣ `<img>` 的常见属性有哪些？
 
 **答：**
 
@@ -288,19 +288,19 @@
 
 **答：**
 
--  当图片进入视口（可见区域）时，才真正加载。
-   实现方式：
+- 当图片进入视口（可见区域）时，才真正加载。
+  实现方式：
 
 ```js
 const imgs = document.querySelectorAll("img[data-src]");
 const observer = new IntersectionObserver((entries) => {
-   entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-         const img = entry.target;
-         img.src = img.dataset.src;
-         observer.unobserve(img);
-      }
-   });
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      const img = entry.target;
+      img.src = img.dataset.src;
+      observer.unobserve(img);
+    }
+  });
 });
 imgs.forEach((img) => observer.observe(img));
 ```
@@ -316,9 +316,9 @@ imgs.forEach((img) => observer.observe(img));
 
    ```html
    <img
-      src="small.jpg"
-      srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
-      sizes="(max-width: 600px) 480px, 800px"
+     src="small.jpg"
+     srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
+     sizes="(max-width: 600px) 480px, 800px"
    />
    ```
 
@@ -328,8 +328,8 @@ imgs.forEach((img) => observer.observe(img));
 
    ```html
    <picture>
-      <source media="(min-width:800px)" srcset="large.jpg" />
-      <img src="small.jpg" alt="demo" />
+     <source media="(min-width:800px)" srcset="large.jpg" />
+     <img src="small.jpg" alt="demo" />
    </picture>
    ```
 
@@ -375,10 +375,10 @@ Base64 是把图片二进制数据编码成文本（ASCII 字符串）：
 
 ✅ 优点：
 
--  减少 HTTP 请求（适合小图标）
-   ❌ 缺点：
--  会增大体积（大约 +30%）
--  无法缓存（嵌入 HTML 里）
+- 减少 HTTP 请求（适合小图标）
+  ❌ 缺点：
+- 会增大体积（大约 +30%）
+- 无法缓存（嵌入 HTML 里）
 
 ---
 
@@ -386,17 +386,17 @@ Base64 是把图片二进制数据编码成文本（ASCII 字符串）：
 
 **答：**
 
--  把多个小图标拼成一张大图；
--  用 `background-position` 来定位显示哪个部分；
+- 把多个小图标拼成一张大图；
+- 用 `background-position` 来定位显示哪个部分；
 
 ```css
 .icon {
-   background-image: url(sprite.png);
-   width: 20px;
-   height: 20px;
+  background-image: url(sprite.png);
+  width: 20px;
+  height: 20px;
 }
 .icon-home {
-   background-position: -20px -40px;
+  background-position: -20px -40px;
 }
 ```
 
@@ -411,12 +411,12 @@ Base64 是把图片二进制数据编码成文本（ASCII 字符串）：
 
 ```js
 function compressImage(img, quality = 0.7) {
-   const canvas = document.createElement("canvas");
-   const ctx = canvas.getContext("2d");
-   canvas.width = img.width;
-   canvas.height = img.height;
-   ctx.drawImage(img, 0, 0);
-   return canvas.toDataURL("image/jpeg", quality);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0);
+  return canvas.toDataURL("image/jpeg", quality);
 }
 ```
 
@@ -461,9 +461,9 @@ img.src = "test.jpg";
 
 考察点：
 
--  IntersectionObserver
--  React/Vue 组件封装
--  loading 状态
+- IntersectionObserver
+- React/Vue 组件封装
+- loading 状态
 
 ---
 
@@ -471,9 +471,9 @@ img.src = "test.jpg";
 
 考察点：
 
--  FileReader 读取图片
--  Canvas 画图 + toDataURL 输出
--  Blob 转 File 再上传
+- FileReader 读取图片
+- Canvas 画图 + toDataURL 输出
+- Blob 转 File 再上传
 
 ---
 
@@ -487,3 +487,289 @@ img.src = "test.jpg";
 4. CDN 分发
 5. 小图转 Base64
 6. 关键图优先加载（preload）
+
+# 第三部分 SEO
+
+> ### 什么是 SEO？为什么 SEO 对于一个网站至关重要？
+
+非常好的问题 ✅
+这是前端面试中**网页优化与搜索引擎友好性**的经典考点之一。
+下面给你一份**标准 + 面试官满意度高的回答**👇
+
+---
+
+## 🧭 一、什么是 SEO？
+
+**SEO（Search Engine Optimization）即“搜索引擎优化”**。
+是指通过**对网站结构、内容、链接及技术优化**，
+让网站在搜索引擎（如百度、Google）中的**自然排名更靠前**，
+从而提升网站的**曝光率、点击率和访问量**。
+
+---
+
+## 🧩 二、SEO 的核心原理
+
+搜索引擎（如 Google、Baidu）通过「**爬虫程序**」抓取网页内容，
+然后根据算法对网页进行**索引（Indexing）**和**排名（Ranking）**。
+SEO 的目标，就是**让网页更容易被爬虫识别、理解和推荐**。
+
+---
+
+## 🚀 三、为什么 SEO 对网站至关重要？
+
+| 原因                      | 说明                                                           |
+| ------------------------- | -------------------------------------------------------------- |
+| **1. 提升曝光和流量**     | 大多数用户通过搜索引擎访问网站，排名靠前的网站能获得更多访问。 |
+| **2. 降低推广成本**       | 与付费广告相比，SEO 是一种长期、自然的引流方式。               |
+| **3. 增强品牌可信度**     | 排名靠前的网站更容易获得用户信任。                             |
+| **4. 提升用户体验（UX）** | SEO 优化往往伴随内容结构、性能优化，使网站更易用。             |
+| **5. 改善网站结构**       | 有助于前后端分离项目的内容可爬取性（SSR、静态化）。            |
+
+---
+
+## 🧠 四、前端开发与 SEO 的关系（重点！）
+
+虽然 SEO 看似是“运营或后端”的事，
+但**前端工程师在 SEO 中起着关键作用**。
+面试官最爱问这一块 👇
+
+### 1️⃣ HTML 语义化结构（Semantic HTML）
+
+使用正确的标签结构：
+
+```html
+<h1>文章标题</h1>
+<p>内容段落</p>
+<img src="image.jpg" alt="描述图片内容" />
+```
+
+> 帮助搜索引擎理解内容层次，识别关键信息。
+
+---
+
+### 2️⃣ Meta 标签优化
+
+```html
+<meta name="description" content="本网站提供高质量的前端教程与实战案例。" />
+<meta name="keywords" content="HTML,CSS,JavaScript,前端开发" />
+```
+
+> 有助于搜索引擎在摘要中显示相关信息，提高点击率。
+
+---
+
+### 3️⃣ 合理的 URL 设计
+
+- ✅ 推荐：`/article/javascript-basics`
+- ❌ 不推荐：`/page?id=123`
+
+> 语义化 URL 让搜索引擎更容易理解页面内容。
+
+---
+
+### 4️⃣ 图片优化（加 alt）
+
+```html
+<img src="/images/logo.png" alt="网站Logo" />
+```
+
+> 搜索引擎无法识别图片内容，`alt` 提供语义描述，有助于图片搜索收录。
+
+---
+
+### 5️⃣ SSR 或静态化（SEO 的关键技术点）
+
+> 对于 **SPA 单页应用（如 Vue、React）**，前端渲染的页面内容可能在爬虫访问时还未生成。
+> 因此需要：
+
+- 使用 **SSR（服务端渲染）** 或 **静态预渲染**；
+- 常见解决方案：`Next.js`、`Nuxt.js`、`React Helmet`。
+
+---
+
+### 6️⃣ 页面性能优化（影响 SEO 排名）
+
+- 减少首屏加载时间；
+- 使用懒加载；
+- 图片压缩；
+- 减少不必要的 JS；
+- 使用 CDN；
+
+> 搜索引擎排名算法中「性能」占很大权重（尤其是 Google）。
+
+---
+
+### 7️⃣ 移动端适配
+
+> 移动端友好性（Mobile Friendly）是搜索引擎排名的关键因素之一。
+
+---
+
+## 🧮 五、总结一份面试回答（可直接背诵）
+
+> SEO（搜索引擎优化）是通过优化网页结构、内容、Meta 信息、URL 设计等，使网页更容易被搜索引擎识别和收录，从而提升网站的自然排名和流量。
+>
+> 对网站而言，SEO 能显著提高曝光度、降低推广成本，并提升用户体验。
+>
+> 前端在 SEO 中的作用主要体现在：
+>
+> - 使用语义化的 HTML 结构；
+> - 合理配置 `<title>`、`<meta>` 标签；
+> - 添加图片的 `alt` 属性；
+> - 优化性能和移动端体验；
+> - 对 SPA 项目使用 SSR 或静态化生成内容。
+>
+> 在现代前端项目（如 React、Vue）中，SEO 仍然是影响流量与商业价值的关键因素。
+
+> ### SEO 有哪些关键点？你在日常开发中，都采取了哪些措施来进行 SEO 呢？
+
+非常棒 👍 这道题是 **SEO 的第二层考察题**，
+前一道问「什么是 SEO」，这一道问「怎么做 SEO」，
+面试官要看你是否**真的懂实践层面的 SEO 优化措施**。
+
+---
+
+## 🧭 一、SEO 的关键点（核心六大方面）
+
+SEO 的优化点非常多，但前端工程师需要掌握以下 6 大关键方面 👇
+
+| 分类               | 关键点                                             | 说明                                   |
+| ------------------ | -------------------------------------------------- | -------------------------------------- |
+| **1️⃣ 内容优化**    | 关键词布局、标题层级、描述清晰                     | 内容质量 & 关键词自然出现              |
+| **2️⃣ HTML 语义化** | 合理使用 h1~h6、p、a、img、nav、article            | 让搜索引擎理解内容结构                 |
+| **3️⃣ Meta 信息**   | `<title>`、`<meta description>`、`<meta keywords>` | 决定搜索结果摘要展示                   |
+| **4️⃣ 链接结构**    | 内链（内部跳转） + 外链（外部引用） + URL 规范     | 影响网站权重传递与爬虫抓取深度         |
+| **5️⃣ 性能优化**    | 首屏加载、图片懒加载、CDN、JS 体积控制             | 页面性能是 Google/Baidu 排名的重要权重 |
+| **6️⃣ 技术适配**    | SSR（服务端渲染）、移动端适配、sitemap.xml         | 确保爬虫能看到完整内容                 |
+
+---
+
+## 🚀 二、我在日常开发中采取的 SEO 优化措施（面试可直接背诵 ✅）
+
+下面是一个高分回答模板，**结构清晰、实践具体**👇
+
+---
+
+### 💡（1）HTML 语义化结构
+
+我在开发时会注意：
+
+- 使用 `<header>`、`<nav>`、`<main>`、`<article>`、`<footer>` 等语义化标签；
+- 保证每个页面只有一个 `<h1>`；
+- 重要内容用 `<strong>` 或 `<em>`；
+- 图片都有合理的 `alt` 描述。
+
+✅ 示例：
+
+```html
+<article>
+  <h1>前端性能优化指南</h1>
+  <p>本文介绍了10种常见的性能优化方法...</p>
+  <img src="img/seo.jpg" alt="前端性能优化示意图" />
+</article>
+```
+
+---
+
+### 💡（2）Meta 标签优化
+
+每个页面都会配置标题和描述信息：
+
+```html
+<head>
+  <title>前端开发教程 - 代码实战与优化技巧</title>
+  <meta
+    name="description"
+    content="提供高质量前端教程、实战项目与性能优化方案。"
+  />
+  <meta name="keywords" content="HTML,CSS,JavaScript,React,Vue,前端教程" />
+</head>
+```
+
+这些标签有助于搜索引擎识别主题内容，并在搜索结果中展示摘要。
+
+---
+
+### 💡（3）URL 设计 & 路由规范化
+
+- URL 使用语义化、可读的单词而非参数。
+  ✅ `/blog/javascript-basics`
+  ❌ `/article?id=1234`
+
+- 使用小写、短横线分隔；
+
+- 对 React/Vue SPA 项目，会使用「**服务器端 URL 重写**」或 SSR，让每个路径都能被单独访问。
+
+---
+
+### 💡（4）SSR 或静态预渲染（解决 SPA 不可爬取问题）
+
+搜索引擎爬虫对 SPA（单页应用）的 JS 渲染支持有限。
+因此在实际项目中，我会：
+
+- 使用 **Next.js（React）** 或 **Nuxt.js（Vue）** 提供 SSR；
+- 或者使用 **`vite-plugin-ssr` / prerender-spa-plugin`** 做静态化导出；
+- 确保爬虫访问页面时，HTML 已包含主要内容。
+
+---
+
+### 💡（5）性能优化（影响 SEO 排名的关键）
+
+Google 的算法（Core Web Vitals）强烈依赖性能指标。
+我在开发中会重点关注：
+
+- 图片懒加载 (`loading="lazy"`);
+- 使用 CDN；
+- JS 分包与 Tree-shaking；
+- 缓存策略（HTTP 缓存 + 本地缓存）；
+- 减少阻塞渲染的 JS/CSS；
+- 压缩资源。
+
+✅ 示例：
+
+```html
+<img src="/images/banner.jpg" loading="lazy" alt="首页横幅图" />
+```
+
+---
+
+### 💡（6）移动端适配 & 响应式设计
+
+- 使用 `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+- 优化字体与按钮尺寸；
+- 使用媒体查询或响应式框架；
+- 确保 Lighthouse 移动端评分达标（Google 移动优先索引）。
+
+---
+
+### 💡（7）辅助文件与外部支持
+
+- `robots.txt`：告知爬虫哪些页面可以/不可以抓取。
+- `sitemap.xml`：提供网站结构地图，方便索引。
+- Open Graph（OG）/Twitter Card 标签：优化社交分享预览。
+
+✅ 示例：
+
+```html
+<meta property="og:title" content="前端开发教程" />
+<meta property="og:description" content="实用的前端项目与性能优化技巧" />
+<meta property="og:image" content="/images/share.jpg" />
+```
+
+---
+
+## 📊 三、面试可用的“总结版回答模板”
+
+> SEO 的关键点主要包括内容质量、语义化结构、Meta 优化、URL 设计、性能与移动端适配。
+>
+> 在日常开发中，我通常会：
+>
+> 1. 使用语义化 HTML 标签，让爬虫更好理解页面结构；
+> 2. 为每个页面配置独立的 `<title>`、`<meta description>`；
+> 3. 保证 URL 结构清晰、可读；
+> 4. 采用 SSR 或预渲染提高 SPA 的可爬取性；
+> 5. 优化性能与首屏加载，提升搜索排名；
+> 6. 添加 sitemap.xml 和 robots.txt 辅助爬虫索引；
+> 7. 做好移动端适配，保证良好的用户体验。
+>
+> 这些优化不仅有助于搜索引擎排名，也显著改善了用户体验。
