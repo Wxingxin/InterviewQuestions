@@ -1,19 +1,63 @@
-function deepclone(obj) {
-  if (typeof obj === null || typeof obj !== "object") {
-    return obj;
+const PENDING = "pending";
+const FULFILLED = "fulfilled";
+const REJECTED = "rejected";
+
+class MyPromise {
+  constructor(executor) {
+    this.state = PENDING;
+    this.value = null;
+    this.reason = null;
+    this.onFulfilledsCallback = [];
+    this.onRejectedsCallback = [];
+
+    function fulfill(value) {
+      if (this.state === PENDING) {
+        this.state = FULFILLED;
+        this.value = value;
+        this.onFulfilledsCallback.forEach((cb) => cb());
+      }
+    }
+
+    function reject(reason) {
+      if (this.state === PENDING) {
+        this.state = REJECTED;
+        this.reason = reason;
+        this.onRejectedsCallback.forEach((cb) => cb());
+      }
+    }
+
+    try {
+      executor(fulfill, reject);
+    } catch (error) {
+      reject(error);
+    }
   }
 
-  if (obj instanceof Date) {
-    return new Date(obj);
+  then(onFulfilled, onRejected) {
+    onFulfilled = typeof onFulfilled === "function" ? onFulfilled : (v) => v;
+    onRejected =
+      typeof onRejected === "function"
+        ? onRejected
+        : (error) => {
+            throw error;
+          };
+    return MyPromise((resolve, reject) => {});
   }
 
-  if (obj instanceof RegExp) {
-    return new RegExp(obj);
+  static resolve(value){
+    if(value instanceof MyPromise) return value
+    return new MyPromise(resolve => resolve(value))
   }
 
-  const deepobj = Array.isArray(obj) ? [] : {};
+  static reject(reason){
+    return new MyPromise((_, reject) => reject(reason))
+  }
 
-  for(let item of obj){
-    if(obj)
+  static all(promises){
+    return new MyPromise((resolve,reject) => {
+      promises.forEach((p,i) => {
+        MyPromise.resolve(p).then()
+      })
+    })
   }
 }
