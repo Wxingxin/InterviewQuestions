@@ -1,12 +1,19 @@
-function foo() {
-  return "hello";
-}
+function deepclone(obj) {
+  if (typeof obj === null || typeof obj !== "object") {
+    return obj;
+  }
 
-function bar() {
-  const a = 22;
-  return a;
-}
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
 
-function name(){
-  return 'this is my good';
+  if (obj instanceof RegExp) {
+    return new RegExp(obj);
+  }
+
+  const deepobj = Array.isArray(obj) ? [] : {};
+
+  for(let item of obj){
+    if(obj)
+  }
 }
