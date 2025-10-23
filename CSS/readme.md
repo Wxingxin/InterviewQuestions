@@ -1,4 +1,4 @@
-# 基础语法与选择器
+# css的单位和选择器
 
 > ### **CSS 单位有哪些？px、em、rem、%、vh/vw 区别？**
 
@@ -26,11 +26,6 @@
 
 - 物理像素 (Physical Pixels) 和 CSS 像素 (CSS Pixels / Logical Pixels) 之间的比率。如果一个设备的 DPR 为 2，那么 1 个 CSS 像素将对应 4 个设备像素（2x2）。
 
-> ### link 和 @import 的区别
-
-- link 是 xhtml 标签，除了引入 css 外，还可以加载库，框架，工具等；@import 属于 css 范畴，只能加载 css
-- link 引用 css 的时候，在页面载入时同时加载。 @import 需要页面完全加载完成后加载
-- link 是 xhtml 标签，无兼容问题，@import 是 css2 提出来的，低版本的浏览器不支持
 
 # 布局
 
@@ -978,3 +973,9 @@ div {
 
 我可以帮你画一张 **「CSS 阻塞渲染流程图 + 优化策略对比」**，
 一张图就能秒讲清浏览器为何阻塞以及如何优化，要我画吗？
+
+> ### link 和 @import 的区别
+
+- link 是 xhtml 标签，除了引入 css 外，还可以加载库，框架，工具等；@import 属于 css 范畴，只能加载 css
+- link 引用 css 的时候，在页面载入时同时加载。 @import 需要页面完全加载完成后加载
+- link 是 xhtml 标签，无兼容问题，@import 是 css2 提出来的，低版本的浏览器不支持
