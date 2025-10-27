@@ -307,10 +307,23 @@ console.log(a.msg);
 
 ---
 
-### ❓21. Vite 中模块化加载的原理？
+> ### ❓21. Vite 中模块化加载的原理？
 
 **答：**
 Vite 利用浏览器原生 ESM，
 在开发阶段不打包，直接通过 `import` 加载模块（HTTP 按需加载）。
 构建时再用 Rollup 打包为生产版本。
 
+# 使用大全
+> ### Commonjs
+1. Commonjs是一种规范
+
+> ### ES Module
+
+| 分类                   | 导出语法                           | 导入语法                                 |
+| -------------------- | ------------------------------ | ------------------------------------ |
+| 命名导出（Named Export）   | `export const a = 1;`          | `import { a } from './m.js';`        |
+| 默认导出（Default Export） | `export default function() {}` | `import fn from './m.js';`           |
+| 重命名导出                | `export { a as b };`           | `import { b as myB } from './m.js';` |
+| 全部导出                 | `export * from './other.js';`  | `import * as mod from './m.js';`     |
+| 动态导入                 | ——                             | `import('./m.js').then(...)`         |
