@@ -119,7 +119,7 @@ class MyPromise {
     if (value instanceof MyPromise) return value;
     return new MyPromise((resolve) => resolve(value));
   }
-
+          
   static reject(reason) {
     return new MyPromise((_, reject) => reject(reason));
   }
