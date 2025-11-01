@@ -1,362 +1,439 @@
-当然可以 ✅
-下面是我为你整理的 **TypeScript（TS）面试题大全**，涵盖 **基础 → 进阶 → 实战**，并包含详细解析。
-这份清单可以帮助你应对前端面试中所有与 TS 相关的问题（尤其是 React + TS 项目中）。
+
+# 🧠 TypeScript 面试题大全（附经典案例 + 详解）
 
 ---
 
-## 🟢 一、TypeScript 基础面试题
-
-### 1️⃣ TypeScript 与 JavaScript 的区别？
-
-**答：**
-
-| JS           | TS                      |
-| ------------ | ----------------------- |
-| 弱类型          | 强类型（静态类型检查）             |
-| 无法在编译时发现类型错误 | 编译时可发现类型错误              |
-| 动态语言         | 静态语言的特性                 |
-| 无类型系统        | 有类型系统（如 interface、type） |
-| 不支持装饰器、枚举    | 支持装饰器、枚举、泛型等            |
+## 🧩 一、基础必会题（类型系统核心）
 
 ---
 
-### 2️⃣ TypeScript 的类型有哪些？
+### **1️⃣ TypeScript 是什么？它和 JavaScript 有什么区别？**
 
-常见类型：
+**回答：**
+
+* TypeScript 是 JavaScript 的超集，增加了静态类型检查和一些新特性。
+* TS 在编译时进行类型检测，最终会编译成纯 JS 运行。
+
+**区别：**
+
+| 对比项  | JavaScript | TypeScript |
+| ---- | ---------- | ---------- |
+| 类型系统 | 动态类型       | 静态类型       |
+| 检查时机 | 运行时        | 编译时        |
+| 执行方式 | 直接执行       | 需先编译为 JS   |
+| 错误发现 | 运行时报错      | 编译时报错      |
+
+---
+
+### **2️⃣ TypeScript 的优点是什么？**
+
+✅ 编译期发现错误
+✅ IDE 智能提示（类型推断）
+✅ 更好的代码可维护性
+✅ 支持面向对象特性（类、接口、泛型等）
+
+---
+
+### **3️⃣ TypeScript 中有哪些基本类型？**
 
 ```ts
-number, string, boolean, null, undefined, any, unknown, void, never,
-array, tuple, enum, object, Function, Symbol, bigint
+let a: string = "hello";
+let b: number = 42;
+let c: boolean = true;
+let d: undefined = undefined;
+let e: null = null;
+let f: any = "可以是任何类型";
+let g: unknown = "未知类型";
+let h: void = undefined;
 ```
 
----
-
-### 3️⃣ `any`、`unknown`、`never`、`void` 的区别？
-
-| 类型        | 含义           | 示例                                              |
-| --------- | ------------ | ----------------------------------------------- |
-| `any`     | 任意类型，关闭类型检查  | `let x: any = 123; x = 'abc'`                   |
-| `unknown` | 任意类型，但不能直接操作 | `let x: unknown = 123; x.toFixed()` ❌           |
-| `void`    | 无返回值         | `function log(): void { console.log('ok') }`    |
-| `never`   | 不会返回（抛错或死循环） | `function error(): never { throw new Error() }` |
+> **拓展类型**：`never`, `enum`, `tuple`, `object`, `bigint`, `symbol`。
 
 ---
 
-### 4️⃣ 什么是类型推断？
+### **4️⃣ any、unknown、never 区别？**
 
-TS 会根据变量的初始值自动推断类型。
+| 类型        | 描述                | 典型使用场景       |
+| --------- | ----------------- | ------------ |
+| `any`     | 任意类型，不受类型检查       | 快速原型开发或迁移旧代码 |
+| `unknown` | 安全版 any，必须先类型判断再用 | 不确定类型但要保证安全  |
+| `never`   | 不会有返回值（永远不会执行完）   | 死循环、抛出错误的函数  |
 
 ```ts
-let a = 123; // 推断为 number
-a = 'abc';   // ❌ 报错
-```
-
----
-
-### 5️⃣ 什么是类型断言（Type Assertion）？
-
-告诉编译器你比它更了解类型。
-
-```ts
-const el = document.querySelector('#id') as HTMLDivElement;
-(el as any).click();
-```
-
----
-
-### 6️⃣ interface 和 type 的区别？
-
-| 对比点  | interface    | type        |
-| ---- | ------------ | ----------- |
-| 扩展性  | 可以 `extends` | 可以交叉（`&`）   |
-| 合并声明 | ✅ 可以         | ❌ 不可以       |
-| 能定义  | 对象、函数、类      | 一切类型（含联合类型） |
-
-```ts
-interface A { x: number }
-interface A { y: number } // ✅ 合并声明
-type B = { x: number } & { y: number } // ✅ 用交叉实现
-```
-
----
-
-### 7️⃣ 可选属性与只读属性？
-
-```ts
-interface User {
-  readonly id: number; // 只读
-  name?: string; // 可选
+function fail(msg: string): never {
+  throw new Error(msg);
 }
 ```
 
 ---
 
-### 8️⃣ 枚举（Enum）了解吗？
+### **5️⃣ 类型推断是什么？**
+
+TypeScript 会**自动推导变量类型**。
 
 ```ts
-enum Direction {
-  Up = 1,
-  Down,
-  Left,
-  Right
-}
-```
-
-> 枚举底层是对象映射，编译后有双向映射。
-
----
-
-## 🟡 二、TypeScript 进阶面试题
-
-### 9️⃣ 泛型（Generics）是什么？
-
-**定义可复用的类型模板。**
-
-```ts
-function identity<T>(value: T): T {
-  return value;
-}
-identity<number>(1);
-identity<string>('abc');
+let count = 10;  // 自动推断为 number
+count = "hello"; // ❌ 报错
 ```
 
 ---
 
-### 🔟 泛型约束
+### **6️⃣ 类型断言是什么？**
+
+告诉编译器：“我比你更清楚这个类型。”
 
 ```ts
-function logLength<T extends { length: number }>(arg: T): number {
-  return arg.length;
-}
+const el = document.getElementById("app") as HTMLDivElement;
+el.innerText = "Hello TS!";
 ```
 
 ---
 
-### 11️⃣ 泛型接口与泛型类
+## 🧱 二、对象、类与接口篇
+
+---
+
+### **7️⃣ interface 与 type 的区别？**
+
+| 特性   | interface | type        |
+| ---- | --------- | ----------- |
+| 语义   | 接口，描述对象结构 | 类型别名，描述任意类型 |
+| 扩展   | extends   | & 交叉类型      |
+| 合并声明 | ✅ 支持      | ❌ 不支持       |
+| 泛型   | ✅ 支持      | ✅ 支持        |
+
+---
+
+### **8️⃣ class 中 public、private、protected 的区别？**
 
 ```ts
-interface ApiResponse<T> {
-  code: number;
-  data: T;
-}
-
-class Store<T> {
-  private data: T[] = [];
-  add(item: T) {
-    this.data.push(item);
-  }
+class Person {
+  public name: string;    // 任何地方都能访问
+  private age: number;    // 只能类内部访问
+  protected gender: string; // 类和子类内部访问
 }
 ```
 
 ---
 
-### 12️⃣ keyof、typeof、in、extends、infer
+### **9️⃣ implements 和 extends 区别？**
+
+* `extends`：类继承另一个类。
+* `implements`：类实现一个接口。
 
 ```ts
-type Person = { name: string; age: number };
-type Keys = keyof Person; // "name" | "age"
-
-const p = { x: 1, y: 2 };
-type P = typeof p; // {x:number; y:number}
-
-type PartialPerson = { [K in keyof Person]?: Person[K] };
-
-type T = number extends string ? true : false; // false
-
-type Return<T> = T extends (...args: any[]) => infer R ? R : never;
+interface Flyable { fly(): void; }
+class Bird implements Flyable {
+  fly() { console.log("Bird flying"); }
+}
 ```
 
 ---
 
-### 13️⃣ Utility Types（工具类型）
+### **10️⃣ 抽象类（abstract）和接口的区别？**
 
-常见工具类型：
-
-| 工具              | 含义       |
-| --------------- | -------- |
-| `Partial<T>`    | 所有属性变可选  |
-| `Required<T>`   | 所有属性变必填  |
-| `Readonly<T>`   | 所有属性变只读  |
-| `Pick<T, K>`    | 选择部分属性   |
-| `Omit<T, K>`    | 去除部分属性   |
-| `Record<K, T>`  | 构建对象类型   |
-| `ReturnType<T>` | 提取函数返回类型 |
-| `Parameters<T>` | 提取函数参数类型 |
+| 对比项    | 抽象类       | 接口    |
+| ------ | --------- | ----- |
+| 是否能有实现 | ✅ 可以有部分实现 | ❌ 不行  |
+| 是否能实例化 | ❌ 不可以     | ❌ 不可以 |
+| 用途     | 基类模板      | 类型规范  |
 
 ---
 
-### 14️⃣ 联合类型与交叉类型
+## 🔧 三、函数与泛型篇
+
+---
+
+### **11️⃣ 泛型是什么？**
+
+> 泛型（Generics）允许定义函数、接口、类时不预设类型，让使用时再指定。
+
+```ts
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+identity<number>(10);
+identity("hello");
+```
+
+---
+
+### **12️⃣ 泛型约束怎么用？**
+
+```ts
+interface HasLength { length: number; }
+
+function logLength<T extends HasLength>(arg: T): void {
+  console.log(arg.length);
+}
+
+logLength("hello"); // ✅
+logLength([1, 2, 3]); // ✅
+```
+
+---
+
+### **13️⃣ 泛型接口与泛型类**
+
+```ts
+interface Box<T> {
+  value: T;
+}
+
+class Container<T> {
+  constructor(public content: T) {}
+}
+```
+
+---
+
+### **14️⃣ 函数类型声明有几种写法？**
+
+```ts
+// 1. 类型别名
+type Add = (a: number, b: number) => number;
+
+// 2. 接口写法
+interface AddFn {
+  (a: number, b: number): number;
+}
+
+// 3. 直接定义
+const add = (a: number, b: number): number => a + b;
+```
+
+---
+
+## ⚙️ 四、联合、交叉、类型守卫篇
+
+---
+
+### **15️⃣ 联合类型（Union）与交叉类型（Intersection）区别？**
 
 ```ts
 type A = { name: string };
 type B = { age: number };
 
-type C = A & B; // 交叉 {name, age}
-type D = A | B; // 联合：name 或 age
+type Union = A | B; // 取并集
+type Inter = A & B; // 取交集（合并）
+
+const u: Union = { name: "Tom" };
+const i: Inter = { name: "Tom", age: 20 };
 ```
 
 ---
 
-### 15️⃣ 类型守卫（Type Guards）
+### **16️⃣ 类型守卫（Type Guards）是什么？**
 
-在运行时判断类型：
+用类型判断来**缩小变量类型范围**。
 
 ```ts
-function print(x: string | number) {
-  if (typeof x === 'string') {
-    console.log(x.toUpperCase());
+function printId(id: number | string) {
+  if (typeof id === "string") {
+    console.log(id.toUpperCase());
   } else {
-    console.log(x.toFixed(2));
+    console.log(id.toFixed(2));
   }
 }
 ```
 
 ---
 
-### 16️⃣ 什么是声明合并（Declaration Merging）？
-
-多个同名 `interface` 会自动合并属性。
+### **17️⃣ instanceof 和 in 关键字守卫**
 
 ```ts
-interface A { x: number }
-interface A { y: number }
-
-const obj: A = { x: 1, y: 2 };
+if (obj instanceof Date) { ... }
+if ("name" in obj) { ... }
 ```
 
 ---
 
-### 17️⃣ 什么是命名空间（namespace）？
+## 🧬 五、进阶与工具类型篇
 
-旧式模块化方案，用于组织代码。
+---
+
+### **18️⃣ keyof 是什么？**
+
+返回一个对象类型的键的联合类型。
 
 ```ts
-namespace Utils {
-  export function sum(a: number, b: number) {
-    return a + b;
-  }
+interface Person {
+  name: string;
+  age: number;
 }
+
+type Keys = keyof Person; // "name" | "age"
 ```
 
 ---
 
-## 🔵 三、TypeScript 实战与源码级面试题
+### **19️⃣ typeof 的类型作用？**
 
-### 18️⃣ React + TS 中 Props 怎么写？
-
-```tsx
-interface Props {
-  title: string;
-  onClick?: () => void;
-}
-
-const Button: React.FC<Props> = ({ title, onClick }) => (
-  <button onClick={onClick}>{title}</button>
-);
-```
-
----
-
-### 19️⃣ 如何定义组件的 children？
-
-```tsx
-interface Props {
-  children: React.ReactNode;
-}
-```
-
----
-
-### 20️⃣ 如何在 TS 中定义 API 响应类型？
+获取变量的类型：
 
 ```ts
-interface ApiResponse<T> {
-  code: number;
-  data: T;
-  msg: string;
+const person = { name: "Tom", age: 20 };
+type PersonType = typeof person; // { name: string; age: number; }
+```
+
+---
+
+### **20️⃣ Partial / Required / Pick / Omit 工具类型作用？**
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  age?: number;
 }
 
-type User = { id: number; name: string };
-const res: ApiResponse<User> = {
-  code: 200,
-  data: { id: 1, name: 'Alex' },
-  msg: 'ok'
+type A = Partial<User>;   // 所有属性可选
+type B = Required<User>;  // 所有属性必选
+type C = Pick<User, "id">; // 只保留 id
+type D = Omit<User, "age">; // 删除 age
+```
+
+---
+
+### **21️⃣ Record 和 Exclude 用法？**
+
+```ts
+type Role = "admin" | "user";
+
+type RoleMap = Record<Role, number>; // { admin: number; user: number }
+
+type Status = "ok" | "error" | "loading";
+type Filtered = Exclude<Status, "loading">; // "ok" | "error"
+```
+
+---
+
+### **22️⃣ Readonly 和 ReturnType 用法**
+
+```ts
+type Point = Readonly<{ x: number; y: number }>;
+
+function foo() {
+  return { a: 1, b: 2 };
+}
+type FooReturn = ReturnType<typeof foo>; // { a: number; b: number }
+```
+
+---
+
+## 💥 六、DOM 与实战篇
+
+---
+
+### **23️⃣ 如何在 TS 中操作 DOM？**
+
+```ts
+const btn = document.querySelector("#btn") as HTMLButtonElement;
+btn.addEventListener("click", () => console.log("Clicked!"));
+```
+
+---
+
+### **24️⃣ 如何在 TS 中定义事件处理函数？**
+
+```ts
+const handleInput = (e: Event) => {
+  const input = e.target as HTMLInputElement;
+  console.log(input.value);
 };
 ```
 
 ---
 
-### 21️⃣ TS 中的 `as const` 有什么用？
-
-将对象的所有属性变为只读 + 字面量类型。
+### **25️⃣ 如何定义 API 响应类型？**
 
 ```ts
-const COLORS = {
-  red: '#f00',
-  blue: '#00f'
-} as const;
-
-// type: "red" | "blue"
-type Color = keyof typeof COLORS;
-```
-
----
-
-### 22️⃣ type 与 interface 如何选择？
-
-✅ 建议：
-
-* **对象结构** → `interface`
-* **复杂组合类型**（联合、交叉、函数签名）→ `type`
-
----
-
-### 23️⃣ TS 编译配置中常见选项？
-
-| 配置项             | 含义                     |
-| --------------- | ---------------------- |
-| `strict`        | 启用严格模式                 |
-| `noImplicitAny` | 禁止隐式 any               |
-| `target`        | 编译目标（ES5/ES6）          |
-| `module`        | 模块化方案（ESNext、CommonJS） |
-| `baseUrl`       | 相对路径基准目录               |
-| `paths`         | 路径别名                   |
-
----
-
-### 24️⃣ 什么是 Decorator（装饰器）？
-
-实验性语法，用于修改类、属性、方法行为。
-
-```ts
-function Log(target: any, name: string) {
-  console.log(`${name} 被调用`);
+interface ApiResponse<T> {
+  code: number;
+  data: T;
+  message: string;
 }
 
-class Test {
-  @Log
-  say() {}
+async function getUser(): Promise<ApiResponse<{ name: string }>> {
+  return { code: 200, data: { name: "Tom" }, message: "ok" };
 }
 ```
 
 ---
 
-### 25️⃣ 你如何在项目中使用 TS 提高开发体验？
-
-✅ 建议答案：
-
-* 严格类型约束 props / state；
-* 后端接口自动生成 TS 类型；
-* 结合 ESLint + TS 检查；
-* 利用泛型和 Utility Types 封装通用逻辑；
-* 在大型项目中消除隐式 `any`。
+## 🧭 七、超经典面试问答（高频题）
 
 ---
 
-如果你希望我帮你整理成：
+### **26️⃣ TS 编译流程是什么？**
 
-> ✅ 一份「TypeScript 面试速记手册 PDF」
-> 包含**题目 + 答案 + 核心语法总结**（适合打印复习）
+```
+TS 源代码 → 类型检查器 → 转换成 JS → 浏览器/Node 执行
+```
 
-我可以立即帮你生成。
-要我帮你做这份 PDF 吗？
+---
+
+### **27️⃣ TS 与 Babel 区别？**
+
+| 对比项  | TypeScript  | Babel |
+| ---- | ----------- | ----- |
+| 主要功能 | 类型检查 + 语法转换 | 语法转换  |
+| 输出   | JS          | JS    |
+| 类型检测 | ✅ 有         | ❌ 没有  |
+
+---
+
+### **28️⃣ declare / declare global / declare module 用法？**
+
+* `declare`：声明全局变量或模块类型；
+* 常见于引入 JS 库时编写 `.d.ts` 声明文件。
+
+```ts
+declare const VERSION: string;
+declare module "*.png";
+```
+
+---
+
+### **29️⃣ interface 能否定义函数？**
+
+可以：
+
+```ts
+interface Fn {
+  (x: number, y: number): number;
+}
+```
+
+---
+
+### **30️⃣ TS 如何与 React / Vue 结合？**
+
+* React：用 `React.FC<Props>` 或 `JSX.Element`；
+* Vue3：在 `<script lang="ts">` 中使用；
+* 都可利用类型推断、Props 校验、Hook 类型安全。
+
+---
+
+# ✅ 总结表：TS 面试知识结构图
+
+```
+基础类型 → 类型系统 → 对象/接口 → 类
+  ↓
+函数与泛型 → 联合/交叉类型 → 类型守卫
+  ↓
+工具类型（keyof、Pick、Omit 等）
+  ↓
+DOM + React/Vue 实战
+  ↓
+declare 声明与类型文件 → 编译机制与原理
+```
+
+---
+
+是否希望我下一步帮你整理成：
+
+> 📘 《TypeScript 面试速查手册（PDF）》——含题目 + 代码 + 答案 + 思维导图？
+
+我可以帮你直接导出一份带格式的笔记版，让你面试前快速复习。是否生成？
