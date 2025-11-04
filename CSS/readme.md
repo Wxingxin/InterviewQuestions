@@ -1242,10 +1242,10 @@ div {
 
 ### 4️⃣ 面试简答模板
 
-- 解决 div 文本溢出主要有三种方式：
-- 1. 单行文本：`white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
-- 2. 多行文本：使用 `-webkit-line-clamp` 限制行数 + 隐藏溢出
-- 3. 超出滚动：`overflow: auto` 或 `scroll` 显示滚动条
+- 1️⃣ 解决 div 文本溢出主要有三种方式：
+- 2️⃣ 单行文本：`white-space: nowrap; overflow: hidden; text-overflow: ellipsis;`
+- 3️⃣ 多行文本：使用 `-webkit-line-clamp` 限制行数 + 隐藏溢出
+- 4️⃣ 超出滚动：`overflow: auto` 或 `scroll` 显示滚动条
 
 > ## line-height: 120% 和 line-height: 1.2 有什么区别?
 
