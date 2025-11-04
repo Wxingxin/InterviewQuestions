@@ -321,7 +321,6 @@ div#main.content[data-role="box"] p.title strong::before
 | `flex`        | `flex-grow flex-shrink flex-basis` 的简写          |
 | `align-self`  | 单个子项在交叉轴上的对齐方式（覆盖 `align-items`） |
 
-> flex
 
 > ## CSS Grid 布局大全
 
@@ -993,6 +992,7 @@ img {
 > ### 🧠 题 1
 
 **问：** 什么是 IFC？
+
 **答：**
 IFC 是内联格式化上下文（Inline Formatting Context），
 当块级盒子中仅包含内联级元素时，内部会形成 IFC，
@@ -1003,6 +1003,7 @@ IFC 是内联格式化上下文（Inline Formatting Context），
 > ### 🧠 题 2
 
 **问：** IFC 的高度是如何计算的？
+
 **答：**
 每一行生成一个 line box，line box 的高度取决于该行中最高的内联元素，容器的高度为所有行盒高度之和。
 
@@ -1011,6 +1012,7 @@ IFC 是内联格式化上下文（Inline Formatting Context），
 > ### 🧠 题 3
 
 **问：** 如何让图片与文字垂直居中？
+
 **答：**
 设置：
 
@@ -1027,6 +1029,7 @@ img {
 > ### 🧠 题 4
 
 **问：** 为什么 `<img>` 底部有空隙？如何解决？
+
 **答：**
 
 - 因为图片是 inline 元素，与文字 baseline 对齐；
@@ -1038,6 +1041,7 @@ img {
 > ### 🧠 题 5
 
 **问：** IFC 会清除浮动（float）吗？
+
 **答：**
 不会。IFC 内元素不参与浮动清除，需要通过 BFC 实现。
 
@@ -1046,6 +1050,7 @@ img {
 > ### 🧠 题 6
 
 **问：** 哪些属性只在 IFC 中生效？
+
 **答：**
 `vertical-align`、`text-decoration`、`line-height`、`letter-spacing` 等。
 
@@ -1054,6 +1059,7 @@ img {
 > ### 🧠 题 7
 
 **问：** IFC 中可以嵌套块级元素吗？
+
 **答：**
 不可以。块级元素会打断 IFC，重新创建 BFC 或新的 IFC。
 
@@ -1062,6 +1068,7 @@ img {
 > ### 🧠 题 8
 
 **问：** IFC 的行盒高度不一致时，会发生什么？
+
 **答：**
 line box 的高度以行内最高元素为准；
 超出行高的部分可能会溢出行盒，造成上下不齐。
@@ -1071,6 +1078,7 @@ line box 的高度以行内最高元素为准；
 > ### 🧠 题 9
 
 **问：** IFC 是如何确定换行的？
+
 **答：**
 
 - 根据空格、word-wrap、white-space 规则；
@@ -1082,6 +1090,7 @@ line box 的高度以行内最高元素为准；
 > ### 🧠 题 10
 
 **问：** inline-block 元素内部是 IFC 还是 BFC？
+
 **答：**
 内部建立 IFC（可以排布内联内容），
 外部表现为块级盒子（可以与 inline 同行）。
