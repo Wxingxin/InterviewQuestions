@@ -26,22 +26,22 @@
 
 > ### 列举几条怪异模式中的怪癖行为
 
-- 1. 宽高的算法与 W3C 盒模型不同
-- 2. 在表格中的字体样式不会继承
-- 3. 可以设置行内元素宽高
-- 4. white-space:pre 会失效
+-  宽高的算法与 W3C 盒模型不同
+-  在表格中的字体样式不会继承
+-  可以设置行内元素宽高
+-  white-space:pre 会失效
 
 > ### HTML5 新特性
 
 | 分类     | 特性简述                                         |
 | -------- | ------------------------------------------------ |
-| 语义标签 | header, section, article 等结构清晰              |
-| 表单     | 更丰富的**输入类型**和**验证功**能                       |
-| 存储     | localStorage 和 sessionStorage                   |
-| 多媒体   | video, audio 标签直接播放                        |
-| 图形     | canvas 与 SVG 绘图能力                           |
-| API      | 地理定位、拖拽、多线程、WebSocket                |
-| 无障碍   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
+| 语义标签 <font color=red>新增💯</font>| header, section, article 等结构清晰              |
+| 多媒体 <font color=red>新增💯</font>  | video, audio 标签直接播放                        |
+| 无障碍  <font color=red>加强🤣</font> | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
+| 表单  <font color=red>加强🤣</font>   | 更丰富的**输入类型**和**验证功**能                       |
+| 存储  <font color=red>浏览器😂</font>   | localStorage 和 sessionStorage                   |
+| 图形  <font color=red>浏览器😂</font>   | canvas 与 SVG 绘图能力                           |
+| API   <font color=red>浏览器😂</font>   | 地理定位、拖拽、多线程、WebSocket                |
 
 > ### 简述一下你对 HTML 语义化的理解。
 
