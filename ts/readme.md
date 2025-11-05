@@ -1,19 +1,18 @@
-
 > ### **1️⃣ TypeScript 是什么？它和 JavaScript 有什么区别？**
 
 **回答：**
 
-* TypeScript 是 JavaScript 的超集，增加了静态类型检查和一些新特性。
-* TS 在编译时进行类型检测，最终会编译成纯 JS 运行。
+- TypeScript 是 JavaScript 的超集，增加了静态类型检查和一些新特性。
+- TS 在编译时进行类型检测，最终会编译成纯 JS 运行。
 
 **区别：**
 
-| 对比项  | JavaScript | TypeScript |
-| ---- | ---------- | ---------- |
-| 类型系统 | 动态类型       | 静态类型       |
-| 检查时机 | 运行时        | 编译时        |
-| 执行方式 | 直接执行       | 需先编译为 JS   |
-| 错误发现 | 运行时报错      | 编译时报错      |
+| 对比项   | JavaScript | TypeScript    |
+| -------- | ---------- | ------------- |
+| 类型系统 | 动态类型   | 静态类型      |
+| 检查时机 | 运行时     | 编译时        |
+| 执行方式 | 直接执行   | 需先编译为 JS |
+| 错误发现 | 运行时报错 | 编译时报错    |
 
 ---
 
@@ -45,11 +44,11 @@ let h: void = undefined;
 
 ### **4️⃣ any、unknown、never 区别？**
 
-| 类型        | 描述                | 典型使用场景       |
-| --------- | ----------------- | ------------ |
-| `any`     | 任意类型，不受类型检查       | 快速原型开发或迁移旧代码 |
-| `unknown` | 安全版 any，必须先类型判断再用 | 不确定类型但要保证安全  |
-| `never`   | 不会有返回值（永远不会执行完）   | 死循环、抛出错误的函数  |
+| 类型      | 描述                           | 典型使用场景             |
+| --------- | ------------------------------ | ------------------------ |
+| `any`     | 任意类型，不受类型检查         | 快速原型开发或迁移旧代码 |
+| `unknown` | 安全版 any，必须先类型判断再用 | 不确定类型但要保证安全   |
+| `never`   | 不会有返回值（永远不会执行完） | 死循环、抛出错误的函数   |
 
 ```ts
 function fail(msg: string): never {
@@ -64,7 +63,7 @@ function fail(msg: string): never {
 TypeScript 会**自动推导变量类型**。
 
 ```ts
-let count = 10;  // 自动推断为 number
+let count = 10; // 自动推断为 number
 count = "hello"; // ❌ 报错
 ```
 
@@ -87,12 +86,12 @@ el.innerText = "Hello TS!";
 
 ### **7️⃣ interface 与 type 的区别？**
 
-| 特性   | interface | type        |
-| ---- | --------- | ----------- |
-| 语义   | 接口，描述对象结构 | 类型别名，描述任意类型 |
-| 扩展   | extends   | & 交叉类型      |
-| 合并声明 | ✅ 支持      | ❌ 不支持       |
-| 泛型   | ✅ 支持      | ✅ 支持        |
+| 特性     | interface          | type                   |
+| -------- | ------------------ | ---------------------- |
+| 语义     | 接口，描述对象结构 | 类型别名，描述任意类型 |
+| 扩展     | extends            | & 交叉类型             |
+| 合并声明 | ✅ 支持            | ❌ 不支持              |
+| 泛型     | ✅ 支持            | ✅ 支持                |
 
 ---
 
@@ -100,8 +99,8 @@ el.innerText = "Hello TS!";
 
 ```ts
 class Person {
-  public name: string;    // 任何地方都能访问
-  private age: number;    // 只能类内部访问
+  public name: string; // 任何地方都能访问
+  private age: number; // 只能类内部访问
   protected gender: string; // 类和子类内部访问
 }
 ```
@@ -110,13 +109,17 @@ class Person {
 
 ### **9️⃣ implements 和 extends 区别？**
 
-* `extends`：类继承另一个类。
-* `implements`：类实现一个接口。
+- `extends`：类继承另一个类。
+- `implements`：类实现一个接口。
 
 ```ts
-interface Flyable { fly(): void; }
+interface Flyable {
+  fly(): void;
+}
 class Bird implements Flyable {
-  fly() { console.log("Bird flying"); }
+  fly() {
+    console.log("Bird flying");
+  }
 }
 ```
 
@@ -124,11 +127,11 @@ class Bird implements Flyable {
 
 ### **10️⃣ 抽象类（abstract）和接口的区别？**
 
-| 对比项    | 抽象类       | 接口    |
-| ------ | --------- | ----- |
-| 是否能有实现 | ✅ 可以有部分实现 | ❌ 不行  |
-| 是否能实例化 | ❌ 不可以     | ❌ 不可以 |
-| 用途     | 基类模板      | 类型规范  |
+| 对比项       | 抽象类            | 接口      |
+| ------------ | ----------------- | --------- |
+| 是否能有实现 | ✅ 可以有部分实现 | ❌ 不行   |
+| 是否能实例化 | ❌ 不可以         | ❌ 不可以 |
+| 用途         | 基类模板          | 类型规范  |
 
 ---
 
@@ -154,7 +157,9 @@ identity("hello");
 ### **12️⃣ 泛型约束怎么用？**
 
 ```ts
-interface HasLength { length: number; }
+interface HasLength {
+  length: number;
+}
 
 function logLength<T extends HasLength>(arg: T): void {
   console.log(arg.length);
@@ -280,8 +285,8 @@ interface User {
   age?: number;
 }
 
-type A = Partial<User>;   // 所有属性可选
-type B = Required<User>;  // 所有属性必选
+type A = Partial<User>; // 所有属性可选
+type B = Required<User>; // 所有属性必选
 type C = Pick<User, "id">; // 只保留 id
 type D = Omit<User, "age">; // 删除 age
 ```
@@ -368,18 +373,18 @@ TS 源代码 → 类型检查器 → 转换成 JS → 浏览器/Node 执行
 
 ### **27️⃣ TS 与 Babel 区别？**
 
-| 对比项  | TypeScript  | Babel |
-| ---- | ----------- | ----- |
-| 主要功能 | 类型检查 + 语法转换 | 语法转换  |
-| 输出   | JS          | JS    |
-| 类型检测 | ✅ 有         | ❌ 没有  |
+| 对比项   | TypeScript          | Babel    |
+| -------- | ------------------- | -------- |
+| 主要功能 | 类型检查 + 语法转换 | 语法转换 |
+| 输出     | JS                  | JS       |
+| 类型检测 | ✅ 有               | ❌ 没有  |
 
 ---
 
 ### **28️⃣ declare / declare global / declare module 用法？**
 
-* `declare`：声明全局变量或模块类型；
-* 常见于引入 JS 库时编写 `.d.ts` 声明文件。
+- `declare`：声明全局变量或模块类型；
+- 常见于引入 JS 库时编写 `.d.ts` 声明文件。
 
 ```ts
 declare const VERSION: string;
@@ -402,9 +407,9 @@ interface Fn {
 
 ### **30️⃣ TS 如何与 React / Vue 结合？**
 
-* React：用 `React.FC<Props>` 或 `JSX.Element`；
-* Vue3：在 `<script lang="ts">` 中使用；
-* 都可利用类型推断、Props 校验、Hook 类型安全。
+- React：用 `React.FC<Props>` 或 `JSX.Element`；
+- Vue3：在 `<script lang="ts">` 中使用；
+- 都可利用类型推断、Props 校验、Hook 类型安全。
 
 ---
 
