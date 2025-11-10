@@ -1,365 +1,745 @@
 
-### 1. React 是什么？它的核心思想是什么？
 
-**回答：**
-React 是一个用于构建用户界面的 JavaScript 库。
-它的核心思想是：
+# ✅ 1. **React 的核心思想是什么？**
 
-* **声明式编程**（只关心结果，不关心过程）；
-* **组件化开发**；
-* **单向数据流**；
-* **虚拟 DOM 提升性能**。
+React 的核心思想可以概括为：
 
----
+✅ **声明式 UI**
+你只需要描述“UI 应该是什么样的”，React 负责更新 DOM
 
-### 2. 什么是虚拟 DOM？
-
-**回答：**
-虚拟 DOM（Virtual DOM）是用 JavaScript 对象表示的 DOM 结构。
-React 会：
-
-1. 在内存中维护一棵虚拟 DOM；
-2. 当状态更新时生成新的虚拟 DOM；
-3. 通过 Diff 算法找出变化；
-4. 最小化真实 DOM 操作。
-
-✅ **优点**：
-
-* 提升性能；
-* 跨平台（React Native）。
-
----
-
-### 3. React 中的 JSX 是什么？
-
-JSX 是一种语法糖，用于在 JavaScript 中书写 HTML 元素。
-
-```jsx
-const element = <h1>Hello, React!</h1>;
+```js
+const App = () => <div>{count}</div>;
 ```
 
-**注意**：JSX 会被 Babel 转译为 `React.createElement()` 调用。
+不用操作 DOM（比如 `document.querySelector`），避免手动维护 UI 状态。
 
 ---
 
-### 4. 什么是组件？组件有哪几种？
+✅ **组件化开发**
+页面由组件组成，组件可以复用、组合、独立维护
 
-组件是 UI 的独立、可复用单元。
-
-📦 **两种类型：**
-
-1. **函数组件（Function Component）**
-
-   ```jsx
-   function Hello() {
-     return <h1>Hello</h1>;
-   }
-   ```
-2. **类组件（Class Component）**
-
-   ```jsx
-   class Hello extends React.Component {
-     render() {
-       return <h1>Hello</h1>;
-     }
-   }
-   ```
-
----
-
-### 5. React 中的 props 和 state 区别？
-
-| 对比项  | props   | state                   |
-| :--- | :------ | :---------------------- |
-| 作用   | 外部传入数据  | 组件内部状态                  |
-| 是否可变 | 不可变     | 可变                      |
-| 使用场景 | 父子通信    | 控制组件内部逻辑                |
-| 修改方式 | 父组件重新渲染 | `setState` 或 `useState` |
-
----
-
-### 6. setState 是同步还是异步的？
-
-**回答：**
-
-* 在 **React 合成事件**、**生命周期函数** 中是**异步**；
-* 在 **原生事件**、**setTimeout** 中是**同步**；
-* React18 的 `useState` 在 Concurrent 模式下默认异步。
-
----
-
-### 7. React 中如何实现条件渲染？
-
-**三种方式：**
-
-```jsx
-// 1. 三元表达式
-{isLogin ? <Home /> : <Login />}
-
-// 2. && 逻辑判断
-{error && <ErrorMessage />}
-
-// 3. 函数返回
-function renderView() {
-  if (loading) return <Loading />;
-  return <Content />;
+```js
+function Button({ text }) {
+  return <button>{text}</button>;
 }
 ```
 
 ---
 
-### 8. React 中 key 的作用是什么？
-
-* key 是元素的唯一标识；
-* React 用 key 来识别哪些元素被修改、添加或删除；
-* **不使用 index 作为 key**（除非静态列表）。
+✅ **单向数据流**
+父 → 子传递数据，不建议子直接改父的数据
+保证数据可控、更容易调试
 
 ---
 
-### 9. React 中如何实现列表渲染？
+✅ **Virtual DOM + Diff 策略**
+React 用虚拟 DOM 描述 UI变化，再进行最小量真实 DOM 更新，提高性能
 
-```jsx
-const list = ['A', 'B', 'C'];
-<ul>
-  {list.map((item) => (
-    <li key={item}>{item}</li>
-  ))}
-</ul>
+---
+
+✅ 总结一句：
+**React 用声明式 + 组件化 + 单向数据流管理 UI，通过虚拟 DOM 提升渲染效率。**
+
+---
+
+# ✅ 2. **JSX 是什么？为什么需要 JSX？**
+
+### ✅ JSX 是什么？
+
+一种 **JavaScript + XML 的语法扩展**：
+
+```js
+const element = <h1>Hello React</h1>;
+```
+
+实际上 JSX 会被编译成：
+
+```js
+React.createElement("h1", null, "Hello React");
 ```
 
 ---
 
-### 10. 组件之间如何通信？
+### ✅ 为什么需要 JSX？
 
-| 通信方式                     | 说明     |
-| ------------------------ | ------ |
-| props                    | 父传子    |
-| 回调函数                     | 子传父    |
-| Context                  | 跨层级传递  |
-| Redux / Zustand / Recoil | 全局状态管理 |
-| EventEmitter / 自定义事件     | 任意组件通信 |
+✔ 写 UI 时更直观，更接近模板语言
+✔ 比直接 `React.createElement()` 更简洁
+✔ 具有 JS 全部能力（变量、表达式、函数、条件渲染）
 
----
+✅ 没有 JSX 的写法：
 
-## ⚙️ 二、React 中级篇（核心与实践）
+```js
+React.createElement('div', null,
+  React.createElement('span', null, 'text')
+);
+```
 
-### 11. React 生命周期有哪些阶段？
-
-**类组件生命周期：**
-
-1. 挂载阶段：`constructor` → `render` → `componentDidMount`
-2. 更新阶段：`render` → `componentDidUpdate`
-3. 卸载阶段：`componentWillUnmount`
-
-✅ **Hooks 对应：**
-
-* `useEffect(() => {}, [])` ≈ `componentDidMount`
-* `useEffect(() => {...})` ≈ `componentDidUpdate`
-* `useEffect(() => {... return () => {...}}, [])` ≈ `componentWillUnmount`
-
----
-
-### 12. 什么是受控组件与非受控组件？
-
-| 类型    | 定义                     | 示例                                          |
-| ----- | ---------------------- | ------------------------------------------- |
-| 受控组件  | 表单值由 React state 控制    | `<input value={value} onChange={setValue}>` |
-| 非受控组件 | 表单值存储在 DOM 中，通过 ref 获取 | `<input ref={inputRef}>`                    |
-
----
-
-### 13. React 中 useEffect 的用途？
-
-用于执行**副作用操作**：网络请求、事件监听、定时器、DOM 操作。
+✅ 有 JSX：
 
 ```jsx
+<div><span>text</span></div>
+```
+
+➡ **JSX 本质是语法糖，最终会变成函数调用。**
+
+---
+
+# ✅ 3. React 的虚拟 DOM 如何工作？
+
+React 不直接操作真实 DOM，而是：
+
+✅ 1. 组件 render 生成虚拟 DOM（JS 对象）
+✅ 2. React 对比“更新前 vs 更新后”的虚拟 DOM → Diff
+✅ 3. 找到变化 → 最小成本更新真实 DOM
+
+流程图：
+
+```
+UI更新 → 新 Virtual DOM → Diff → 计算差异 → 只更新变化部分 → 真 DOM
+```
+
+优势：
+
+✔ 减少 DOM 操作（最耗性能）
+✔ 保证性能更稳定
+✔ 可以在内存中计算、批量操作 DOM
+
+---
+
+# ✅ 4. 函数组件 vs 类组件
+
+| 对比项          | 函数组件                    | 类组件                   |
+| ------------ | ----------------------- | --------------------- |
+| 写法           | 普通函数                    | 继承 `React.Component`  |
+| 状态 state     | `useState`              | `this.state`          |
+| 生命周期         | 用 Hooks 模拟（useEffect 等） | componentDidMount 等   |
+| this         | ✅ 没有 this               | ❌ this 指向易出错          |
+| 性能           | ✅ 更轻、更快                 | ❌ 开销大                 |
+| 逻辑复用         | 自定义 Hook 很方便            | 需要 HOC 或 render props |
+| 推荐程度 (2025+) | ✅ 官方推荐，未来主流             | 不再推荐                  |
+
+简单对比：
+
+```jsx
+// 函数组件
+function App() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+```jsx
+// 类组件
+class App extends React.Component {
+  state = { count: 0 }
+  render() {
+    return <button onClick={() => this.setState({ count: this.state.count + 1 })}>{this.state.count}</button>;
+  }
+}
+```
+
+✅ **结论：函数组件更简单、性能更好、Hook 更灵活 → 现代 React 主流。**
+
+---
+
+# ✅ 5. setState 是同步还是异步？为什么？
+
+✅ **答案：既可以是异步，也可以是同步。**
+
+* ✅ 在 **React 合成事件 / 生命周期** 中：**异步批处理**
+* ✅ 在 **原生事件 / setTimeout / Promise** 中：**同步执行**
+
+例子：
+
+```js
+// 合成事件中
+onClick={() => {
+  this.setState({ count: this.state.count + 1 });
+  console.log(this.state.count); // 旧值（异步）
+}}
+```
+
+但如果用原生事件：
+
+```js
+document.body.addEventListener('click', () => {
+  this.setState({ count: this.state.count + 1 });
+  console.log(this.state.count); // 新值（同步）
+});
+```
+
+---
+
+### ✅ 为什么是异步？
+
+✔ 把多个 setState 合并批处理，提高性能
+✔ 避免每次 setState 都触发一次重新渲染
+
+例如：
+
+```js
+this.setState({ a: 1 });
+this.setState({ b: 2 });
+```
+
+React 会只渲染一次。
+
+---
+
+✅ **一句总结：**
+
+> React 在内部会对 setState 进行批处理，它“看起来”异步，但在某些环境又会同步执行。
+
+---
+
+下面是第 **6～10** 题的标准面试回答，内容简洁但覆盖原理和细节，可直接用于面试 ✅
+
+---
+
+# ✅ **6. 为什么 state 不能直接修改？（不能 this.state.x = x）**
+
+### ✅ 正确答案（面试高频）
+
+因为直接修改 `this.state`：
+
+1. **不会触发组件重新渲染**
+
+   ```js
+   this.state.count = 1
+   // UI 不会更新
+   ```
+
+2. **破坏 React 的状态管理机制**
+   React 依赖 `setState` 进行：
+   ✔ 批量更新
+   ✔ diff 计算
+   ✔ 触发 Fiber 调度
+   如果绕过 `setState`，这些都不会发生。
+
+3. **React 会在未来使用 state 的不可变性优化性能**
+   如果直接修改对象，React 无法判断是否变化。
+
+✅ 正确方式：
+
+```js
+this.setState({ count: this.state.count + 1 });
+```
+
+✅ 一句话总结：
+
+> **不能直接改 state，因为不会触发更新，破坏不可变数据原则，并且绕过 React 的更新流程。**
+
+---
+
+# ✅ **7. props 和 state 的区别？**
+
+| 对比项  | props         | state               |
+| ---- | ------------- | ------------------- |
+| 来源   | 父组件传入         | 组件内部自身维护            |
+| 可修改性 | ❌ 只读，不可修改     | ✅ 可通过 setState 修改   |
+| 谁负责  | 外部控制（数据驱动 UI） | 自己控制（组件内部逻辑）        |
+| 使用场景 | 配置组件、父传子数据    | UI 动态变化（交互、异步数据、计数） |
+
+✅ 示例：
+
+```jsx
+function Counter({ step }) {      // step 是 props
+  const [count, setCount] = useState(0); // count 是 state
+  return <button onClick={() => setCount(count + step)}>{count}</button>;
+}
+```
+
+✅ 一句话总结：
+
+> props 是外部输入，state 是内部状态；props 不能改，state 可改。
+
+---
+
+# ✅ **8. key 的作用是什么？为什么不能用 index 当 key？**
+
+### ✅ key 的作用
+
+用于让 React 在 Diff 过程中识别列表项，找到**最小更新单元**，提高效率，保持正确性。
+
+✅ React diff 原则：
+
+* key 相同 → 复用组件
+* key 不同 → 创建 / 删除组件
+
+---
+
+### ❌ 为什么不能用 index 当 key？
+
+| 问题场景                 | 影响                         |
+| -------------------- | -------------------------- |
+| 列表进行**插入 / 删除 / 排序** | React 复用错误 DOM，导致 UI 异常    |
+| 表单输入出现错位             | 因为 React 认为 DOM 没变，但其实数据变了 |
+| 动画、过渡效果错乱            | 错误复用 DOM                   |
+
+✅ 错误示例：
+
+```jsx
+items.map((v, i) => <li key={i}>{v}</li>)
+```
+
+✅ 正确：
+
+```jsx
+items.map(item => <li key={item.id}>{item.text}</li>)
+```
+
+✅ 一句话总结：
+
+> key 是虚拟 DOM diff 的唯一标识，不推荐用 index，会导致渲染混乱、性能降低和数据错位。
+
+---
+
+# ✅ **9. 受控组件 vs 非受控组件？**
+
+### ✅ 受控组件（推荐）
+
+输入的值由 **React state 控制** —— 表单值 = 组件 state
+
+```jsx
+const [value, setValue] = useState('');
+<input value={value} onChange={e => setValue(e.target.value)} />
+```
+
+✅ 优点：
+✔ 数据可控
+✔ 表单校验简单
+✔ UI 与数据一致
+
+---
+
+### ✅ 非受控组件
+
+值保存在 DOM，而不是 React state
+
+```jsx
+const inputRef = useRef();
+<input ref={inputRef} />
+```
+
+取值：
+
+```js
+console.log(inputRef.current.value);
+```
+
+✅ 适合场景：
+✔ 性能要求高
+✔ 第三方库、文件上传等不方便受控处理
+
+✅ 一句话总结：
+
+> 受控组件由 React 管控数据，非受控组件由 DOM 管控数据。
+
+---
+
+# ✅ **10. 生命周期有哪些？（老 vs 新）**
+
+### ✅ ✅ **类组件老生命周期（16 以前）**
+
+| 阶段 | 生命周期函数                                                                                                |
+| -- | ----------------------------------------------------------------------------------------------------- |
+| 挂载 | constructor → componentWillMount → render → componentDidMount                                         |
+| 更新 | componentWillReceiveProps → shouldComponentUpdate → componentWillUpdate → render → componentDidUpdate |
+| 卸载 | componentWillUnmount                                                                                  |
+
+⚠️ `componentWillMount / componentWillReceiveProps / componentWillUpdate` **已废弃**（因副作用和执行不确定）
+
+---
+
+### ✅ ✅ **新生命周期（Fiber 之后）**
+
+| 阶段 | 生命周期函数                                                                                                           |
+| -- | ---------------------------------------------------------------------------------------------------------------- |
+| 挂载 | constructor → **getDerivedStateFromProps** → render → **componentDidMount**                                      |
+| 更新 | **getDerivedStateFromProps** → shouldComponentUpdate → render → **getSnapshotBeforeUpdate** → componentDidUpdate |
+| 卸载 | componentWillUnmount                                                                                             |
+
+---
+
+✅ 补充说明：
+
+| 生命周期                     | 用途                   |
+| ------------------------ | -------------------- |
+| componentDidMount        | 发起请求、订阅、DOM 操作       |
+| componentDidUpdate       | 依赖更新后的 DOM           |
+| componentWillUnmount     | 清理定时器、取消订阅           |
+| getDerivedStateFromProps | 从 props 派生 state（慎用） |
+| getSnapshotBeforeUpdate  | DOM 更新前获取快照，如滚动位置    |
+
+---
+
+✅ **函数组件对应生命周期（Hooks）**
+
+| 类组件生命周期               | Hooks 替代                           |
+| --------------------- | ---------------------------------- |
+| componentDidMount     | useEffect(() => {}, [])            |
+| componentDidUpdate    | useEffect(() => {})                |
+| componentWillUnmount  | useEffect(() => return cleanup)    |
+| shouldComponentUpdate | React.memo / useMemo / useCallback |
+
+---
+
+### ✅ 一句话总结：
+
+> 新版移除了不安全生命周期，加入 `getDerivedStateFromProps` 和 `getSnapshotBeforeUpdate`，函数组件通过 Hooks 实现生命周期能力。
+
+---
+
+下面是这 10 道 **Hooks 高频面试题的“标准回答 + 示例 + 面试要点”**
+内容够简洁、够原理、够面试 ✅
+
+---
+
+# ✅ **1. 为什么 React 推出 Hooks？**
+
+React 推出 Hooks主要解决三个问题：
+
+### ✅ ① 逻辑复用困难（类组件无法复用状态逻辑）
+
+以前用 HOC / Render Props，写法复杂、嵌套地狱
+Hooks 可以通过 **自定义 Hook** 复用逻辑
+
+```js
+useUsers()
+useScroll()
+useDebounce()
+```
+
+---
+
+### ✅ ② 类组件 this 难理解
+
+`this` 指向易出错
+函数组件没有 `this`，学习成本更低
+
+---
+
+### ✅ ③ 生命周期难用，逻辑分散
+
+同一逻辑拆在多个生命周期中
+Heat：网络请求、DOM 操作、订阅、清除逻辑分散在 Mount/Update/Unmount
+Hooks 能把逻辑集中在一个 useEffect 里
+
+---
+
+✅ 一句话总结：
+
+> **Hooks 让你在不写 class 的情况下使用 state & 生命周期，逻辑复用更简单、代码更清晰。**
+
+---
+
+# ✅ **2. useState 和 useRef 的区别？**
+
+| 对比项      | useState     | useRef          |
+| -------- | ------------ | --------------- |
+| 是否引发重新渲染 | ✅ 会          | ❌ 不会            |
+| 保存的值     | 状态，每次都会参与渲染  | 一个可变的值，不参与渲染    |
+| 用途       | UI 状态、组件显示变化 | 保存 DOM、定时器、缓存旧值 |
+
+✅ 例子：useRef 不会触发渲染
+
+```js
+const ref = useRef(0);
+ref.current++;
+```
+
+✅ 用来保存 DOM：
+
+```js
+const inputRef = useRef();
+<input ref={inputRef} />
+inputRef.current.focus();
+```
+
+✅ 用来记录前一次值（不会触发渲染）：
+
+```js
+const prev = useRef(count);
+```
+
+✅ 一句话总结：
+
+> **useState 用于 UI 状态，会触发渲染；useRef 用于存值、存 DOM，不会触发渲染。**
+
+---
+
+# ✅ **3. useEffect 的执行时机？如何避免无限循环？**
+
+### ✅ 执行时机：
+
+* 在 **DOM 更新后、浏览器绘制之后** 异步执行
+* 类似 `componentDidMount + componentDidUpdate + componentWillUnmount`
+
+---
+
+### ✅ 避免无限循环的关键：依赖项！
+
+错误写法（每次渲染都更新状态 → 无限循环）：
+
+```js
 useEffect(() => {
-  console.log('组件挂载');
-  return () => console.log('组件卸载');
+  setCount(count + 1);
+});
+```
+
+✅ 正确写法：
+
+```js
+useEffect(() => {
+  setCount(count + 1);
+}, []); // 只执行一次
+```
+
+或：
+
+```js
+useEffect(() => {
+  console.log(count);
+}, [count]); // 只有 count 变化才执行
+```
+
+✅ 清理副作用：
+
+```js
+useEffect(() => {
+  const timer = setInterval(...);
+  return () => clearInterval(timer);
 }, []);
 ```
 
 ---
 
-### 14. useEffect 与 useLayoutEffect 的区别？
+# ✅ **4. useEffect 和 useLayoutEffect 的区别？**
 
-| 对比项  | useEffect | useLayoutEffect  |
-| :--- | :-------- | :--------------- |
-| 执行时机 | 浏览器渲染后    | 浏览器绘制前           |
-| 场景   | 异步副作用（请求） | 同步 DOM 操作（测量、动画） |
+| 对比     | useEffect  | useLayoutEffect  |
+| ------ | ---------- | ---------------- |
+| 执行时机   | 渲染后异步执行    | 渲染后、浏览器绘制前（同步）   |
+| 是否阻塞渲染 | ❌ 不会       | ✅ 会阻塞渲染          |
+| 使用场景   | 网络请求、订阅、日志 | DOM 读取、布局计算、避免闪烁 |
 
----
+✅ useLayoutEffect 示例：
 
-### 15. 什么是 React Hooks？解决了什么问题？
-
-Hooks 是 React16.8 引入的新特性，**让函数组件拥有状态和生命周期功能**。
-
-✅ 解决：
-
-* 类组件复杂、难复用；
-* this 指向困扰；
-* 状态逻辑复用困难。
-
----
-
-### 16. 常用 Hooks 有哪些？
-
-| Hook                | 作用             |
-| ------------------- | -------------- |
-| useState            | 定义状态           |
-| useEffect           | 副作用            |
-| useRef              | 获取 DOM 或保存引用   |
-| useContext          | 使用上下文          |
-| useReducer          | 管理复杂状态逻辑       |
-| useMemo             | 计算缓存           |
-| useCallback         | 函数缓存           |
-| useImperativeHandle | 自定义暴露给父组件的 ref |
-
----
-
-### 17. useMemo 和 useCallback 区别？
-
-| Hook        | 缓存内容       | 典型场景      |
-| ----------- | ---------- | --------- |
-| useMemo     | 缓存**计算结果** | 避免重复计算    |
-| useCallback | 缓存**函数引用** | 避免子组件重复渲染 |
-
----
-
-### 18. React 中的 Context 是什么？
-
-> Context 用于在组件树中共享全局数据（如主题、语言、用户信息）。
-
-**使用示例：**
-
-```jsx
-const ThemeContext = createContext('light');
-
-function App() {
-  return (
-    <ThemeContext.Provider value="dark">
-      <Button />
-    </ThemeContext.Provider>
-  );
-}
-
-function Button() {
-  const theme = useContext(ThemeContext);
-  return <button className={theme}>按钮</button>;
-}
+```js
+useLayoutEffect(() => {
+  const height = divRef.current.clientHeight;
+  setHeight(height);
+});
 ```
 
----
+✅ 一句话总结：
 
-### 19. React 如何进行性能优化？
-
-✅ **常见优化手段：**
-
-1. 使用 `React.memo()` 避免无意义渲染；
-2. `useMemo` / `useCallback` 缓存；
-3. 列表使用 `key`；
-4. 懒加载：`React.lazy + Suspense`；
-5. 虚拟列表：`react-window`；
-6. 拆分组件；
-7. 避免在 render 里定义函数；
-8. SSR（Next.js）。
+> **要读/写 DOM 用 useLayoutEffect，其余用 useEffect。**
 
 ---
 
-### 20. React 事件机制是什么？
+# ✅ **5. useMemo 和 useCallback 有什么用？什么时候用？**
 
-React 使用 **合成事件（SyntheticEvent）**，对原生事件进行封装。
+| Hook        | 作用     | 返回值 |
+| ----------- | ------ | --- |
+| useMemo     | 缓存计算结果 | 值   |
+| useCallback | 缓存函数   | 函数  |
 
-**优点：**
+✅ useMemo 示例：
 
-* 统一事件系统；
-* 跨浏览器兼容；
-* 性能更高（事件委托到 document）。
-
----
-
-### 21. React 的 Diff 算法原理？
-
-React 的 Diff 算法有三大优化：
-
-1. **树的分层比较**；
-2. **同层节点按 key 比较**；
-3. **跨层移动节点视为删除+创建**。
-
-复杂度从 `O(n³)` 优化到 `O(n)`。
-
----
-
-### 22. React 中如何实现组件懒加载？
-
-```jsx
-const About = React.lazy(() => import('./About'));
-<Suspense fallback={<div>Loading...</div>}>
-  <About />
-</Suspense>
+```js
+const total = useMemo(() => compute(list), [list]);
 ```
 
+避免每次 render 都重新计算（性能优化）
+
+✅ useCallback 示例：
+
+```js
+const onClick = useCallback(() => {
+  setCount(count + 1);
+}, [count]);
+```
+
+避免子组件因为函数引用改变而重新渲染
+
+✅ 使用场景：
+✔ expensive 计算
+✔ 子组件依赖 props（React.memo）
+✔ 避免函数重新创建造成 diff 变化
+
 ---
 
-### 23. React 中如何处理错误？
+# ✅ **6. 自定义 Hook 如何编写？应用场景？**
 
-使用 **ErrorBoundary（错误边界）**：
+✅ 自定义 Hook 就是一个名称以 `use` 开头的函数，可以使用其他 Hooks：
 
-```jsx
-class ErrorBoundary extends React.Component {
-  state = { hasError: false };
-  componentDidCatch(error, info) {
-    this.setState({ hasError: true });
-  }
-  render() {
-    if (this.state.hasError) return <h1>出错了！</h1>;
-    return this.props.children;
-  }
+示例：封装窗口宽度监听
+
+```js
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
 }
 ```
 
----
+使用：
 
-### 24. React 的 Fiber 是什么？
+```js
+const width = useWindowWidth();
+```
 
-> Fiber 是 React 16 之后的核心架构，解决“长任务阻塞渲染”的问题。
+✅ 场景：
+✔ 网络请求 useRequest
+✔ 表单处理 useForm
+✔ 防抖节流 useDebounce/useThrottle
+✔ localStorage 状态持久化
+✔ socket 订阅 etc.
 
-**原理：**
+✅ 一句话总结：
 
-* 将更新任务拆分成小块；
-* 每次渲染只执行一部分；
-* 可中断、可恢复；
-* 提高响应速度。
-
----
-
-### 25. 什么是 React 合成事件？为什么使用它？
-
-React 将所有事件绑定到根节点，通过事件委托统一管理。
-**优点：**
-
-* 降低内存消耗；
-* 提升性能；
-* 保证跨浏览器一致性。
+> 自定义 Hook 是逻辑复用的最佳方式，不重复代码、组合灵活。
 
 ---
 
-## 🚀 三、附赠高频面试问答速记表
+# ✅ **7. useReducer vs Redux？**
 
-| 问题                 | 一句话答法                       |
-| ------------------ | --------------------------- |
-| setState 为什么异步？    | 为了批量更新和提升性能                 |
-| React 如何阻止组件重复渲染？  | React.memo + useCallback    |
-| Hook 为什么不能写在条件语句中？ | Hooks 调用顺序必须一致              |
-| key 的作用？           | 帮助 Diff 快速定位变化节点            |
-| React 如何更新 UI？     | state 改变 → diff → patch DOM |
-| useRef 有什么作用？      | 保存可变值或获取 DOM 引用             |
-| useReducer 有什么用？   | 管理复杂状态逻辑，类似 Redux           |
-| React.lazy 有什么作用？  | 动态加载组件，减少首屏体积               |
+| 对比项   | useReducer | Redux                  |
+| ----- | ---------- | ---------------------- |
+| 作用范围  | 单个组件或局部    | 全局状态管理                 |
+| 配置复杂度 | 简单         | 需要 store / middleware  |
+| 开销    | 小、无依赖      | 大、状态可序列化、可调试           |
+| 异步    | 自己处理       | middleware（thunk、saga） |
+| 状态共享  | 需要 Context | 天然全局共享                 |
+
+✅ useReducer：
+
+```js
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+一句话：
+
+> useReducer 适合中小规模局部状态；Redux 适合大型应用、全局共享、可调试场景。
 
 ---
 
-是否希望我继续帮你整理：
+# ✅ **8. useImperativeHandle / useRef 操作 DOM 的原理？**
 
-> ✅「React 高频面试题速记 PDF + 进阶版（Hooks 深挖、Fiber、并发特性、性能优化）」
-> 方便你在面试前快速复盘？
+* useRef 获取真实 DOM：
+
+```js
+const inputRef = useRef();
+<input ref={inputRef} />
+inputRef.current.focus();
+```
+
+* useImperativeHandle 暴露给父组件的 DOM API（受控化）
+
+```js
+useImperativeHandle(ref, () => ({
+  focus: () => inputRef.current.focus()
+}));
+```
+
+✅ 原理：
+React 使用 **ref.current 指向真实 DOM 或实例**
+父组件获取到 ref 后就能直接操作 DOM
+
+✅ 使用场景：
+✔ 第三方库（canvas、swiper、video）
+✔ 手动聚焦、滚动、选择、播放/暂停
+
+---
+
+# ✅ **9. 为什么不要在循环、条件语句中使用 Hooks？**
+
+因为 Hook 必须保持 **调用顺序一致**。
+
+React 根据调用顺序记录 Hook：
+
+```
+useState → useEffect → useMemo → ...
+```
+
+如果放在条件里，会改变 Hook 调用顺序 ↓
+
+```js
+if (show) {
+  useState();  // ❌ 错误
+}
+```
+
+下一次渲染顺序不一致，React 无法匹配对应 state，导致崩溃。
+
+✅ 正确：
+
+```js
+const [visible, setVisible] = useState(false);
+useEffect(() => { ... }, []);
+```
+
+✅ 一句话总结：
+
+> Hook 必须在函数最顶层调用、不能写在条件、循环、嵌套中的原因是：**保证调用顺序一致**。
+
+---
+
+# ✅ **10. React Hook 的闭包陷阱？**
+
+问题表现：effect 或回调里拿到的是“旧 state”
+
+```js
+const [count, setCount] = useState(0);
+
+useEffect(() => {
+  setInterval(() => {
+    console.log(count); // 一直是 0
+  }, 1000);
+}, []);
+```
+
+✅ 原因：
+`useEffect` 的回调捕获了当时的 `count`，形成闭包 → 不会随 state 更新
+
+✅ 解决方法：
+
+✔ 方法 1：添加依赖
+
+```js
+useEffect(() => {
+  console.log(count);
+}, [count]);
+```
+
+✔ 方法 2：用函数式 setState（最佳）
+
+```js
+setCount(prev => prev + 1);
+```
+
+✔ 方法 3：使用 ref 存当前值
+
+```js
+const ref = useRef();
+ref.current = count;
+```
+
+✅ 一句话总结：
+
+> Hook 捕获的是渲染时的变量快照，如果依赖不更新，就会拿到旧值——这就是闭包陷阱。
+
+---
+
+✅ 如果你需要，我可以继续整理：
+
+* 👉 React 性能优化面试题
+* 👉 虚拟 DOM & Fiber 面试题
+* 👉 Redux/React-Router 面试题
+* 👉 高级场景题（防止重复请求、虚拟列表、白屏排查等）
+
+要继续吗？需要 PDF 输出吗？
