@@ -54,6 +54,13 @@ class Person {
 const p1 = new Person('Tom', 20);
 p1.sayHi(); // Hi, I'm Tom, 20 years old.
 ```
+- 写法2
+
+```js
+const Person = class {
+
+}
+```
 
 📘 **注意：**
 

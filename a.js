@@ -1,15 +1,31 @@
-function Person(name){
-    this.name = name
+function Person(name, age, height, address) {
+  this.name = name;
+  this.age = age;
+  this.height = height;
+  this.address = address;
 }
 
-console.log(Person.__proto__)
-console.log(Person.__proto__.__proto__)
-console.log(Person.__proto__.__proto__.__proto__)
-console.log('---------------')
-const p1 = new Person('weijiaxing')
-console.log(p1.constructor);
-console.log('---------------')
+Person.prototype.running = function () {
+  console.log("running");
+};
+Person.prototype.eating = function () {
+  console.log("eating");
+};
 
-console.log(p1.__proto__);
-console.log(p1.__proto__.__proto__);
-console.log(p1.__proto__.__proto__.__proto__);
+function Student(name, age, height, address, sno, score) {
+  this.name = name;
+  this.age = age;
+  this.height = height;
+  this.address = address;
+  this.sno = sno;
+  this.score = score;
+}
+Student.prototype.running = function () {
+  console.log("running");
+};
+Student.prototype.eating = function () {
+  console.log("eating");
+};
+Student.prototype.studying = function () {
+  console.log("studying");
+};

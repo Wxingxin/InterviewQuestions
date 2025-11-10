@@ -8,6 +8,168 @@
 
 # 💯💯💯 数据类型检测的方式有哪些
 
+
+## ✅ **1. `typeof` —— 基础类型检测**
+
+```js
+typeof 123       // 'number'
+typeof 'abc'     // 'string'
+typeof true      // 'boolean'
+typeof undefined // 'undefined'
+typeof Symbol()  // 'symbol'
+typeof 10n       // 'bigint'
+typeof function(){} // 'function'
+```
+
+✅ 优点
+✔ 简单、适合原始类型
+❌ 缺点
+❌ 不能区分 `null`、`object`、数组
+
+```js
+typeof null        // 'object' ❌ 历史遗留问题
+typeof []          // 'object'
+typeof {}          // 'object'
+```
+
+---
+
+## ✅ **2. `instanceof` —— 判断是否由某构造函数生成**
+
+```js
+[] instanceof Array        // true
+{} instanceof Object       // true
+new Date() instanceof Date // true
+```
+
+✅ 优点
+✔ 可判断复杂对象（Array、Date、RegExp 等）
+❌ 缺点
+❌ 不能判断基本类型
+❌ 跨 iframe / 跨 window 失效
+
+```js
+123 instanceof Number // false （基本类型不是实例）
+```
+
+---
+
+## ✅ **3. `Object.prototype.toString.call()` —— 最精准通用方案**
+
+```js
+Object.prototype.toString.call(123)        // "[object Number]"
+Object.prototype.toString.call("abc")      // "[object String]"
+Object.prototype.toString.call(null)       // "[object Null]"
+Object.prototype.toString.call(undefined)  // "[object Undefined]"
+Object.prototype.toString.call([])         // "[object Array]"
+Object.prototype.toString.call({})         // "[object Object]"
+Object.prototype.toString.call(/\d/)       // "[object RegExp]"
+Object.prototype.toString.call(new Date()) // "[object Date]"
+```
+
+✅ **最准确的类型检测方式（面试必背）**
+✔ 支持所有类型
+✔ 解决 typeof & instanceof 的缺陷
+
+👉 封装一个通用函数：
+
+```js
+function getType(val) {
+  return Object.prototype.toString.call(val).slice(8, -1).toLowerCase();
+}
+
+getType([])         // 'array'
+getType(null)       // 'null'
+getType(new Set())  // 'set'
+```
+
+---
+
+## ✅ **4. `Array.isArray()` —— 专门判断数组**
+
+```js
+Array.isArray([])     // true
+Array.isArray({})     // false
+```
+
+✔ 比 `instanceof` 更靠谱
+✔ 跨 iframe/window 也能正确判断
+
+---
+
+## ✅ **5. `constructor` 检测构造器**
+
+```js
+(123).constructor === Number      // true
+"abc".constructor === String      // true
+[].constructor === Array          // true
+({}).constructor === Object       // true
+```
+
+❌ 缺点：构造器可被修改，不安全
+
+```js
+function A(){}
+A.prototype.constructor = B;
+(new A()).constructor === A // false
+```
+
+---
+
+## ✅ **6. `Array.of()` / `Array.from()` 区分类数组与数组**
+
+```js
+Array.from({ length: 2 }) // [undefined, undefined] 说明是类数组
+```
+
+---
+
+## ✅ **7. `isFinite` / `isNaN` 检测数值类型**
+
+```js
+isNaN(NaN) // true
+isFinite(123) // true
+isFinite(Infinity) // false
+```
+
+---
+
+## ✅ **8. `Number.isNaN` / `Number.isFinite` 更安全**
+
+```js
+Number.isNaN('abc') // false ✅
+isNaN('abc')        // true ❌ 会先转换类型
+```
+
+---
+
+## ✅ **9. `Symbol.toStringTag` 自定义类型名**
+
+某些对象自己会返回定制结果：
+
+```js
+class A {
+  get [Symbol.toStringTag]() {
+    return 'MyClass';
+  }
+}
+Object.prototype.toString.call(new A()) // "[object MyClass]"
+```
+
+---
+
+## ✅ 最推荐的标准方案
+
+| 目标                | 方法                                   |
+| ----------------- | ------------------------------------ |
+| 判断基础类型            | `typeof`                             |
+| 判断对象、数组、正则、Date 等 | ✅ `Object.prototype.toString.call()` |
+| 判断数组              | ✅ `Array.isArray()`                  |
+| 判断是否某类实例          | `instanceof`                         |
+
+
+
+
 # 💯💯💯 OTHER
 
 > ## 1️⃣ `typeof null === 'object'`
