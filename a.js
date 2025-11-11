@@ -1,13 +1,26 @@
-class Person{
-  constructor(name,age){
-    this.name = name
-    this.age = age;
-  }
+function ajax(options) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const defaluts = {
+      url: "",
+      method: "GET",
+      data: null,
+      Headers: {},
+    };
 
-  sayHi(){
-    console.log(`HI , i ${this.name}, ${this.age}`)
-  }
+    const opts = Object.assign({},defaluts,options)
+    if(opts.method.toUpperCase() === "GET" && opts.data){
+
+    }
+    
+    for(const key in opts.Headers){
+      xhr.setRequestHeader(key,opts.Headers[key])
+    }
+
+    xhr.open(opts.method,opts.url,true)
+
+    xhr.send(
+
+    )
+  });
 }
-
-const p1 = new Person("gao",22)
-p1.sayHi();

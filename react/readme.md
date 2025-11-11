@@ -1,6 +1,6 @@
+# 💯💯💯基础核心
 
-
-# ✅ 1. **React 的核心思想是什么？**
+### ✅ 1. **React 的核心思想是什么？**
 
 React 的核心思想可以概括为：
 
@@ -42,9 +42,9 @@ React 用虚拟 DOM 描述 UI变化，再进行最小量真实 DOM 更新，提�
 
 ---
 
-# ✅ 2. **JSX 是什么？为什么需要 JSX？**
+### ✅ 2. **JSX 是什么？为什么需要 JSX？**
 
-### ✅ JSX 是什么？
+##### ✅ JSX 是什么？
 
 一种 **JavaScript + XML 的语法扩展**：
 
@@ -60,7 +60,7 @@ React.createElement("h1", null, "Hello React");
 
 ---
 
-### ✅ 为什么需要 JSX？
+##### ✅ 为什么需要 JSX？
 
 ✔ 写 UI 时更直观，更接近模板语言
 ✔ 比直接 `React.createElement()` 更简洁
@@ -106,7 +106,7 @@ UI更新 → 新 Virtual DOM → Diff → 计算差异 → 只更新变化部分
 
 ---
 
-# ✅ 4. 函数组件 vs 类组件
+### ✅ 4. 函数组件 vs 类组件
 
 | 对比项          | 函数组件                    | 类组件                   |
 | ------------ | ----------------------- | --------------------- |
@@ -142,7 +142,7 @@ class App extends React.Component {
 
 ---
 
-# ✅ 5. setState 是同步还是异步？为什么？
+### ✅ 5. setState 是同步还是异步？为什么？
 
 ✅ **答案：既可以是异步，也可以是同步。**
 
@@ -170,7 +170,7 @@ document.body.addEventListener('click', () => {
 
 ---
 
-### ✅ 为什么是异步？
+##### ✅ 为什么是异步？
 
 ✔ 把多个 setState 合并批处理，提高性能
 ✔ 避免每次 setState 都触发一次重新渲染
@@ -196,9 +196,9 @@ React 会只渲染一次。
 
 ---
 
-# ✅ **6. 为什么 state 不能直接修改？（不能 this.state.x = x）**
+### ✅ **6. 为什么 state 不能直接修改？（不能 this.state.x = x）**
 
-### ✅ 正确答案（面试高频）
+##### ✅ 正确答案（面试高频）
 
 因为直接修改 `this.state`：
 
@@ -231,7 +231,7 @@ this.setState({ count: this.state.count + 1 });
 
 ---
 
-# ✅ **7. props 和 state 的区别？**
+### ✅ **7. props 和 state 的区别？**
 
 | 对比项  | props         | state               |
 | ---- | ------------- | ------------------- |
@@ -255,9 +255,9 @@ function Counter({ step }) {      // step 是 props
 
 ---
 
-# ✅ **8. key 的作用是什么？为什么不能用 index 当 key？**
+### ✅ **8. key 的作用是什么？为什么不能用 index 当 key？**
 
-### ✅ key 的作用
+##### ✅ key 的作用
 
 用于让 React 在 Diff 过程中识别列表项，找到**最小更新单元**，提高效率，保持正确性。
 
@@ -268,7 +268,7 @@ function Counter({ step }) {      // step 是 props
 
 ---
 
-### ❌ 为什么不能用 index 当 key？
+##### ❌ 为什么不能用 index 当 key？
 
 | 问题场景                 | 影响                         |
 | -------------------- | -------------------------- |
@@ -294,9 +294,9 @@ items.map(item => <li key={item.id}>{item.text}</li>)
 
 ---
 
-# ✅ **9. 受控组件 vs 非受控组件？**
+### ✅ **9. 受控组件 vs 非受控组件？**
 
-### ✅ 受控组件（推荐）
+##### ✅ 受控组件（推荐）
 
 输入的值由 **React state 控制** —— 表单值 = 组件 state
 
@@ -312,7 +312,7 @@ const [value, setValue] = useState('');
 
 ---
 
-### ✅ 非受控组件
+##### ✅ 非受控组件
 
 值保存在 DOM，而不是 React state
 
@@ -337,9 +337,9 @@ console.log(inputRef.current.value);
 
 ---
 
-# ✅ **10. 生命周期有哪些？（老 vs 新）**
+### ✅ **10. 生命周期有哪些？（老 vs 新）**
 
-### ✅ ✅ **类组件老生命周期（16 以前）**
+##### ✅ ✅ **类组件老生命周期（16 以前）**
 
 | 阶段 | 生命周期函数                                                                                                |
 | -- | ----------------------------------------------------------------------------------------------------- |
@@ -351,7 +351,7 @@ console.log(inputRef.current.value);
 
 ---
 
-### ✅ ✅ **新生命周期（Fiber 之后）**
+##### ✅ ✅ **新生命周期（Fiber 之后）**
 
 | 阶段 | 生命周期函数                                                                                                           |
 | -- | ---------------------------------------------------------------------------------------------------------------- |
@@ -384,22 +384,18 @@ console.log(inputRef.current.value);
 
 ---
 
-### ✅ 一句话总结：
+##### ✅ 一句话总结：
 
 > 新版移除了不安全生命周期，加入 `getDerivedStateFromProps` 和 `getSnapshotBeforeUpdate`，函数组件通过 Hooks 实现生命周期能力。
 
----
 
-下面是这 10 道 **Hooks 高频面试题的“标准回答 + 示例 + 面试要点”**
-内容够简洁、够原理、够面试 ✅
+# 💯💯💯 hooks
 
----
-
-# ✅ **1. 为什么 React 推出 Hooks？**
+### ✅ **1. 为什么 React 推出 Hooks？**
 
 React 推出 Hooks主要解决三个问题：
 
-### ✅ ① 逻辑复用困难（类组件无法复用状态逻辑）
+##### ✅ ① 逻辑复用困难（类组件无法复用状态逻辑）
 
 以前用 HOC / Render Props，写法复杂、嵌套地狱
 Hooks 可以通过 **自定义 Hook** 复用逻辑
@@ -412,14 +408,14 @@ useDebounce()
 
 ---
 
-### ✅ ② 类组件 this 难理解
+##### ✅ ② 类组件 this 难理解
 
 `this` 指向易出错
 函数组件没有 `this`，学习成本更低
 
 ---
 
-### ✅ ③ 生命周期难用，逻辑分散
+##### ✅ ③ 生命周期难用，逻辑分散
 
 同一逻辑拆在多个生命周期中
 Heat：网络请求、DOM 操作、订阅、清除逻辑分散在 Mount/Update/Unmount
@@ -433,7 +429,7 @@ Hooks 能把逻辑集中在一个 useEffect 里
 
 ---
 
-# ✅ **2. useState 和 useRef 的区别？**
+### ✅ **2. useState 和 useRef 的区别？**
 
 | 对比项      | useState     | useRef          |
 | -------- | ------------ | --------------- |
@@ -468,16 +464,16 @@ const prev = useRef(count);
 
 ---
 
-# ✅ **3. useEffect 的执行时机？如何避免无限循环？**
+### ✅ **3. useEffect 的执行时机？如何避免无限循环？**
 
-### ✅ 执行时机：
+##### ✅ 执行时机：
 
 * 在 **DOM 更新后、浏览器绘制之后** 异步执行
 * 类似 `componentDidMount + componentDidUpdate + componentWillUnmount`
 
 ---
 
-### ✅ 避免无限循环的关键：依赖项！
+##### ✅ 避免无限循环的关键：依赖项！
 
 错误写法（每次渲染都更新状态 → 无限循环）：
 
@@ -514,7 +510,7 @@ useEffect(() => {
 
 ---
 
-# ✅ **4. useEffect 和 useLayoutEffect 的区别？**
+### ✅ **4. useEffect 和 useLayoutEffect 的区别？**
 
 | 对比     | useEffect  | useLayoutEffect  |
 | ------ | ---------- | ---------------- |
@@ -537,7 +533,7 @@ useLayoutEffect(() => {
 
 ---
 
-# ✅ **5. useMemo 和 useCallback 有什么用？什么时候用？**
+### ✅ **5. useMemo 和 useCallback 有什么用？什么时候用？**
 
 | Hook        | 作用     | 返回值 |
 | ----------- | ------ | --- |
@@ -569,7 +565,7 @@ const onClick = useCallback(() => {
 
 ---
 
-# ✅ **6. 自定义 Hook 如何编写？应用场景？**
+### ✅ **6. 自定义 Hook 如何编写？应用场景？**
 
 ✅ 自定义 Hook 就是一个名称以 `use` 开头的函数，可以使用其他 Hooks：
 
@@ -606,7 +602,7 @@ const width = useWindowWidth();
 
 ---
 
-# ✅ **7. useReducer vs Redux？**
+### ✅ **7. useReducer vs Redux？**
 
 | 对比项   | useReducer | Redux                  |
 | ----- | ---------- | ---------------------- |
@@ -628,7 +624,7 @@ const [state, dispatch] = useReducer(reducer, initialState);
 
 ---
 
-# ✅ **8. useImperativeHandle / useRef 操作 DOM 的原理？**
+### ✅ **8. useImperativeHandle / useRef 操作 DOM 的原理？**
 
 * useRef 获取真实 DOM：
 
@@ -656,7 +652,7 @@ React 使用 **ref.current 指向真实 DOM 或实例**
 
 ---
 
-# ✅ **9. 为什么不要在循环、条件语句中使用 Hooks？**
+### ✅ **9. 为什么不要在循环、条件语句中使用 Hooks？**
 
 因为 Hook 必须保持 **调用顺序一致**。
 
@@ -689,7 +685,7 @@ useEffect(() => { ... }, []);
 
 ---
 
-# ✅ **10. React Hook 的闭包陷阱？**
+### ✅ **10. React Hook 的闭包陷阱？**
 
 问题表现：effect 或回调里拿到的是“旧 state”
 
@@ -742,4 +738,302 @@ ref.current = count;
 * 👉 Redux/React-Router 面试题
 * 👉 高级场景题（防止重复请求、虚拟列表、白屏排查等）
 
-要继续吗？需要 PDF 输出吗？
+# 💯💯💯 性能优化（必问）
+
+## 💡 一、React 性能优化方案有哪些？
+
+### 1️⃣ React.memo
+
+**作用：**
+让函数组件在相同 props 的情况下跳过重新渲染。类似类组件中的 `PureComponent`。
+
+**原理：**
+React.memo 会对前后 props 做浅比较（shallow compare）。如果相同，则不会重新渲染。
+
+**示例：**
+
+```jsx
+const Child = React.memo(({ name }) => {
+  console.log('Child render');
+  return <div>{name}</div>;
+});
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  return (
+    <>
+      <Child name="Tom" />
+      <button onClick={() => setCount(count + 1)}>add</button>
+    </>
+  );
+}
+```
+
+✅ 优化后：点击按钮不会重新渲染 `Child`
+❌ 优化前：`App` 一更新，`Child` 也会更新
+
+---
+
+### 2️⃣ useMemo
+
+**作用：**
+缓存**计算结果**，避免每次渲染都执行高代价的计算。
+
+**原理：**
+`useMemo(fn, deps)` → 当依赖不变时，直接返回上一次计算结果。
+
+**示例：**
+
+```jsx
+const total = useMemo(() => {
+  console.log("Recalculate...");
+  return list.reduce((a, b) => a + b, 0);
+}, [list]);
+```
+
+---
+
+### 3️⃣ useCallback
+
+**作用：**
+缓存**函数引用**，避免子组件因 props 传入的函数变化而重复渲染。
+
+**示例：**
+
+```jsx
+const handleClick = useCallback(() => {
+  console.log("clicked");
+}, []);
+```
+
+**区别：**
+
+* `useMemo` 缓存 **值**
+* `useCallback` 缓存 **函数**
+
+---
+
+### 4️⃣ 分片渲染（Time Slicing）/ 虚拟列表
+
+**目的：**
+当数据量很大时（几千上万条），防止一次性渲染造成页面卡顿。
+
+**原理：**
+
+* **分片渲染：** 把渲染任务拆分成小块，分多帧执行。
+* **虚拟列表（Virtual List）：** 只渲染“可视区域”内的元素，非可见部分不渲染。
+
+**示例：react-window/react-virtualized**
+
+```jsx
+import { FixedSizeList as List } from 'react-window';
+
+<List
+  height={500}
+  itemCount={10000}
+  itemSize={35}
+  width={300}
+>
+  {({ index, style }) => <div style={style}>Row {index}</div>}
+</List>
+```
+
+---
+
+### 5️⃣ React.lazy / Suspense
+
+**作用：**
+实现**代码分割（Code Splitting）**，按需加载组件。
+
+**原理：**
+在打包时（Webpack/ESBuild），会把懒加载组件单独打包成 chunk。首次加载时只加载主 bundle，懒加载组件等到用到时再请求。
+
+**示例：**
+
+```jsx
+const About = React.lazy(() => import('./About'));
+
+<Suspense fallback={<div>Loading...</div>}>
+  <About />
+</Suspense>
+```
+
+---
+
+### 6️⃣ key 优化 diff
+
+**作用：**
+`key` 帮助 React 更快定位 DOM 节点，减少不必要的创建和销毁。
+
+**优化点：**
+
+* 使用唯一且稳定的 key，如 id
+* 避免使用 index 作为 key（可能导致复用错误）
+
+---
+
+### ✅ 小结
+
+| 优化手段                       | 作用方向       |
+| -------------------------- | ---------- |
+| React.memo / PureComponent | 避免子组件重复渲染  |
+| useMemo / useCallback      | 缓存值或函数引用   |
+| React.lazy / Suspense      | 代码分割，懒加载   |
+| 虚拟列表 / 分片渲染                | 优化大数据量渲染性能 |
+| key 优化                     | 提高 diff 效率 |
+
+---
+
+## ⚙️ 二、什么是 Fiber？解决了什么问题？
+
+### 🌿 Fiber 的定义
+
+**Fiber 是 React 16 引入的一种新的协调（Reconciliation）算法的核心数据结构。**
+本质上，它是对 **虚拟 DOM 的重构**，让渲染变得可中断、可恢复、可优先级调度。
+
+---
+
+### ❓React 15 的问题
+
+React 15 的协调（Reconciliation）是**递归同步**的：
+
+* 树很大时（成千上万个节点）
+* 一次 setState 会递归渲染整棵树
+* JS 线程被长时间占用
+* 导致掉帧、页面卡顿（60fps 被阻塞）
+
+---
+
+### 💡Fiber 的目标
+
+React Fiber 让渲染过程变成**可中断、可恢复的异步任务**：
+
+| 机制  | 说明                         |
+| --- | -------------------------- |
+| 可中断 | 当有更高优先级任务（如用户输入）时，可以暂停当前渲染 |
+| 可恢复 | 暂停后可以从上次中断处继续              |
+| 可分片 | 渲染分为多个小单元（Fiber Node）逐步执行  |
+
+---
+
+### ⚙️ Fiber 的核心实现
+
+每个组件对应一个 Fiber Node，节点上包含：
+
+* `type`（组件类型）
+* `pendingProps`（新的 props）
+* `child` / `sibling` / `return`（形成链表结构）
+* `alternate`（旧 Fiber，用于 diff）
+
+渲染流程被拆分为两个阶段：
+
+1. **Render 阶段（可中断）**：生成 Fiber 树（diff）
+2. **Commit 阶段（不可中断）**：批量提交 DOM 更新
+
+---
+
+### 🧠 简单类比
+
+> Fiber 像一个“任务切片调度器”：
+>
+> React 15：递归 → 一次性干完
+> React Fiber：循环 → 干一点 → 检查任务队列 → 再干一点
+
+---
+
+## 🧩 三、如何减少组件重复渲染？
+
+### 1️⃣ 使用 React.memo（或 PureComponent）
+
+阻止无意义的子组件更新。
+
+### 2️⃣ 使用 useCallback / useMemo
+
+保证 props 不变：
+
+```jsx
+const onClick = useCallback(() => doSomething(), []);
+```
+
+### 3️⃣ 避免不必要的 state 提升
+
+不要把只在局部使用的数据放在父组件，否则父组件更新会连带子组件更新。
+
+### 4️⃣ 拆分组件
+
+粒度更细的组件能减少渲染范围。
+
+### 5️⃣ key、列表项稳定
+
+防止列表 diff 错误导致重新创建 DOM。
+
+### 6️⃣ 使用不可变数据（immutable）
+
+避免对象引用变化导致浅比较失效。
+
+---
+
+## 📜 四、什么是虚拟滚动（Virtual Scrolling）？实现原理？
+
+### 💡 定义
+
+**虚拟滚动**是一种性能优化技术，用于在长列表中只渲染“可见区域的元素”。
+
+---
+
+### 📈 场景
+
+比如 10,000 条数据，如果全部渲染，DOM 节点过多会极其卡顿。
+虚拟滚动只显示 20~50 条“可见项”，当滚动时动态替换。
+
+---
+
+### ⚙️ 实现原理
+
+1. **计算可视区域的起止索引**
+   根据滚动条 `scrollTop` 和单项高度计算当前可见项范围。
+
+   ```js
+   const start = Math.floor(scrollTop / itemHeight);
+   const end = start + visibleCount;
+   ```
+
+2. **仅渲染这一部分数据**
+
+   ```jsx
+   const visibleData = data.slice(start, end);
+   ```
+
+3. **使用空白占位**
+   模拟整体高度，保证滚动条正常。
+
+   ```jsx
+   <div style={{ height: data.length * itemHeight }}>
+     <div style={{ transform: `translateY(${start * itemHeight}px)` }}>
+       {visibleData.map(...)}
+     </div>
+   </div>
+   ```
+
+4. **滚动时动态更新**
+   `onScroll` 时重新计算 start/end，更新渲染内容。
+
+---
+
+### 🧰 现成库
+
+* `react-window`（轻量）
+* `react-virtualized`（功能强大）
+* `virtual` from `tanstack/react-virtual`
+
+---
+
+✅ **总结表**
+
+| 技术点                   | 核心思路      | 实际场景    |
+| --------------------- | --------- | ------- |
+| React.memo            | 缓存组件渲染    | 父组件频繁更新 |
+| useMemo / useCallback | 缓存值或函数    | 避免引用变化  |
+| Fiber                 | 可中断异步渲染架构 | 大量节点更新  |
+| 虚拟滚动                  | 只渲染可见元素   | 长列表场景   |
+
