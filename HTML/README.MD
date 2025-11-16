@@ -35,13 +35,13 @@
 
 | 分类                                    | 特性简述                                         |
 | --------------------------------------- | ------------------------------------------------ |
-| 语义标签 <font color=red>新增 💯</font> | header, section, article 等结构清晰              |
-| 多媒体 <font color=red>新增 💯</font>   | video, audio 标签直接播放                        |
-| 无障碍 <font color=red>加强 🤣</font>   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
-| 表单 <font color=red>加强 🤣</font>     | 更丰富的**输入类型**和**验证功**能               |
-| 存储 <font color=red>浏览器 😂</font>   | localStorage 和 sessionStorage                   |
-| 图形 <font color=red>浏览器 😂</font>   | canvas 与 SVG 绘图能力                           |
-| API <font color=red>浏览器 😂</font>    | 地理定位、拖拽、多线程、WebSocket                |
+| 语义标签 <font color=red>💯新增 💯</font> | header, section, article 等结构清晰              |
+| 多媒体 <font color=red>💯新增 💯</font>   | video, audio 标签直接播放                        |
+| 无障碍 <font color=red>🤣加强 🤣</font>   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
+| 表单 <font color=red>🤣加强 🤣</font>     | 更丰富的**输入类型**和**验证功**能               |
+| 存储 <font color=red>😂浏览器 😂</font>   | localStorage 和 sessionStorage                   |
+| 图形 <font color=red>😂浏览器 😂</font>   | canvas 与 SVG 绘图能力                           |
+| API <font color=red>😂浏览器 😂</font>    | 地理定位、拖拽、多线程、WebSocket                |
 
 > ### 简述一下你对 HTML 语义化的理解。
 
@@ -97,63 +97,7 @@
 
 ---
 
-> ### script、script async 和 script defer 的区别
 
-```html
-<script src="script.js"></script>
-<!-- 默认，同步加载，同步执行 -->
-<script src="script.js" async></script>
-<!-- 异步加载，立即执行 -->
-<script src="script.js" defer></script>
-<!-- 异步加载，DOMContentLoaded 前执行 -->
-```
-
-📊 对比表格：
-
-| 特性         | `<script>`              | `<script async>`                                       | `<script defer>`      |
-| ------------ | ----------------------- | ------------------------------------------------------ | --------------------- |
-| 是否异步加载 | ❌ 否（同步）           | ✅ 是                                                  | ✅ 是                 |
-| 是否阻塞渲染 | ✅ 是（阻塞 HTML 解析） | ❌ 否（不会阻塞）                                      | ❌ 否（不会阻塞）     |
-| 脚本执行顺序 | 按写入顺序执行          | 谁先加载完谁先执行，不保证顺序                         | 按写入顺序执行        |
-| 执行时机     | 立即执行                | 加载完立刻执行，中断渲染，执行这个脚本以后，再继续渲染 | 等 DOM 构建完毕后执行 |
-
----
-
-## 🧠 通俗解释：
-
-1. `<script>`
-
-- 默认是**同步加载 + 同步执行**
-- 在加载和执行脚本时，**浏览器会暂停解析 HTML**
-- ❗ 可能阻塞页面加载
-
-2. `<script async>`
-
-- 是**异步加载**，但**加载完成后立即执行**
-- **不保证执行顺序**
-- 适合不依赖其他脚本的独立脚本（如统计、广告）
-
-3. `<script defer>`
-
-- 也是**异步加载**
-- **等 DOM 构建完毕后再顺序执行**
-- 最推荐的方式之一，适合放在 `<head>` 中而不阻塞 HTML 渲染
-
----
-
-假设有以下 HTML：
-
-```html
-<script src="a.js"></script>
-<script src="b.js" async></script>
-<script src="c.js" defer></script>
-```
-
-- `a.js` 会**立即加载并执行**（阻塞后续 HTML）
-- `b.js` 会**并行加载**，加载完立刻执行（可能在 `a.js` 前或后执行）
-- `c.js` 会并行加载，但**等 HTML 解析完再按顺序执行**
-
----
 
 > ### **块级元素**和**行级元素**
 
@@ -246,7 +190,7 @@
 - （1）页面太宽 → 被压缩缩放显示 : 控制页面布局宽度 , 适配不同屏幕
 - （2）字太小，用户体验差 : 控制缩放比例 , 提升用户体验
 
-# 💯💯💯 第二部分 html 面试题
+# 💯💯💯 第二部分 html 面试题 PICTURE
 
 ---
 
@@ -799,7 +743,154 @@ Google 的算法（Core Web Vitals）强烈依赖性能指标。
 I
 少用或者尽量不用 iframe，因为搜索引擎不会抓取 iframe 中的内容
 
-# 面试题 4 other
+
+# 💯💯💯 第三部分 html 面试题 script
+
+> ### base
+
+1. 浏览器在**解析**HTML的**过程中**，遇到了script元素是**不能**继续**构建**DOM树
+- 它会停止继续构建，首先下载JavaScript代码，并且执行JavaScript的脚本（阻塞DOMTree的构建）；
+- 只有等到JavaScript脚本执行结束后，才会继续解析HTML，构建DOM树；
+
+2. 为什么要这样做呢？
+
+- 这是因为JavaScript的作用之一就是操作DOM，并且可以修改DOM;
+- 如果我们等到DOM树构建完成并且渲染再执行JavaScript，会造成严重的回流和重绘，影响页面的性能；
+- 所以会在遇到script元素时，优先下载和执行JavaScript代码，再继续构建DOM树
+
+3. 但是这个也往往会带来新的问题，特别是现代页面开发中：
+- 在目前的开发模式中（比如Vue、React），脚本往往比HTML页面更“重”，下载时间需要更长;
+- 所以会造成页面的解析阻塞，在脚本下载、执行完成之前，浪费很多时间和性能；
+
+##### script 解析过程
+
+1. 解析HTML
+2. 遇到script标签
+- *暂停解析HTML
+- 下载script文件内容
+- 执行seript文件的内容
+- 继续构建DOM
+
+> ### defer的作用
+1. defer属性告诉浏览器不要等待脚本下载，而继续解析HTML，构建DOMTree。
+- 脚本会由浏览器来进行下载，但是不会阻塞DOMTree的构建过程；
+- 如果脚本提前下载好了，它会等待DOMTree构建完成，在DoMContentLoaded事件之前先执行defer中的代码；
+
+2. 所以DoMContentLoaded总是会等待defer中的代码先执行完成。
+```js
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script defer src="./a.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      console.log("a.html DOMContentLoaded");
+    });
+  </script>
+</head>
+```
+3. 另外多个带defer的脚本是可以保持正确的顺序执行的。
+4. 所以defer可以提高页面的性能，并且推荐放到head元素中；
+
+##### defer解析
+
+1. 构建DOMTree
+2. 遇到```defer script```元素 ➡️ 线程中 ```下载scrip标签```
+3. 继续构建DOM
+4. 构建完DOMTree
+5. 执行script标签
+6. DOMContentLoaded
+
+> ###  async的作用
+
+1. async特性与defer有些类似，它也能够让脚本不阻塞页面。
+2. async是让一个脚本的下载和执行是独立的：
+- 浏览器不会因async脚本的下载而阻塞（与defer 类似）；
+- async脚本会在下载好后立即执行，不能保证在DOMContentLoaded之前或者之后执行（执行时会阻塞DOM Tree的构建）
+- async脚本不能保证顺序，它是独立下载、独立运行，不会等待其他脚本
+
+```js
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script async src="./a.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      console.log("a.html DOMContentLoaded");
+    });
+  </script>
+</head>
+```
+##### async执行
+1. 开始构建DOMTree
+2. 遇到```async script```元素 ➡️ 线程中 ```下载scrip标签``` ➡️ ```执行async script文件``` 
+3. 继续构建DOM
+- 构建ul
+- 构建div
+- 构建p
+- 构建hl
+4. 执行DOMContentLoaded回调函数
+> ### script、script async 和 script defer 的区别
+
+```html
+<script src="script.js"></script>
+<!-- 默认，同步加载，同步执行 -->
+<script src="script.js" async></script>
+<!-- 异步加载，立即执行 -->
+<script src="script.js" defer></script>
+<!-- 异步加载，DOMContentLoaded 前执行 -->
+```
+
+📊 对比表格：
+
+| 特性         | `<script>`              | `<script async>`                                       | `<script defer>`      |
+| ------------ | ----------------------- | ------------------------------------------------------ | --------------------- |
+| 是否异步加载 | ❌ 否（同步）           | ✅ 是                                                  | ✅ 是                 |
+| 是否阻塞渲染 | ✅ 是（阻塞 HTML 解析） | ❌ 否（不会阻塞）                                      | ❌ 否（不会阻塞）     |
+| 脚本执行顺序 | 按写入顺序执行          | 谁先加载完谁先执行，不保证顺序                         | 按写入顺序执行        |
+| 执行时机     | 立即执行                | 加载完立刻执行，中断渲染，执行这个脚本以后，再继续渲染 | 等 DOM 构建完毕后执行 |
+
+---
+
+## 🧠 通俗解释：
+
+1. `<script>`
+
+- 默认是**同步加载 + 同步执行**
+- 在加载和执行脚本时，**浏览器会暂停解析 HTML**
+- ❗ 可能阻塞页面加载
+
+2. `<script async>`
+
+- 是**异步加载**，但**加载完成后立即执行**
+- **不保证执行顺序**
+- 适合不依赖其他脚本的独立脚本（如统计、广告）
+
+3. `<script defer>`
+
+- 也是**异步加载**
+- **等 DOM 构建完毕后再顺序执行**
+- 最推荐的方式之一，适合放在 `<head>` 中而不阻塞 HTML 渲染
+
+---
+
+假设有以下 HTML：
+
+```html
+<script src="a.js"></script>
+<script src="b.js" async></script>
+<script src="c.js" defer></script>
+```
+
+- `a.js` 会**立即加载并执行**（阻塞后续 HTML）
+- `b.js` 会**并行加载**，加载完立刻执行（可能在 `a.js` 前或后执行）
+- `c.js` 会并行加载，但**等 HTML 解析完再按顺序执行**
+
+---
+
+# 💯💯💯 面试题 4 other
 
 > ### 请描述下 SEO 中的 TDK？
 
