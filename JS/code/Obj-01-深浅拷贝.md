@@ -224,7 +224,7 @@ const lodashCopy = _.cloneDeep(data);
 
 ---
 
-> ### 基础版
+> ### 基础版 plus
 
 ```js
 function deepclone(obj) {
@@ -250,5 +250,87 @@ function deepclone(obj) {
   }
 
   return deepobj; // 别忘了返回
+}
+```
+
+> ### 进阶 pro
+
+```js
+function deepClone(obj, hash = new WeakMap()) {
+  if (obj === null) return obj;
+  if (typeof obj !== "object") return obj;
+
+  // 处理循环引用
+  if (hash.has(obj)) {
+    return hash.get(obj);
+  }
+
+  // 处理特殊对象类型
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
+
+  if (obj instanceof RegExp) {
+    return new RegExp(obj);
+  }
+
+  // 初始化克隆对象
+  const cloneObj = Array.isArray(obj) ? [] : {};
+  hash.set(obj, cloneObj);
+
+  // 深拷贝每一项
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      cloneObj[key] = deepClone(obj[key], hash);
+    }
+  }
+
+  return cloneObj;
+}
+```
+
+> ### max
+
+```js
+function deepClone(obj, hash = new WeakMap()) {
+  if (obj === null) return obj;
+  if (typeof obj !== "object") return obj;
+
+  if (hash.has(obj)) return hash.get(obj);
+
+  let cloneObj;
+
+  const Constructor = obj.constructor;
+  switch (Constructor) {
+    case Date:
+      return new Date(obj);
+    case RegExp:
+      return new RegExp(obj);
+    case Map:
+      cloneObj = new Map();
+      hash.set(obj, cloneObj);
+      obj.forEach((value, key) => {
+        cloneObj.set(key, deepClone(value, hash));
+      });
+      return cloneObj;
+    case Set:
+      cloneObj = new Set();
+      hash.set(obj, cloneObj);
+      obj.forEach((value) => {
+        cloneObj.add(deepClone(value, hash));
+      });
+      return cloneObj;
+  }
+
+  cloneObj = Array.isArray(obj) ? [] : {};
+  hash.set(obj, cloneObj);
+
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      cloneObj[key] = deepClone(obj[key], hash);
+    }
+  }
+
+  return cloneObj;
 }
 ```
