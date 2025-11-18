@@ -1,5 +1,4 @@
 > ### ES6 课程概述
->
 > <font color=red> ECMAScript、JavaScript、NodeJs， 它们的区别是什么? </font>
 
 - **ECMAScript**：简称 ES，是一个语言标准（循环、判断、变量、数组等数据类型
@@ -8,33 +7,108 @@
 
 # 💯💯💯 数据类型检测的方式有哪些
 
+## 7种原始类型（Number、String、Boolean、BigInt、Symbol、Null、Undefined）和1种对象类型（Object）
 
-## ✅ **1. `typeof` —— 基础类型检测**
+> ## ✅ **1. `typeof` —— 基础类型检测**
 
+### 使用方法
 ```js
-typeof 123       // 'number'
-typeof 'abc'     // 'string'
-typeof true      // 'boolean'
-typeof undefined // 'undefined'
-typeof Symbol()  // 'symbol'
-typeof 10n       // 'bigint'
-typeof function(){} // 'function'
+//1
+typeof operand
+
+
+//2
+typeof(operand)
 ```
 
-✅ 优点
-✔ 简单、适合原始类型
-❌ 缺点
-❌ 不能区分 `null`、`object`、数组
+
+### ✔️ 1. 基本类型
 
 ```js
-typeof null        // 'object' ❌ 历史遗留问题
-typeof []          // 'object'
-typeof {}          // 'object'
+typeof 123         // "number"
+typeof NaN         // "number"
+typeof Infinity    // "number"
+typeof 'Hello'     // "string"
+typeof true        // "boolean"
+typeof undefined   // "undefined"
+typeof Symbol()    // "symbol"
+typeof 123n        // "bigint"
 ```
 
 ---
 
-## ✅ **2. `instanceof` —— 判断是否由某构造函数生成**
+### ✔️ 2. 特殊对象
+
+```js
+typeof null        // "object"   (历史遗留 bug)
+typeof []          // "object"
+typeof {}          // "object"
+typeof new Date()  // "object"
+typeof /abc/       // "object"
+typeof new Map()   // "object"
+typeof new Set()   // "object"
+```
+
+---
+
+### ✔️ 3. 函数及可调用对象
+
+```js
+typeof function(){}       // "function"
+typeof class A{}          // "function"
+typeof () => {}           // "function"
+typeof Math.sin           // "function"
+```
+
+> 注意：**class 本质上也是函数**。
+
+---
+
+### ✔️ 4. 未声明变量
+
+```js
+typeof foo    // "undefined" （不会报错）
+```
+
+### typeof 的缺陷与坑点（务必注意）
+
+#### ❌ 1. 无法区分对象类型
+
+```js
+typeof []   // "object"
+typeof {}   // "object"
+typeof null // "object"
+```
+
+> 不能用来判断数组、日期、正则等。
+
+---
+
+#### ❌ 2. 对 null 返回 `"object"`（JS 历史 bug）
+
+这是 JS 最臭名昭著的“语言八大坑”之一。
+
+---
+
+#### ❌ 3. `typeof NaN` 返回 `"number"`
+
+```js
+typeof NaN  // "number"
+```
+
+判断 NaN 应使用 `Number.isNaN()`。
+
+---
+
+#### ❌ 4. 所有 class 都返回 `"function"`
+
+```js
+class A{}
+typeof A   // "function"
+```
+
+
+> ## ✅ **2. `instanceof` —— 判断是否由某构造函数生成**
 
 ```js
 [] instanceof Array        // true
@@ -42,11 +116,11 @@ typeof {}          // 'object'
 new Date() instanceof Date // true
 ```
 
-✅ 优点
+### ✅ 优点
 ✔ 可判断复杂对象（Array、Date、RegExp 等）
-❌ 缺点
-❌ 不能判断基本类型
-❌ 跨 iframe / 跨 window 失效
+### ❌ 缺点
+- ❌ 不能判断基本类型
+- ❌ 跨 iframe / 跨 window 失效
 
 ```js
 123 instanceof Number // false （基本类型不是实例）
@@ -71,17 +145,6 @@ Object.prototype.toString.call(new Date()) // "[object Date]"
 ✔ 支持所有类型
 ✔ 解决 typeof & instanceof 的缺陷
 
-👉 封装一个通用函数：
-
-```js
-function getType(val) {
-  return Object.prototype.toString.call(val).slice(8, -1).toLowerCase();
-}
-
-getType([])         // 'array'
-getType(null)       // 'null'
-getType(new Set())  // 'set'
-```
 
 ---
 
@@ -168,6 +231,19 @@ Object.prototype.toString.call(new A()) // "[object MyClass]"
 | 判断是否某类实例          | `instanceof`                         |
 
 
+## 💯💯💯 封装一个通用函数：
+
+```js
+function getType(val) {
+  if(value === null) return "Null"
+  if(value === undefined) return "Undefined"
+  return Object.prototype.toString.call(val).slice(8, -1).toLowerCase();
+}
+
+getType([])         // 'array'
+getType(null)       // 'null'
+getType(new Set())  // 'set'
+```
 
 
 # 💯💯💯 OTHER
@@ -484,22 +560,3 @@ return {
 
 ---
 
-# ✅ 总结表
-
-| 题目                        | 关键考点      |
-| --------------------------- | ------------- |
-| typeof null                 | 历史遗留 Bug  |
-| [] == ![]                   | 隐式类型转换  |
-| NaN !== NaN                 | IEEE 浮点标准 |
-| [] + {} / {} + []           | 语法解析顺序  |
-| 0.1 + 0.2 !== 0.3           | 浮点精度      |
-| "b" + "a" + +"a" + "a"      | 一元运算符    |
-| {} == {}                    | 引用类型比较  |
-| parseInt('08')              | 进制坑        |
-| a == 1 && a == 2            | valueOf 重载  |
-| setTimeout(...)             | 事件循环      |
-| const obj.a 修改            | 引用可变      |
-| ['1','2','3'].map(parseInt) | map 参数传递  |
-| [] == 0 / ![] == 0          | 隐式转换      |
-| var a=(b=3)                 | 变量作用域    |
-| return 换行                 | 自动分号插入  |
