@@ -1,159 +1,80 @@
-const PENDING = "PENDING";
-const FULFILLED = "FULFILLED";
-const REJECTED = "REJECTED";
+// miniZustand.js
+import { useEffect, useState } from "react";
 
-class MyPromise {
-  constructor(executor) {
-    this.state = PENDING;
-    this.value = null;
-    this.reason = null;
-    this.onFulfilledsCallback = [];
-    this.onRejectedsCallback = [];
+// create：用来创建一个 store，并返回一个 useStore Hook
+export function create(createState) {
+  // 全局的状态
+  let state;
+  // 订阅这个状态的“监听函数”列表
+  const listeners = new Set();
 
-    const fulfill = (value) => {
-      if (this.state === PENDING) {
-        this.state = FULFILLED;
-        this.value = value;
-        this.onFulfilledsCallback.forEach((cb) => cb());
-      }
+  // 修改状态的函数
+  const setState = (partial, replace) => {
+    // 支持两种写法：
+    // 1. setState({ count: 1 })
+    // 2. setState((state) => ({ count: state.count + 1 }))
+    const nextState =
+      typeof partial === "function" ? partial(state) : partial;
+
+    // 如果 replace 为 true，或者 nextState 不是对象，就直接替换
+    // 否则就做一个浅合并（类似 setState）
+    state =
+      replace || typeof nextState !== "object"
+        ? nextState
+        : { ...state, ...nextState };
+
+    // 状态变了，通知所有监听者
+    listeners.forEach((listener) => listener(state));
+  };
+
+  // 获取当前状态
+  const getState = () => state;
+
+  // 订阅状态变化
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    // 返回取消订阅的函数
+    return () => {
+      listeners.delete(listener);
     };
+  };
 
-    const reject = (reason) => {
-      if (this.state === PENDING) {
-        this.state = REJECTED;
-        this.reason = reason;
-        this.onRejectedsCallback.forEach((cb) => cb());
-      }
-    };
+  // 初始化 state：调用用户传进来的 createState
+  // createState 里会写初始值和一些修改 state 的方法
+  state = createState(setState, getState);
 
-    try {
-      executor(fulfill, reject);
-    } catch (error) {
-      reject(error);
-    }
-  }
+  // React Hook：组件里用它来读取状态
+  const useStore = (selector = (s) => s) => {
+    // selector 用来从 state 里选一部分想用的数据
+    // 默认 selector = (s) => s，也就是整个 state 都拿
+    const [selectedState, setSelectedState] = useState(() =>
+      selector(state)
+    );
 
-  then(onFulfilled, onRejected) {
-    onFulfilled = typeof onFulfilled === "function" ? onFulfilled : (v) => v;
-    onRejected =
-      typeof onRejected === "function"
-        ? onRejected
-        : (err) => {
-            throw err;
-          };
+    useEffect(() => {
+      // 每次 state 变化时，这个函数会被调用
+      const callback = (newState) => {
+        const nextSelected = selector(newState);
+        setSelectedState(nextSelected);
+      };
 
-    return new MyPromise((resolve, reject) => {
-      if (this.state === FULFILLED) {
-        queueMicrotask(() => {
-          try {
-            const x = onFulfilled(this.value);
-            resolve(x);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      }
+      // 订阅变化
+      const unsubscribe = subscribe(callback);
 
-      if (this.state === REJECTED) {
-        queueMicrotask(() => {
-          try {
-            const x = onRejected(this.reason);
-            resolve(x);
-          } catch (error) {
-            reject(error);
-          }
-        });
-      }
-    });
-  }
+      // 一进来先同步一次
+      callback(state);
 
-  static resolve(value) {
-    if (value instanceof MyPromise) {
-      return value;
-    }
-    return new MyPromise((resolve) => resolve(value));
-  }
+      // 组件卸载时取消订阅
+      return unsubscribe;
+    }, [selector]);
 
-  static reject(reason) {
-    return new MyPromise((_, reject) => reject(reason));
-  }
+    return selectedState;
+  };
 
-  static all(promises) {
-    return new MyPromise((resolve, reject) => {
-      let results = [];
-      let count = 0;
+  // 给 useStore 挂上一些方法，方便在组件外也能用
+  useStore.getState = getState;
+  useStore.setState = setState;
+  useStore.subscribe = subscribe;
 
-      promises.forEach((p, i) => {
-        MyPromise.resolve(p).then((value) => {
-          results[i] = value;
-          count++;
-          if (count === promises.length) {
-            resolve(results);
-          }
-        });
-      });
-
-      if (promises.length === 0) {
-        resolve([]);
-      }
-    });
-  }
-
-  static allSettled(promises){
-    return new MyPromise(resolve=> {
-        let results = []
-        let count = 0;
-
-        promises.forEach((p,i) => {
-            (value) => {
-                results[i] = {status: "fulfilled", value};
-                count++;
-                if(count === promises.length){
-                    resolve(results);
-                }
-            },
-            (reason) => {
-                results[i] = {status: "rejected", reason};
-                count++;
-                if(count === promises.length){
-                    resolve(results);
-                }
-            }
-        })
-
-        if(promises.length === 0){
-            resolve([])
-        }
-    })
-  }
-
-  static race(promises){
-    return new MyPromise((resolve,reject) => {
-        promises.forEach(p => {
-            MyPromise.resolve(p).then(resolve,reject)
-        })
-    })
-  }
-
-  static any(promises){
-    return new MyPromise((resolve,reject) => {
-        let errors = []
-        let count = 0;
-
-        promises.forEach((p,i) => {
-            MyPromise.resolve(p).then(
-                (value) => {
-                    resolve(value)
-                },
-                (err) => {
-                    errors[i] = err;
-                    count++;
-                    if(count === promises.length){
-                        reject(new AggregateError(errors, "All promises were rejected"))
-                    }
-                }
-            )
-        })
-    })
-  }
+  return useStore;
 }
