@@ -46,7 +46,7 @@
 > ### 简述一下你对 HTML 语义化的理解。
 
 - （1）使用语义化的标签来创建页面结构，如 header,footer,nav，从标签上即可以直观的知道这个标签的作用
-- （2）HTML 语义化让页面的内容结构化 ➡️ 结构更清晰 ➡️ 利于开发和维护。而不是滥用 div；
+- （2）HTML 语义化让页面的 ⏏️ 内容结构化 ➡️ 结构更清晰 ➡️ 利于开发和维护。而不是滥用 div；
 - （3）搜索引擎的爬虫也依赖于 HTML 不同标签来确定不同的权重，有利于 SEO；
 
 > ### 语义化标签 常用的
@@ -262,22 +262,47 @@
 
 **答：**
 
-- 当图片进入视口（可见区域）时，才真正加载。
-  实现方式：
+- 只有当图片**即将进入视口（用户可见区域）**时，才开始加载真实图片。
+未进入视口时先用占位符，减少初始加载资源，提高性能。
 
-```js
-const imgs = document.querySelectorAll("img[data-src]");
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
+##### **方式 1：原生属性 `loading="lazy"`（最简单）**
+
+```html
+<img src="image.jpg" loading="lazy" alt="">
+```
+
+✔ 浏览器自动在图片即将可见时加载。
+
+---
+
+##### **方式 2：IntersectionObserver（推荐）**
+
+更精确可控，支持更多 API。
+
+```html
+<img data-src="real.jpg" class="lazy" alt="">
+
+<script>
+const imgs = document.querySelectorAll('img.lazy');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
     if (entry.isIntersecting) {
       const img = entry.target;
       img.src = img.dataset.src;
+      img.classList.remove('lazy');
       observer.unobserve(img);
     }
   });
 });
-imgs.forEach((img) => observer.observe(img));
+
+imgs.forEach(img => observer.observe(img));
+</script>
 ```
+##### **方式 3：滚动事件监听（不推荐）**
+
+较老的方式，需要自行判断是否进入可视区。
+
 
 ---
 
@@ -286,26 +311,49 @@ imgs.forEach((img) => observer.observe(img));
 **答：**
 有两种方式：
 
-1. **`srcset + sizes`**
+ **方式 1：`srcset` + `sizes`（最推荐，现代浏览器通用）**
 
-   ```html
-   <img
-     src="small.jpg"
-     srcset="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
-     sizes="(max-width: 600px) 480px, 800px"
-   />
-   ```
+##### **1）使用不同分辨率的图片**
 
-   浏览器会根据视口宽度自动选择合适的图片。
+```html
+<img 
+  src="img-800.jpg" 
+  srcset="
+    img-400.jpg 400w,
+    img-800.jpg 800w,
+    img-1200.jpg 1200w
+  "
+  sizes="
+    (max-width: 600px) 400px,
+    (max-width: 1000px) 800px,
+    1200px
+  "
+  alt="示例图片">
+```
 
-2. **`<picture>` 标签**
+##### **原理：**
 
-   ```html
-   <picture>
-     <source media="(min-width:800px)" srcset="large.jpg" />
-     <img src="small.jpg" alt="demo" />
-   </picture>
-   ```
+* `srcset` 告诉浏览器“有哪些尺寸的图片可用”
+* `sizes` 告诉浏览器“当前布局需要多宽的图片”
+* 浏览器根据设备宽度、DPR（像素密度）自动选择最合适的图片文件。
+
+---
+
+#### **方式 2：使用 `<picture>` 元素**
+
+适合需要 **不同格式**（如 WebP）或完全不同的图片资源。
+
+```html
+<picture>
+  <source srcset="img.webp" type="image/webp">
+  <source srcset="img.jpg" type="image/jpeg">
+  <img src="img.jpg" alt="示例图片">
+</picture>
+```
+
+##### **原理：**
+
+浏览器根据支持的格式自动选择最合适的 `<source>`。
 
 ---
 
