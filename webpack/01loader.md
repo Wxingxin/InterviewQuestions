@@ -1,98 +1,256 @@
+下面我给你整理一份 **webpack 常见 loader 使用 & 配置大全**，偏面试 + 实战向，你可以当作小抄用 👇
 
-## 🧩 一、什么是 Loader？
+---
 
-> Loader 让 Webpack 能够识别和处理各种类型的文件（不仅仅是 JS）。
-> Webpack 默认只理解 `.js` 文件，
-> 通过 Loader 可以让它理解 `.css`、`.png`、`.vue`、`.ts`、`.jsx` 等等。
+## 一、loader 是什么？怎么配置？
 
-例如：
+* **作用**：让 webpack 能“理解”各种非 JS 资源（CSS / TS / 图片 / Vue 单文件组件等），把它们转成 JS 能处理的模块。
+* **配置位置**：`webpack.config.js` 的 `module.rules` 中。
 
 ```js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.xxx$/,      // 匹配文件
+        use: [               // 从右到左、从下到上执行
+          {
+            loader: 'loader-name',
+            options: { /* ... */ }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 二、样式相关 loader
+
+### 1. `style-loader` + `css-loader`（最基本）
+
+* `css-loader`：让 webpack 认识 `import './index.css'`
+* `style-loader`：把 CSS 通过 `<style>` 插入到页面中（开发环境常用）
+
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',   // 把 CSS 插入到 DOM
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,  // 在 css-loader 之前还有几个 loader
+              modules: false     // 若 true，则启用 CSS Modules
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### CSS Modules 示例：
+
+```js
+{
+  test: /\.module\.css$/,
+  use: [
+    'style-loader',
+    {
+      loader: 'css-loader',
+      options: {
+        modules: {
+          localIdentName: '[name]__[local]__[hash:base64:5]'
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+
+### 2. 预处理器：`sass-loader` / `less-loader` / `stylus-loader`
+
+一般链路：
+
+* `style-loader` / `MiniCssExtractPlugin.loader`
+* `css-loader`
+* `postcss-loader`（可选）
+* `sass-loader` / `less-loader` …
+
+```js
+{
+  test: /\.s[ac]ss$/,
+  use: [
+    'style-loader',
+    'css-loader',
+    'postcss-loader',    // 若需要 autoprefixer 等
+    'sass-loader'
+  ]
+}
+```
+
+less 类似：
+
+```js
+{
+  test: /\.less$/,
+  use: [
+    'style-loader',
+    'css-loader',
+    'postcss-loader',
+    {
+      loader: 'less-loader',
+      options: {
+        lessOptions: {
+          javascriptEnabled: true // antd 常用
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+
+### 3. `postcss-loader`（自动添加前缀等）
+
+配合 `postcss.config.js`：
+
+```js
+// webpack.config.js
 {
   test: /\.css$/,
-  use: ['style-loader', 'css-loader']
+  use: [
+    'style-loader',
+    'css-loader',
+    'postcss-loader'
+  ]
+}
+```
+
+```js
+// postcss.config.js
+module.exports = {
+  plugins: [
+    require('autoprefixer')(),
+    // require('postcss-preset-env')()
+  ]
 }
 ```
 
 ---
 
-## 🧭 二、Loader 按功能分类总览
+### 4. 生产环境抽离 CSS：`MiniCssExtractPlugin.loader`
 
-| 分类            | 作用                            | 示例 Loader                                                                    |
-| ------------- | ----------------------------- | ---------------------------------------------------------------------------- |
-| 🧱 1. 代码编译类   | 把新语法编译成浏览器可识别代码               | `babel-loader`, `ts-loader`, `vue-loader`, `jsx-loader`                      |
-| 🎨 2. 样式处理类   | 解析 CSS / Less / Sass / Stylus | `css-loader`, `style-loader`, `sass-loader`, `less-loader`, `postcss-loader` |
-| 🖼️ 3. 文件与资源类 | 处理图片、字体、视频等静态资源               | `file-loader`, `url-loader`, `asset/resource`                                |
-| 🧰 4. 模板与结构类  | 处理 HTML、Pug、Handlebars、EJS 模板 | `html-loader`, `pug-loader`, `ejs-loader`                                    |
-| 🔧 5. 优化与辅助类  | 代码校验、转换、国际化                   | `eslint-loader`, `json-loader`, `i18n-loader`, `thread-loader`               |
-| ⚙️ 6. 特殊用途类   | 框架、热更新、调试                     | `vue-loader`, `react-hot-loader`, `source-map-loader`                        |
+开发用 `style-loader`，生产改为抽离成单独 CSS 文件。
+
+```js
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          process.env.NODE_ENV === 'production'
+            ? MiniCssExtractPlugin.loader
+            : 'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:8].css'
+    })
+  ]
+};
+```
 
 ---
 
-## 🧱 一类：代码编译类 Loader
+## 三、JS / TS 相关 loader
 
-| Loader                        | 功能               | 说明                                  |
-| ----------------------------- | ---------------- | ----------------------------------- |
-| **babel-loader**              | 把 ES6+ 转成 ES5    | 配合 `.babelrc` 或 `@babel/preset-env` |
-| **ts-loader**                 | 编译 TypeScript 文件 | 依赖 `typescript`                     |
-| **vue-loader**                | 解析 `.vue` 单文件组件  | Vue 项目核心 Loader                     |
-| **jsx-loader / babel-loader** | 编译 React JSX 语法  | 搭配 Babel 一起使用                       |
+### 1. `babel-loader`（ES6+ 转 ES5）
 
-📘 示例：
+**核心**：结合 `.babelrc` 或 `babel.config.js`
 
 ```js
+// webpack.config.js
 {
-  test: /\.js$/,
+  test: /\.[jt]sx?$/,
   exclude: /node_modules/,
-  use: 'babel-loader'
+  use: {
+    loader: 'babel-loader',
+    options: {
+      cacheDirectory: true   // 开启缓存，加快二次构建
+    }
+  }
 }
+```
+
+```js
+// babel.config.js
+module.exports = {
+  presets: [
+    ['@babel/preset-env', {
+      useBuiltIns: 'usage',
+      corejs: 3
+    }],
+    '@babel/preset-react',        // 若用 React
+    '@babel/preset-typescript'    // 若用 TS，另一种写法
+  ],
+  plugins: [
+    // 按需加载等插件……
+  ]
+};
 ```
 
 ---
 
-## 🎨 二类：样式处理类 Loader
+### 2. `ts-loader`（编译 TypeScript）
 
-| Loader             | 功能                        | 说明                 |
-| ------------------ | ------------------------- | ------------------ |
-| **style-loader**   | 把 CSS 以 `<style>` 注入 HTML | 通常放在 css-loader 之后 |
-| **css-loader**     | 解析 `@import`、`url()` 等语法  | 必备                 |
-| **postcss-loader** | 自动加前缀、兼容性处理               | 需配合 `autoprefixer` |
-| **sass-loader**    | 编译 `.scss/.sass`          | 需安装 `sass`         |
-| **less-loader**    | 编译 `.less`                | 需安装 `less`         |
-| **stylus-loader**  | 编译 `.styl` 文件             | 需安装 `stylus`       |
+两种常见方案：
 
-📘 示例：
+#### 方案 A：单独使用 `ts-loader`（调用 tsc）
 
 ```js
 {
-  test: /\.scss$/,
-  use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
+  test: /\.tsx?$/,
+  use: 'ts-loader',
+  exclude: /node_modules/
 }
 ```
 
----
+`tsconfig.json` 负责配置编译选项。
 
-## 🖼️ 三类：文件与资源类 Loader
+#### 方案 B：`babel-loader` + `@babel/preset-typescript`
 
-| Loader                   | 功能                             | 说明                |
-| ------------------------ | ------------------------------ | ----------------- |
-| **file-loader**          | 把文件输出到输出目录                     | 返回 URL            |
-| **url-loader**           | 小文件转为 Base64，大文件交给 file-loader | 依赖 file-loader    |
-| **asset/resource**       | Webpack 5 内置替代 file-loader     | 直接输出资源文件          |
-| **asset/inline**         | 内联资源为 Base64                   | 替代 url-loader     |
-| **asset**                | 自动选择内联或资源文件（基于大小）              | Webpack 5 新特性     |
-| **image-webpack-loader** | 压缩优化图片                         | 可与 file-loader 连用 |
-| **svg-inline-loader**    | 把 SVG 变成内联内容                   | 方便修改样式            |
-
-📘 示例：
+好处：可以用 Babel 的生态 & 插件链路（如装饰器、按需加载等）
 
 ```js
 {
-  test: /\.(png|jpg|gif|svg)$/,
-  type: 'asset',
-  parser: {
-    dataUrlCondition: {
-      maxSize: 8 * 1024 // 小于8kb的图片转Base64
+  test: /\.tsx?$/,
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: [
+        '@babel/preset-env',
+        '@babel/preset-react',
+        '@babel/preset-typescript'
+      ]
     }
   }
 }
@@ -100,16 +258,113 @@
 
 ---
 
-## 🧰 四类：模板与结构类 Loader
+## 四、静态资源 loader（图片 / 字体等）
 
-| Loader                | 功能               | 说明             |
-| --------------------- | ---------------- | -------------- |
-| **html-loader**       | 处理 HTML 文件中的资源路径 | 支持 `<img src>` |
-| **pug-loader**        | 编译 `.pug` 模板     | 依赖 pug         |
-| **ejs-loader**        | 编译 EJS 模板        | 用于前端渲染         |
-| **handlebars-loader** | 解析 Handlebars 模板 | 常用于静态页面生成      |
+webpack5 推荐使用内置 `asset modules`，但面试 loader 也经常问。
 
-📘 示例：
+### 1. 老写法：`file-loader` / `url-loader`
+
+* `file-loader`：把文件复制到输出目录，返回 URL
+* `url-loader`：小文件转为 base64，大文件 fallback 到 `file-loader`
+
+```js
+{
+  test: /\.(png|jpe?g|gif|svg)$/i,
+  use: [
+    {
+      loader: 'url-loader',
+      options: {
+        limit: 8 * 1024,          // 小于 8kb 转成 base64
+        name: 'img/[name].[hash:8].[ext]'
+      }
+    }
+  ]
+}
+```
+
+字体类似：
+
+```js
+{
+  test: /\.(woff2?|eot|ttf|otf)$/,
+  use: [{
+    loader: 'file-loader',
+    options: {
+      name: 'fonts/[name].[hash:8].[ext]'
+    }
+  }]
+}
+```
+
+---
+
+### 2. webpack5 推荐：`asset/resource` / `asset/inline` / `asset`
+
+```js
+module.exports = {
+  module: {
+    rules: [
+      // 自动在 inline 与 resource 之间选择（默认 8kb）
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024
+          }
+        },
+        generator: {
+          filename: 'img/[name].[hash:8][ext]'
+        }
+      },
+      // 始终输出文件
+      {
+        test: /\.(woff2?|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash:8][ext]'
+        }
+      }
+    ]
+  }
+};
+```
+
+---
+
+### 3. 图片优化：`image-webpack-loader`
+
+配合 `url-loader` / `asset` 使用：
+
+```js
+{
+  test: /\.(png|jpe?g|gif)$/i,
+  use: [
+    {
+      loader: 'url-loader',
+      options: { limit: 8 * 1024 }
+    },
+    {
+      loader: 'image-webpack-loader',
+      options: {
+        mozjpeg: { progressive: true },
+        optipng: { enabled: true },
+        pngquant: { quality: [0.65, 0.90], speed: 4 }
+      }
+    }
+  ]
+}
+```
+
+生产环境打包时压缩图片。
+
+---
+
+## 五、HTML & 模板相关 loader
+
+### 1. `html-loader`
+
+让 HTML 里的 `<img src="...">` 等资源交给 webpack 处理。
 
 ```js
 {
@@ -118,128 +373,448 @@
 }
 ```
 
+一般配合 `HtmlWebpackPlugin` 使用。
+
 ---
 
-## 🔧 五类：优化与辅助类 Loader
+### 2. 模板引擎 loader 示例
 
-| Loader            | 功能            | 说明                                     |
-| ----------------- | ------------- | -------------------------------------- |
-| **eslint-loader** | 代码语法检查        | Webpack 5 推荐改为 `eslint-webpack-plugin` |
-| **json-loader**   | 加载 `.json` 文件 | Webpack 5 已内置                          |
-| **thread-loader** | 多线程编译优化性能     | 通常配合 babel-loader 使用                   |
-| **cache-loader**  | 缓存结果以提升构建速度   | 适合大型项目                                 |
-| **i18n-loader**   | 国际化文件处理       | 配合语言包使用                                |
-
-📘 示例：
+* `ejs-loader`
+* `pug-loader`
+* `handlebars-loader`
+* 等…
 
 ```js
 {
-  test: /\.js$/,
-  use: ['thread-loader', 'babel-loader']
+  test: /\.ejs$/,
+  use: [
+    {
+      loader: 'ejs-loader',
+      options: {
+        esModule: false
+      }
+    }
+  ]
 }
 ```
 
 ---
 
-## ⚙️ 六类：特殊用途类 Loader
+## 六、框架相关 loader
 
-| Loader                | 功能                | 场景              |
-| --------------------- | ----------------- | --------------- |
-| **source-map-loader** | 加载已有的 SourceMap   | 用于调试            |
-| **react-hot-loader**  | 支持 React 热更新      | React 项目常用      |
-| **vue-style-loader**  | Vue 专用 style 注入器  | 替代 style-loader |
-| **raw-loader**        | 导入文件为字符串          | 例如 `.txt` 内容    |
-| **markdown-loader**   | 把 Markdown 转 HTML | 文档站常用           |
+### 1. `vue-loader`
 
-📘 示例：
+Vue 单文件组件（`.vue`）必须配合 `VueLoaderPlugin`：
+
+```js
+// webpack.config.js
+const { VueLoaderPlugin } = require('vue-loader');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      }
+    ]
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
+};
+```
+
+`.vue` 里面的 `<style>`、`<script>` 会根据其他 loader 再走一遍，例如 sass / babel。
+
+---
+
+### 2. React
+
+React 本身不需要专门 loader，一般通过 `babel-loader` + `@babel/preset-react` 即可。
+
+```js
+{
+  test: /\.(js|jsx)$/,
+  use: 'babel-loader',
+  exclude: /node_modules/
+}
+```
+
+---
+
+## 七、工具 & 辅助类 loader
+
+### 1. 代码检查：`eslint-loader`（已不推荐）→ `eslint-webpack-plugin`
+
+虽然不是 loader，但面试经常混着问。
+
+**老写法（不推荐）**：
+
+```js
+{
+  enforce: 'pre',
+  test: /\.(j|t)sx?$/,
+  exclude: /node_modules/,
+  loader: 'eslint-loader',
+  options: {
+    fix: true
+  }
+}
+```
+
+**新推荐方式：插件**
+
+```js
+const ESLintPlugin = require('eslint-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      fix: true
+    })
+  ]
+};
+```
+
+---
+
+### 2. 多进程构建：`thread-loader`
+
+适用于 `babel-loader` / `ts-loader` 等耗时 loader 前面，加快构建。
+
+```js
+{
+  test: /\.[jt]sx?$/,
+  use: [
+    {
+      loader: 'thread-loader',
+      options: {
+        workers: 2
+      }
+    },
+    'babel-loader'
+  ],
+  exclude: /node_modules/
+}
+```
+
+---
+
+### 3. 缓存：`cache-loader`（webpack5 已内置持久化缓存）
+
+```js
+{
+  test: /\.[jt]sx?$/,
+  use: [
+    'cache-loader',
+    'babel-loader'
+  ],
+  exclude: /node_modules/
+}
+```
+
+webpack5 更建议使用：
+
+```js
+module.exports = {
+  cache: {
+    type: 'filesystem'
+  }
+}
+```
+
+---
+
+### 4. `markdown-loader` / `raw-loader`
+
+* `raw-loader`：以字符串形式导入文件内容
+* `markdown-loader`：把 MD 转成 HTML 字符串等
 
 ```js
 {
   test: /\.md$/,
-  use: ['html-loader', 'markdown-loader']
+  use: [
+    'html-loader',
+    'markdown-loader'
+  ]
 }
 ```
 
 ---
 
-## 🧠 七、Loader 执行顺序与规则
+## 八、典型规则组织方式示例（含 oneOf）
 
-1️⃣ **执行顺序**
-多个 loader 时，执行顺序为：
-
-> 从右到左（或从下到上）
+面试中经常问“你们项目的 loader 大概是怎么组织的”。
 
 ```js
-use: ['style-loader', 'css-loader', 'sass-loader']
+module.exports = {
+  module: {
+    rules: [
+      {
+        oneOf: [
+          // JS / TS
+          {
+            test: /\.[jt]sx?$/,
+            exclude: /node_modules/,
+            use: 'babel-loader'
+          },
+          // 样式
+          {
+            test: /\.css$/,
+            use: ['style-loader', 'css-loader', 'postcss-loader']
+          },
+          // 图片
+          {
+            test: /\.(png|jpe?g|gif|svg)$/,
+            type: 'asset',
+            parser: {
+              dataUrlCondition: {
+                maxSize: 8 * 1024
+              }
+            }
+          },
+          // 其他资源
+          {
+            exclude: /\.(js|mjs|jsx|ts|tsx|css|scss|sass|less|html|json)$/,
+            type: 'asset/resource'
+          }
+        ]
+      }
+    ]
+  }
+};
 ```
-
-实际执行：
-
-> sass-loader → css-loader → style-loader
 
 ---
 
-2️⃣ **test 匹配规则**
+## 九、面试话术总结（可以直接说）
+
+> 在 webpack 里，loader 负责把各种非 JS 资源转换成模块。常见的比如：
+>
+> * 样式相关：`style-loader`、`css-loader`、`sass-loader`、`less-loader`、`postcss-loader`，生产环境会配合 `MiniCssExtractPlugin.loader` 把 CSS 抽离出来；
+> * 脚本相关：`babel-loader` 做 ES6+ 转换，`ts-loader` 或 `babel-loader + preset-typescript` 处理 TS；
+> * 资源相关：早期用 `file-loader`、`url-loader`，webpack5 推荐用内置的 `asset/resource`、`asset/inline`、`asset`；图片优化可用 `image-webpack-loader`；
+> * 框架相关：如 `vue-loader` 处理 `.vue`，React 通过 `babel-loader + preset-react` 即可；
+> * 工具类：如代码检查 `eslint-webpack-plugin`、多进程的 `thread-loader`、缓存 `cache-loader` / 内置 filesystem cache 等。
+>
+> 在配置上，统一写在 `module.rules` 里，通过 `test` 匹配文件，`use` 或 `loader+options` 指定处理链路，注意 loader 执行是从右到左的。
+
+---
+
+如果你需要，我还可以帮你出一套 **“webpack loader 专项面试题 + 参考答案”**，方便你系统刷题巩固。
+
+# 💯💯💯 手写loader
+
+可以，咱们来写一个**“去掉 console 的自定义 loader”**，难度适中，足够能看出你会写 loader，又不至于太复杂。
+
+下面我会给你：
+
+1. 完整 loader 代码（`strip-console-loader.js`）
+2. 在 `webpack.config.js` 里的使用方式
+3. 面试时可以怎么【讲代码 & 扩展说法】
+
+---
+
+## 一、这个 loader 干什么？
+
+**目标：**
+写一个 `strip-console-loader`，把代码中的 `console.log / console.warn / console.error ...` 删掉，支持通过 `options` 配置要删除哪些方法。
+
+举例：
 
 ```js
-{
-  test: /\.css$/, // 正则匹配文件
-  exclude: /node_modules/, // 排除
-  include: path.resolve(__dirname, 'src'), // 仅包含
-}
+// 源代码
+console.log('debug');
+console.warn('warn');
+alert('hello');
+```
+
+经过 loader 处理后：
+
+```js
+alert('hello');
 ```
 
 ---
 
-3️⃣ **常见优化技巧**
+## 二、loader 完整代码（strip-console-loader.js）
 
-* 使用 `cache-loader` 或 `thread-loader` 提升性能
-* 对大资源使用 `asset/resource` 替代旧 file/url-loader
-* 对样式文件可用 `MiniCssExtractPlugin.loader` 抽离 CSS
+```js
+// loaders/strip-console-loader.js
+const { validate } = require('schema-utils');
+
+/**
+ * 配置项的校验规则
+ * 方便在使用 loader 时给出更友好的报错提示
+ */
+const schema = {
+  type: 'object',
+  properties: {
+    methods: {
+      type: 'array',
+      items: { type: 'string' },
+      description: '需要移除的 console 方法名，比如 ["log", "warn"]'
+    }
+  },
+  additionalProperties: false
+};
+
+module.exports = function stripConsoleLoader(source) {
+  // 声明这是一个可缓存的 loader（输入一样就不需要重复执行）
+  if (this.cacheable) {
+    this.cacheable();
+  }
+
+  // 通过 schema-utils + this.getOptions 拿到并校验 options（webpack5 写法）
+  const options = this.getOptions ? this.getOptions() : {};
+  validate(schema, options, {
+    name: 'strip-console-loader'
+  });
+
+  // 默认要删除的 console 方法
+  const methods = options.methods || ['log', 'warn', 'error', 'info', 'debug'];
+
+  let code = source;
+
+  // 简单用正则粗暴删除 console.xxx(...) 语句
+  // 不做 AST 解析是为了保持难度适中
+  methods.forEach((method) => {
+    const reg = new RegExp(
+      // \bconsole.method(...)  ;?  换行也能删
+      String.raw`\bconsole\.${method}\s*\([^;]*\);?`,
+      'g'
+    );
+    code = code.replace(reg, '');
+  });
+
+  // 这里是同步 loader，直接 return 处理后的源码
+  return code;
+};
+```
+
+> ⭐ 这个 loader 的难度点：
+>
+> * 用了 `schema-utils` 做 options 校验（说明你懂 loader 的“工程化”一点）
+> * 用了 `this.cacheable()` 和 `this.getOptions()`（说明你懂 loader 的上下文 API）
+> * 做了一个真实有用的功能（去 `console` 在生产很常见）
 
 ---
 
-## 🧩 八、常见 Loader 组合场景
+## 三、在 webpack 里怎么用？
 
-| 场景           | 常用 Loader 组合                                                     |
-| ------------ | ---------------------------------------------------------------- |
-| 编译 JS (ES6+) | `babel-loader`                                                   |
-| 编译 TS        | `ts-loader`                                                      |
-| Vue 项目       | `vue-loader` + `vue-style-loader` + `css-loader`                 |
-| React 项目     | `babel-loader` + `style-loader` + `css-loader`                   |
-| 处理样式         | `style-loader` + `css-loader` + `postcss-loader` + `sass-loader` |
-| 图片与字体资源      | `asset/resource` 或 `url-loader`                                  |
-| 模板引擎         | `html-loader` + `pug-loader`                                     |
-| 优化构建速度       | `thread-loader` + `cache-loader`                                 |
+假设你的 loader 文件在项目根目录 `loaders/strip-console-loader.js`
 
----
+```js
+// webpack.config.js
+const path = require('path');
 
-## 🧠 九、学习建议路线
-
-| 阶段 | 目标           | 学习重点                                           |
-| -- | ------------ | ---------------------------------------------- |
-| 初级 | 会使用常见 loader | `babel-loader`, `css-loader`, `style-loader`   |
-| 中级 | 能配置项目环境      | `postcss-loader`, `url-loader`, `html-loader`  |
-| 高级 | 能构建工程模板      | `MiniCssExtractPlugin.loader`, `thread-loader` |
-| 实战 | 完整前端打包系统     | 结合 `plugins`、`optimization`、`devServer`        |
-
----
-
-## ✅ 十、总结表
-
-| 分类  | 代表 Loader                                  | 作用             |
-| --- | ------------------------------------------ | -------------- |
-| 编译类 | babel-loader / ts-loader / vue-loader      | 把高级语法转换成浏览器可执行 |
-| 样式类 | style-loader / css-loader / postcss-loader | 加载与处理样式文件      |
-| 资源类 | file-loader / url-loader / asset           | 处理图片与字体        |
-| 模板类 | html-loader / pug-loader                   | 解析模板文件         |
-| 优化类 | eslint-loader / thread-loader              | 优化编译速度与质量      |
-| 特殊类 | vue-style-loader / markdown-loader         | 框架或内容专用        |
+module.exports = {
+  // ...entry / output 省略
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: path.resolve(__dirname, 'loaders/strip-console-loader.js'),
+          options: {
+            // 只删除 log 和 debug，warn/error 保留
+            methods: ['log', 'debug']
+          }
+        }
+      }
+    ]
+  }
+};
+```
 
 ---
 
-是否希望我下一步帮你整理一份
+## 四、你在面试时可以这样讲（话术示范）
 
-> 💼「Webpack Loader + Plugin 对照速查表」
-> （包含常见插件、使用场景、区别、配置示例）？
-> 这能让你完整理解 Loader 与 Plugin 的区别与配合使用。
+> 面试官：你自己有写过 loader 吗？
+
+你可以这样回答：
+
+---
+
+### 1）先整体描述功能
+
+> 有写过一个简单的自定义 loader，叫 `strip-console-loader`，主要作用是在打包时把源码里的 `console.xxx` 语句删掉，用在生产环境，避免多余的日志输出。
+
+---
+
+### 2）再讲 loader 的基本结构
+
+> loader 本质上就是一个函数，它接受源代码字符串 `source`，返回处理后的代码。
+> 我这边是这么写的：
+>
+> * `module.exports = function (source) { ... }` 这是一个同步 loader；
+> * 内部用 `this.getOptions()` 拿到配置；
+> * 用 `this.cacheable()` 告诉 webpack 这个 loader 的结果是可缓存的。
+
+---
+
+### 3）讲讲 options + schema 校验（加分点）
+
+> 我还用了 `schema-utils` 对 options 做了一层校验，定义了一个 schema，比如：
+>
+> * `methods` 是一个字符串数组，表示要移除的 console 方法名；
+> * 如果传入了不认识的字段，就会在构建时报错，这样配置体验更好，也符合 webpack 官方推荐。
+
+---
+
+### 4）讲讲实现逻辑（核心）
+
+> 逻辑上就是：
+>
+> 1. 拿到 `methods`，比如 `['log', 'warn']`；
+> 2. 遍历这些方法，为每个方法构造一个正则：
+>    `\bconsole.log(...)` 这样的调用；
+> 3. 用 `code = code.replace(reg, '')` 把这些语句删掉；
+> 4. 最后 `return code`，交回给 webpack 后面的流程。
+>
+> 这个版本用的是正则，不是 AST，优点是实现简单，缺点是对某些复杂语法不那么精准，但对于业务项目的大部分场景已经够用了。
+
+---
+
+### 5）顺便展示你知道异步 loader（简单提一下就行）
+
+> 目前这个 loader 是同步的，直接 `return`。
+> 如果要做一些异步操作，比如读文件、发请求，可以用 `const callback = this.async()` 拿到回调，然后在异步完成后 `callback(null, newCode)`，就变成异步 loader。
+
+（不用真的写代码，口头说有这个 API 就可以了）
+
+---
+
+### 6）最后讲一下在 webpack 里的使用（落地）
+
+> 在 `webpack.config.js` 里，我是给所有 `.js` 文件加上这个 loader，比如：
+>
+> ```js
+> {
+>   test: /\.js$/,
+>   use: {
+>     loader: 'strip-console-loader',
+>     options: { methods: ['log', 'debug'] }
+>   }
+> }
+> ```
+>
+> 这样打包出来的代码就没有 `console.log` 和 `console.debug` 了。
+
+---
+
+## 五、如果想稍微再高级一点（你可以顺嘴补一句）
+
+你还可以在面试时补一嘴：
+
+* 这个 loader 现在是用正则实现的，如果要更严谨，可以用 **babel** 做 AST 解析，在 loader 里用 `@babel/parser` + `@babel/traverse` 删除 `MemberExpression` 为 `console.xxx` 的节点，再用 `@babel/generator` 生成代码，这样对各种语法兼容性更好。不过那样 loader 复杂度会拉得比较高。
+
+> 这样你显得“知道更高级方案，但根据场景做了取舍”，很加分。
+
+---
+
+如果你愿意，我可以再给你写一个 **异步 loader 示例**，或者写一个 **支持在代码顶部自动加 banner 注释的 loader**，你面试时可以挑一个更顺手的讲。
