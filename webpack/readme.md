@@ -1,6 +1,6 @@
 # 💯💯💯 基础 webpack 了解 和 配置
 
-> ### Webpack？解决了哪些问题？
+> ### Webpack是什么？解决了哪些问题？
 
 **Webpack** 是一个现代化的 **前端模块打包工具（Module Bundler）**。
 它的主要作用：
@@ -21,7 +21,7 @@
 
 Webpack 的核心思想是：
 
-> **“一切皆模块，最终打包输出优化后的静态资源。”**
+**“一切皆模块，最终打包输出<font color=red>优化后</font>的<font color=red>静态资源</font>。”**
 
 **解释：**
 
@@ -365,37 +365,6 @@ mode: 'development' // 或 'production'
 * production 模式下自动压缩优化性能。
 
 ---
-
-> ### 常见的 Loader 有哪些？
-
-| Loader                        | 作用                                |
-| ----------------------------- | --------------------------------- |
-| **babel-loader**              | 把 ES6+ 转换为兼容浏览器的 ES5              |
-| **css-loader**                | 解析 CSS 文件中的 `@import`、`url()`     |
-| **style-loader**              | 把 CSS 插入到 `<style>` 标签中           |
-| **sass-loader / less-loader** | 把 Sass/Less 编译成 CSS               |
-| **url-loader**                | 把小图片转为 base64 内嵌，大图使用 file-loader |
-| **file-loader**               | 处理文件资源（图片、字体）输出到指定目录              |
-| **ts-loader**                 | 编译 TypeScript                     |
-| **vue-loader**                | 解析 `.vue` 单文件组件                   |
-| **eslint-loader**             | 检查代码语法规范                          |
-
----
-
-> ### 常见的 Plugin 有哪些？
-
-| Plugin                         | 作用                     |
-| ------------------------------ | ---------------------- |
-| **HtmlWebpackPlugin**          | 自动生成 HTML 文件并引入打包后的 JS |
-| **DefinePlugin**               | 定义全局常量（如环境变量）          |
-| **MiniCssExtractPlugin**       | 抽离 CSS 为独立文件           |
-| **CleanWebpackPlugin**         | 打包前清空 dist 目录          |
-| **HotModuleReplacementPlugin** | 启用 HMR（热更新）            |
-| **CopyWebpackPlugin**          | 拷贝静态文件到输出目录            |
-| **BundleAnalyzerPlugin**       | 可视化分析打包体积              |
-
----
-
 
 > ###  Plugin 与 Loader 的区别？
 

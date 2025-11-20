@@ -741,37 +741,6 @@ module.exports = {
 
 ---
 
-## 阶段 6（可选）：再进阶一点——配合 git 提交自动 lint
-
-这个和 Webpack 没直接关系，但是真的**很常见**：
-
-1. 安装 husky + lint-staged：
-
-```bash
-npm install -D husky lint-staged
-npx husky install
-```
-
-2. 在 `package.json` 增加：
-
-```json
-"lint-staged": {
-  "src/**/*.{js,jsx}": [
-    "eslint --fix",
-    "git add"
-  ]
-}
-```
-
-3. 增加 git hook：
-
-```bash
-npx husky add .husky/pre-commit "npx lint-staged"
-```
-
-> 这样每次 `git commit` 时会自动跑 ESLint + 自动修复，不合格直接挡在提交入口。
-
----
 
 ## 总结一下每个阶段在干嘛
 

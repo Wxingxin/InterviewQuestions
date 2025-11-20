@@ -694,6 +694,3 @@ const { RawSource } = webpack.sources;
 对面试官来说：
 👉 “确实自己写过插件，而且理解 webpack 生命周期，不是网上随便抄一个 `console.log` 插件。”
 
----
-
-如果你想再多一手“备胎”，我也可以给你再写一个 **BannerPlugin（给所有输出文件顶部加版权信息）**，你可以根据场合挑一个更好讲的。
