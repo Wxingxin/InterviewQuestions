@@ -1,80 +1,50 @@
-// miniZustand.js
-import { useEffect, useState } from "react";
+// loaders/strip-console-loader.js
+const { validate } = require('schema-utils');
 
-// create：用来创建一个 store，并返回一个 useStore Hook
-export function create(createState) {
-  // 全局的状态
-  let state;
-  // 订阅这个状态的“监听函数”列表
-  const listeners = new Set();
+/**
+ * 配置项的校验规则
+ * 方便在使用 loader 时给出更友好的报错提示
+ */
+const schema = {  
+  type: 'object',
+  properties: {
+    methods: {
+      type: 'array',
+      items: { type: 'string' },
+      description: '需要移除的 console 方法名，比如 ["log", "warn"]'
+    }
+  },
+  additionalProperties: false
+};
 
-  // 修改状态的函数
-  const setState = (partial, replace) => {
-    // 支持两种写法：
-    // 1. setState({ count: 1 })
-    // 2. setState((state) => ({ count: state.count + 1 }))
-    const nextState =
-      typeof partial === "function" ? partial(state) : partial;
+module.exports = function stripConsoleLoader(source) {
+  // 声明这是一个可缓存的 loader（输入一样就不需要重复执行）
+  if (this.cacheable) {
+    this.cacheable();
+  }
 
-    // 如果 replace 为 true，或者 nextState 不是对象，就直接替换
-    // 否则就做一个浅合并（类似 setState）
-    state =
-      replace || typeof nextState !== "object"
-        ? nextState
-        : { ...state, ...nextState };
+  // 通过 schema-utils + this.getOptions 拿到并校验 options（webpack5 写法）
+  const options = this.getOptions ? this.getOptions() : {};
+  validate(schema, options, {
+    name: 'strip-console-loader'
+  });
 
-    // 状态变了，通知所有监听者
-    listeners.forEach((listener) => listener(state));
-  };
+  // 默认要删除的 console 方法
+  const methods = options.methods || ['log', 'warn', 'error', 'info', 'debug'];
 
-  // 获取当前状态
-  const getState = () => state;
+  let code = source;
 
-  // 订阅状态变化
-  const subscribe = (listener) => {
-    listeners.add(listener);
-    // 返回取消订阅的函数
-    return () => {
-      listeners.delete(listener);
-    };
-  };
-
-  // 初始化 state：调用用户传进来的 createState
-  // createState 里会写初始值和一些修改 state 的方法
-  state = createState(setState, getState);
-
-  // React Hook：组件里用它来读取状态
-  const useStore = (selector = (s) => s) => {
-    // selector 用来从 state 里选一部分想用的数据
-    // 默认 selector = (s) => s，也就是整个 state 都拿
-    const [selectedState, setSelectedState] = useState(() =>
-      selector(state)
+  // 简单用正则粗暴删除 console.xxx(...) 语句
+  // 不做 AST 解析是为了保持难度适中
+  methods.forEach((method) => {
+    const reg = new RegExp(
+      // \bconsole.method(...)  ;?  换行也能删
+      String.raw`\bconsole\.${method}\s*\([^;]*\);?`,
+      'g'
     );
+    code = code.replace(reg, '');
+  });
 
-    useEffect(() => {
-      // 每次 state 变化时，这个函数会被调用
-      const callback = (newState) => {
-        const nextSelected = selector(newState);
-        setSelectedState(nextSelected);
-      };
-
-      // 订阅变化
-      const unsubscribe = subscribe(callback);
-
-      // 一进来先同步一次
-      callback(state);
-
-      // 组件卸载时取消订阅
-      return unsubscribe;
-    }, [selector]);
-
-    return selectedState;
-  };
-
-  // 给 useStore 挂上一些方法，方便在组件外也能用
-  useStore.getState = getState;
-  useStore.setState = setState;
-  useStore.subscribe = subscribe;
-
-  return useStore;
-}
+  // 这里是同步 loader，直接 return 处理后的源码
+  return code;
+};

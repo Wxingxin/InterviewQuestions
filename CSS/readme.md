@@ -9,22 +9,22 @@
 
 ### **举例子**
 
-1. 选择器（Selectors）：
+1️⃣ 选择器（Selectors）：
 
 - 新的属性选择器，如`[attr^=value]`（属性值以特定字符串开始）；
 - 结构性伪类,如:nth-child、:nth-last-child、:first-of-type ;
 
-2. 背景和边框（Backgrounds and Borders）：
+2️⃣ 背景和边框（Backgrounds and Borders）：
 
 - 边框图片（border-image），允许使用图片来创建边框。
 - 多重背景，支持在单个元素上使用多个背景图片。
 
-3. 文本效果（Text Effects）：
+3️⃣ 文本效果（Text Effects）：
 
 - 文本阴影（text-shadow），可以在文字后面添加阴影效果。
 - 文本溢出（text-overflow），控制文本溢出容器时的显示方式。
 
-4. 转换和动画（CSS Transforms Module,CSS Animations ）:
+4️⃣ 转换和动画（CSS Transforms Module,CSS Animations ）:
 
 - 2D 和 3D 转换（transform），包括旋转（~rotate）、缩放（scale）、倾斜（skew）和平移（^translate）。
 - CSS 动画（animation），允许定义关键帧动画，控制动画序列。
@@ -1704,7 +1704,6 @@ div {
 1. 比如之前我们在开发中借助于 transform 实现动画效果，使用的是复合属性，transform:translate(10px,20px) scale(1.5);。
 2. 但是这种复合属性在 IE11 上是有问题，因为它并不支持，所以我们就必须对它拆分属性，首先设置 translate，在它的外层再包裹一个容器，用来设置 scale 属性
 
-# scss tailwind
 
 # 💯💯💯 other
 

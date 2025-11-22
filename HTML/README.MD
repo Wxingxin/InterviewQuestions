@@ -481,13 +481,85 @@ img.src = "test.jpg";
 
 > ### 💡 五、开放题（常考思维题）
 
-### 1️⃣4️⃣ 如何实现一个图片懒加载组件？
+> ### 1️⃣4️⃣ 如何实现一个图片懒加载组件？
 
-考察点：
+实现图片懒加载组件的关键就一句话：**图片进入（或即将进入）视口时再真正请求资源**。推荐 IntersectionObserver（现代方案），再加一个 scroll 降级兜底。
 
-- IntersectionObserver
-- React/Vue 组件封装
-- loading 状态
+---
+
+## 核心实现（IntersectionObserver 版）
+
+### 思路
+
+1. 初始 `img` 只放占位图/空 src，把真实地址放 `data-src`。
+2. 用 `IntersectionObserver` 观察图片元素。
+3. 当元素进入视口（`isIntersecting`）时，把 `data-src` 赋给 `src`，然后取消观察。
+
+### 原生 JS 组件示例
+
+```html
+<img class="lazy" data-src="real.jpg" src="placeholder.jpg" alt="" />
+```
+
+```js
+function initLazyImages({
+  selector = "img.lazy",
+  rootMargin = "200px 0px",  // 提前 200px 预加载
+  threshold = 0.01,
+  errorSrc = ""
+} = {}) {
+  const imgs = document.querySelectorAll(selector);
+  if (!imgs.length) return;
+
+  // 不支持 IO 时降级
+  if (!("IntersectionObserver" in window)) {
+    imgs.forEach(img => load(img));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        load(img);
+        io.unobserve(img);
+      }
+    });
+  }, { rootMargin, threshold });
+
+  imgs.forEach(img => io.observe(img));
+
+  function load(img) {
+    const realSrc = img.dataset.src;
+    if (!realSrc) return;
+    img.src = realSrc;
+    img.onload = () => img.classList.add("loaded");
+    img.onerror = () => errorSrc && (img.src = errorSrc);
+  }
+}
+initLazyImages();
+```
+
+### 面试加分点
+
+* `rootMargin` 做“提前加载”，避免滚到那一瞬间才白屏。
+* 加 `error` fallback。
+* 加 `loaded` class 做淡入动画或骨架屏结束。
+
+---
+
+
+## React/Vue 组件一句话版（原理一致）
+
+* `ref` 拿到 DOM
+* `useEffect/onMounted` 注册 IO
+* `isIntersecting` 时 setState / 改 src
+
+---
+
+## 一句话总结（面试可背）
+
+> 我会用 IntersectionObserver 监听图片元素，默认先渲染占位图，把真实地址放 data-src；当图片进入视口（配合 rootMargin 提前 200px）时再把 data-src 赋给 src 并取消监听；不支持 IO 的浏览器用 scroll + throttle + getBoundingClientRect 做降级，同时补上 error fallback 和 loaded 动画状态。
 
 ---
 
@@ -505,12 +577,108 @@ img.src = "test.jpg";
 
 **答：**
 
-1. 格式优化（WebP、AVIF）
-2. 分辨率自适应（响应式）
-3. 懒加载
-4. CDN 分发
-5. 小图转 Base64
-6. 关键图优先加载（preload）
+#### 1) 格式优化（收益最大）
+
+* **优先 AVIF / WebP，兜底 JPEG/PNG**
+  用 `<picture>` 做多格式回退。
+* **透明/无损场景用 PNG**，图标/插画优先 **SVG**。
+* 能裁剪的动图尽量用 **MP4/WebM/Lottie** 替代 GIF。
+
+```html
+<picture>
+  <source srcset="a.avif" type="image/avif">
+  <source srcset="a.webp" type="image/webp">
+  <img src="a.jpg" alt="">
+</picture>
+```
+
+---
+
+#### 2) 分辨率自适应（响应式/按需尺寸）
+
+核心是：**不要让用户下载比容器大很多的图**。
+
+* 后端/CDN 出多档尺寸（320/640/1280…）
+* 前端用 `srcset + sizes` 选择最合适的
+* 高 DPR 设备自动拿 2x/3x
+
+```html
+<img 
+  src="a-640.jpg"
+  srcset="a-320.jpg 320w, a-640.jpg 640w, a-1280.jpg 1280w"
+  sizes="(max-width: 600px) 320px, (max-width: 1200px) 640px, 1280px"
+/>
+```
+
+---
+
+#### 3) 加载优化
+
+* **懒加载**：IntersectionObserver + rootMargin 预加载下一屏
+* **关键图优先**：首屏 hero 图 `preload` / 框架里的 `priority`
+* 列表大量图片：**虚拟列表** + 懒加载组合
+* `decoding="async"`、`fetchpriority="high"`（支持时）
+* 低网速优先加载低清，再替换高清（渐进式）
+
+```html
+<link rel="preload" as="image" href="hero.webp">
+<img src="hero.webp" fetchpriority="high" decoding="async">
+```
+
+---
+
+#### 4) CDN + 图片处理能力
+
+* **CDN 就近分发**降低 RTT
+* 用 CDN 的**动态裁剪/缩放/格式转换**参数
+  例如：`?w=640&h=360&fit=cover&fm=webp&q=80`
+* 大站常见策略：**同一张原图 + CDN 参数实时出不同版本**，避免存多份。
+
+---
+
+#### 5) 缓存策略（减少重复下载）
+
+* 静态图长缓存：`Cache-Control: max-age=31536000, immutable`
+* 文件名带 hash，更新不怕缓存
+* 可选：Service Worker 做离线/二次访问加速（PWA）
+
+---
+
+#### 6) 体积/内联策略（小图 Base64 的正确用法）
+
+你写的“小图转 Base64”要说清适用边界：
+
+* **适合非常小且高频图标**（比如 < 2KB）
+  避免额外请求、减少 RTT
+* **不适合稍大图片**：Base64 会膨胀约 1/3，且不可独立缓存
+* 更好的替代：**SVG sprite / iconfont / HTTP2 多路复用**。
+
+---
+
+#### 7) 渲染与体验（面试加分）
+
+* 避免 CLS：给图片明确 `width/height` 或 `aspect-ratio`
+* placeholder：LQIP / blur / blurhash / skeleton
+* 渐进式加载淡入，让视觉更稳
+
+```html
+<img src="a.webp" width="640" height="360" style="aspect-ratio:16/9">
+```
+
+---
+
+#### 8) 监控与迭代（高级加分点）
+
+* 关注 **LCP / CLS / 图片平均大小 / 命中缓存率**
+* 上报图片失败率、加载耗时
+* A/B 测试 WebP/AVIF、不同质量参数收益
+
+---
+
+#### 一段“标准面试总结”
+
+> 图片优化我会按“格式—尺寸—加载—缓存—体验—监控”做：优先 AVIF/WebP + picture 兜底；用 CDN 多尺寸和 srcset/sizes 做分辨率自适应；列表图懒加载、首屏关键图 preload/priority；走 CDN 就近分发并按需裁剪转码；配长缓存和 hash 版本控制；渲染侧用 placeholder 和固定宽高避免 CLS；最后用 LCP/CLS 和体积监控持续优化。
+
 
 # 💯💯💯 第三部分 面试题 SEO
 
