@@ -235,3 +235,277 @@ npm run build
 * **代码分割**：在路由或组件中使用 `React.lazy` + `import()`
 * **环境变量**：用 `DefinePlugin` 或 `dotenv-webpack`
 
+> ###  生产环境和开发环境的构建配置有哪些不同？
+
+下面给你一份**Webpack 开发环境（development）与生产环境（production）构建配置的对比清单**，包含实际项目最常见的差异，并配有解释与示例，足够你直接用于工程实践。
+
+---
+
+# ✅ 一张总表：开发 vs 生产
+
+| 项目                   | 开发环境（development）                        | 生产环境（production）                  |
+| -------------------- | ---------------------------------------- | --------------------------------- |
+| 构建速度                 | **快**，不做优化                               | **慢**，开启各种优化                      |
+| Source Map           | **开启**（如 `eval-cheap-module-source-map`） | **可选开启**（如 `source-map`）          |
+| 代码压缩                 | ❌ 不压缩                                    | ✔ JS/CSS 压缩（Terser/CSS-minimizer） |
+| Tree Shaking         | ❌ 部分生效                                   | ✔ 完全启用（副作用分析）                     |
+| Scope Hoisting（模块合并） | ❌ 默认无                                    | ✔ 默认开启                            |
+| HMR 热更新              | ✔ 开启                                     | ❌ 关闭                              |
+| CSS 输出方式             | style-loader 内联 CSS                      | mini-css-extract-plugin 抽离 CSS 文件 |
+| 缓存（Contenthash）      | ❌ 不需要                                    | ✔ 全面开启                            |
+| 环境变量                 | `mode: 'development'`                    | `mode: 'production'`（会自动开启优化）     |
+| 资源优化                 | ❌ 不做                                     | ✔ 图片/字体等压缩                        |
+| 冗余提示                 | ✔ 开发警告多                                  | ❌ 自动去除 development-only 代码        |
+
+---
+
+# 🔍 1. mode 不同触发的默认行为
+
+### 开发
+
+```js
+mode: "development"
+// 开启以下默认行为：
+- 更快的构建速度
+- 未压缩的输出
+- 更友好错误提示
+- 更快 eval 类 source-map
+```
+
+### 生产
+
+```js
+mode: "production"
+// 自动启用：
+- 代码压缩（Terser）
+- Tree Shaking
+- Scope hoisting
+- 去除未使用代码
+```
+
+> 在 Webpack 中，仅 `mode` 就能改变许多底层优化行为。
+
+---
+
+# 🔍 2. Source Map 配置不同
+
+### 开发首选
+
+```js
+devtool: "eval-cheap-module-source-map"
+```
+
+优点：构建非常快 + 错误定位准确。
+
+### 生产可选（可关闭）
+
+```js
+devtool: "source-map"
+```
+
+优点：准确调试生产bug
+缺点：会暴露源码，可以通过隐藏 Source Map URL 或单独上传到监控平台（Sentry）。
+
+---
+
+# 🔍 3. 开发环境需要 HMR（热更新），生产不需要
+
+### 开发
+
+```js
+devServer: {
+  hot: true,
+  open: true,
+}
+```
+
+### 生产
+
+无 devServer，代码是静态部署。
+
+---
+
+# 🔍 4. CSS 处理方式完全不同
+
+### 开发：使用 `style-loader`（将 CSS 注入 `<style>`）
+
+```js
+use: ["style-loader", "css-loader"]
+```
+
+### 生产：抽离 CSS 文件（更好缓存、减少 JS 体积）
+
+```js
+use: [MiniCssExtractPlugin.loader, "css-loader"]
+plugins: [
+  new MiniCssExtractPlugin({
+    filename: "css/[name].[contenthash].css",
+  })
+]
+```
+
+---
+
+# 🔍 5. 生产环境需要 Contenthash 做长期缓存
+
+### 开发
+
+```js
+output: {
+  filename: "[name].js"
+}
+```
+
+### 生产
+
+```js
+output: {
+  filename: "js/[name].[contenthash:8].js",
+  chunkFilename: "js/[name].[contenthash:8].js",
+}
+```
+
+保证用户更新时才下载新文件。
+
+---
+
+# 🔍 6. 生产环境 JS/CSS 压缩
+
+Webpack 5 默认在 production 下启用 TerserPlugin，但你也可以自己配置：
+
+```js
+optimization: {
+  minimize: true,
+  minimizer: [
+    new TerserPlugin({ extractComments: false }),
+    new CssMinimizerPlugin(),
+  ]
+}
+```
+
+---
+
+# 🔍 7. Tree Shaking / Scope Hoisting
+
+### 生产默认启用，用于删除未使用代码：
+
+```js
+optimization: {
+  usedExports: true,
+}
+```
+
+### 配合 package.json
+
+```json
+{
+  "sideEffects": false
+}
+```
+
+---
+
+# 🔍 8. 图片、字体、资源的优化差异
+
+### 开发环境
+
+* 不压缩图片
+* 不进行太多 asset 优化
+
+### 生产环境
+
+* 使用 `image-minimizer-webpack-plugin` 压缩图片
+* 清理文件（CleanWebpackPlugin）
+* 更严格的 asset module 缓存策略
+
+示例：
+
+```js
+plugins: [
+  new ImageMinimizerPlugin({
+    minimizer: {
+      implementation: ImageMinimizerPlugin.imageminGenerate,
+      options: {
+        plugins: ["jpegtran", "optipng"],
+      },
+    },
+  }),
+]
+```
+
+---
+
+# 🔍 9. 环境变量
+
+### 开发
+
+```js
+new DefinePlugin({
+  "process.env.NODE_ENV": JSON.stringify("development"),
+})
+```
+
+### 生产
+
+```js
+new DefinePlugin({
+  "process.env.NODE_ENV": JSON.stringify("production"),
+})
+```
+
+框架（如 React/Vue）会自动去除开发用代码，比如 React DevTools 提示。
+
+---
+
+# 🔍 10. 配置文件组织方式
+
+实际项目常见结构：
+
+```
+webpack/
+  webpack.base.js
+  webpack.dev.js
+  webpack.prod.js
+```
+
+`webpack.dev.js`:
+
+```js
+module.exports = merge(baseConfig, {
+  mode: "development",
+  devtool: "eval-cheap-module-source-map",
+  devServer: { hot: true },
+});
+```
+
+`webpack.prod.js`:
+
+```js
+module.exports = merge(baseConfig, {
+  mode: "production",
+  devtool: false,
+  optimization: { minimize: true },
+});
+```
+
+---
+
+# 🎯 总结（记住以下 8 点即可）
+
+生产相比开发多了：
+
+1. **压缩代码（JS/CSS）**
+2. **Tree shaking & Scope hoisting**
+3. **抽离 CSS 文件**
+4. **内容哈希（contenthash）缓存策略**
+5. **图片资源优化**
+6. **更慢但更准确的 source map（可关闭）**
+7. **环境变量为 production**
+8. **无热更新，无 devServer**
+
+开发环境则侧重：
+
+* **构建速度**
+* **调试方便**
+* **热更新**
+

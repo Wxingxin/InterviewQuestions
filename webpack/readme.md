@@ -266,6 +266,200 @@ module.exports = {
 
 ---
 
+
+> ### 什么是模块打包（Module Bundling）？**
+
+模块打包（Module Bundling）指的是：
+
+**将多个分散的模块（JS、CSS、图片等）及其依赖关系，经过编译、处理、合并，最终输出为浏览器可直接运行的若干 bundle 文件的过程。**
+
+因为浏览器天然只支持 ES Modules（且较新）与 `<script>`，而不支持：
+
+* Node 的 CommonJS（require/module.exports）
+* TS/JSX
+* Sass/Less
+* 代码分割 chunk 的加载逻辑
+* Tree Shaking 等优化
+
+所以打包工具（Webpack、Rollup、Vite、Parcel）需要做：
+
+1. **分析所有 import/require 的依赖关系**
+2. **处理各种文件（JSX、TS、CSS、图片等）**
+3. **把它们合并成浏览器能直接运行的 bundle**
+
+比如：
+
+```
+index.js → import utils.js → import lodash.js → ...
+```
+
+最终 Webpack 会生成：
+
+```
+dist/
+  main.js
+  vendor.js
+```
+
+
+> ###  Webpack 默认支持哪些模块规范？**
+
+Webpack 是一个“通用模块打包器”，它开箱即支持多种模块规范：
+
+#### ✅ **1）ES Module（ESM）**
+
+```js
+import a from './a.js'
+export default ...
+```
+
+#### ✅ **2）CommonJS（CJS）**
+
+```js
+const a = require('./a.js')
+module.exports = ...
+```
+
+#### ✅ **3）AMD（Asynchronous Module Definition）**
+
+```js
+define(['dep'], function(dep){ ... })
+```
+
+#### ✅ **4）Webpack 自己的动态导入规范**
+
+```js
+import('./a.js')   // 代码分割、懒加载
+```
+
+#### （注意）
+
+* Webpack 会把所有模块统一编译成浏览器可执行的 bundle
+* Node.js 的原生 ESM/CJS 差异在 Webpack 内部都被抽象掉
+
+> ###  **什么是依赖图谱（Dependency Graph）？**
+
+Webpack 的核心思想是：
+
+> 从入口文件出发，递归分析所有依赖，构建出整站所有模块之间的有向图，这个图称为 **依赖图谱（Dependency Graph）**。
+
+比如入口是：
+
+```
+index.js
+```
+
+它依赖：
+
+```
+utils.js、api.js
+```
+
+`utils.js` 又依赖：
+
+```
+helper.js
+```
+
+Webpack 会构建一个图：
+
+```
+index.js
+ ├── utils.js
+ │     └── helper.js
+ └── api.js
+```
+
+#### 依赖图谱用于：
+
+#### **1）打包成 bundle**
+
+Webpack 根据依赖图决定把哪些文件合并进 main.js 或分离成 chunk。
+
+#### **2）代码分割（SplitChunks）**
+
+图中哪些模块被多个入口引用 → 抽成 vendor.js。
+
+#### **3）Tree Shaking**
+
+知道哪些模块未被引用 → 删除。
+
+#### **4）按需加载**
+
+动态 import 指向的模块会落在图谱不同的分支 → Webpack 给它单独输出 chunk。
+
+#### **5）循环依赖检测**
+
+图结构可让 Webpack 检测循环 import。
+
+
+> ### **什么是 AST？Webpack 构建中如何用到 AST？**
+
+#### **AST（抽象语法树，Abstract Syntax Tree）是什么？**
+
+AST 是对源代码的一种**结构化树形表示**。
+
+例如代码：
+
+```js
+const x = 10;
+```
+
+AST 的结构会表示：
+
+* variable declaration
+* identifier(x)
+* literal(10)
+
+它不关心空格、注释，只关注语法结构。
+
+---
+
+> ### **Webpack / Loader / Plugin 如何使用 AST？**
+
+Webpack 本身依赖大量 AST 工具（如 acorn），AST 是 Webpack 构建的核心。
+
+Webpack 在构建阶段做了几个关键步骤：
+
+#### **1）解析代码 → 转为 AST**
+
+Webpack 读取每个模块的源代码，然后用 parser 将其解析为 AST。
+
+#### **2）从 AST 中收集依赖（import/require）**
+
+例如遇到：
+
+```js
+import a from './a.js'
+```
+
+Webpack 通过 AST 知道你依赖了 `./a.js`，并继续递归构建依赖图。
+
+#### **3）对代码进行转译（如 Babel）**
+
+Babel loader 做的事情就是：
+
+* 读取 JS
+* 构建 AST
+* 根据插件修改 AST（如把 ES6 转 ES5）
+* 再打印成 JS
+
+#### **4）Tree Shaking 使用 AST 判断哪些代码未被使用**
+
+通过分析 AST 确定哪些 exports 没有被用到，从而删除未引用代码。
+
+#### **5）Minify 压缩也依赖 AST（Terser）**
+
+压缩工具会：
+
+* 解析 AST
+* 应用变换（变量重命名、删除无效表达式）
+* 输出最小化 JS
+
+👉 **一句话总结：Webpack 中对 JS 的所有分析、优化、转换都离不开 AST。**
+
+
+
 # 💯💯💯 细致的配置 和 区别
 
 > ### Webpack 的 Entry 配置可以有哪些写法？
@@ -675,11 +869,11 @@ Webpack 使用自定义的模块解析器（基于 enhanced-resolve）：
 
 # 💯💯💯 性能优化 和 相应的细致
 
-## **1️⃣ 如何优化 Webpack 的构建速度？**
+>### **1️⃣ 如何优化 Webpack 的构建速度？**
 
 构建速度优化核心思路是：“**减少要编译的内容 + 提高编译效率 + 利用缓存**”。
 
-### ✅ 常用手段：
+#### ✅ 常用手段：
 
 | 优化方向                  | 方法                                    | 示例                            |
 | ------------------------- | --------------------------------------- | ------------------------------- |
@@ -693,11 +887,11 @@ Webpack 使用自定义的模块解析器（基于 enhanced-resolve）：
 
 ---
 
-## **2️⃣ 如何优化 Webpack 的打包体积？**
+> ### **2️⃣ 如何优化 Webpack 的打包体积？**
 
 核心目标：“**让最终产物更小、更少、更高效**”。
 
-### ✅ 优化方法：
+#### ✅ 优化方法：
 
 | 优化方向              | 方法                                  | 示例                                    |
 | --------------------- | ------------------------------------- | --------------------------------------- |
@@ -714,11 +908,11 @@ Webpack 使用自定义的模块解析器（基于 enhanced-resolve）：
 
 
 
-## **3️⃣ 什么是 Tree Shaking？实现原理？**
+### **3️⃣ 什么是 Tree Shaking？实现原理？**
 
 > Tree Shaking 是一种**消除未使用代码（Dead Code Elimination）**的技术。
 
-### ✨ 实现原理：
+#### ✨ 实现原理：
 
 1. **ESM 静态分析**
    Webpack 通过分析 ES Module（`import/export`）语法，识别哪些导出未被使用；
@@ -739,7 +933,7 @@ used();
 
 ---
 
-## **4️⃣ Tree Shaking 有哪些局限性？**
+### **4️⃣ Tree Shaking 有哪些局限性？**
 
 | 局限性                   | 原因                                                             |
 | ------------------------ | ---------------------------------------------------------------- |
@@ -750,11 +944,11 @@ used();
 
 ---
 
-## **5️⃣ 什么是代码分割（Code Splitting）？**
+### **5️⃣ 什么是代码分割（Code Splitting）？**
 
 > 代码分割是将项目打包为多个 bundle，以便按需加载、减少首屏体积。
 
-### 💡 实现方式：
+#### 💡 实现方式：
 
 1. **多入口打包**
 
@@ -783,7 +977,7 @@ used();
 
 ---
 
-## **6️⃣ 如何配置动态导入（Dynamic Import）？**
+### **6️⃣ 如何配置动态导入（Dynamic Import）？**
 
 动态导入使用 **import() 函数语法**，Webpack 自动分包。
 
@@ -804,7 +998,7 @@ Webpack 会自动将 `./dialog` 生成为独立 chunk。
 
 ---
 
-## **7️⃣ 如何开启持久化缓存（Persistent Caching）？**
+### **7️⃣ 如何开启持久化缓存（Persistent Caching）？**
 
 Webpack 5 开箱即用文件系统缓存：
 
@@ -827,7 +1021,7 @@ module.exports = {
 
 ---
 
-## **8️⃣ 如何利用 `externals` 优化构建？**
+### **8️⃣ 如何利用 `externals` 优化构建？**
 
 > `externals` 用于**排除不希望被打包进 bundle 的依赖**，让其在运行时通过 CDN 或全局变量提供。
 
@@ -854,7 +1048,7 @@ externals: {
 
 ---
 
-## **9️⃣ 什么是懒加载（Lazy Loading）？**
+### **9️⃣ 什么是懒加载（Lazy Loading）？**
 
 > 懒加载是一种 **按需加载资源** 的技术，仅在需要时才加载对应模块。
 
@@ -884,7 +1078,7 @@ Webpack 会为 `Profile` 生成独立 chunk。
 
 ---
 
-## **🔟 如何减少重复代码和依赖？**
+### **🔟 如何减少重复代码和依赖？**
 
 | 方法                    | 说明                                    |
 | ----------------------- | --------------------------------------- |
@@ -920,6 +1114,3 @@ optimization: {
 
 # 💯💯💯
 
-# 💯💯💯
-
-# 💯💯💯
