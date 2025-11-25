@@ -240,7 +240,8 @@
 
 **答：** 常见优化手段：
 
-1. ✅ **懒加载（Lazy Load）**
+1. ✅ **使用 CDN 加速💤网络💤**
+2. ✅ **懒加载（Lazy Load）🛜code🛜**
 
    ```html
    <img src="..." loading="lazy" />
@@ -248,15 +249,10 @@
 
    或使用 IntersectionObserver。
 
-2. ✅ **使用 CDN 加速**
-3. ✅ **压缩图片（TinyPNG、ImageOptim）**
-4. ✅ **图片格式优化（WebP、AVIF）**
-5. ✅ **使用雪碧图（Sprite）** 减少 HTTP 请求。
-6. ✅ **预加载关键图片**
-
-   ```html
-   <link rel="preload" as="image" href="banner.jpg" />
-   ```
+3. ✅ **预加载关键图片🛜code🛜**
+4. ✅ **压缩图片（TinyPNG、ImageOptim）📶not code📶**
+5. ✅ **图片格式优化（WebP、AVIF）📶not code📶**
+6. ✅ **使用雪碧图（Sprite）📶not code📶** 减少 HTTP 请求。
 
 ---
 
@@ -682,7 +678,7 @@ initLazyImages();
 > 图片优化我会按“格式—尺寸—加载—缓存—体验—监控”做：优先 AVIF/WebP + picture 兜底；用 CDN 多尺寸和 srcset/sizes 做分辨率自适应；列表图懒加载、首屏关键图 preload/priority；走 CDN 就近分发并按需裁剪转码；配长缓存和 hash 版本控制；渲染侧用 placeholder 和固定宽高避免 CLS；最后用 LCP/CLS 和体积监控持续优化。
 
 
-# 💯💯💯 第三部分 面试题 SEO
+# 💯💯💯 第三部分 SEO 面试题 
 
 > ## 🧭 一、什么是 SEO？
 
