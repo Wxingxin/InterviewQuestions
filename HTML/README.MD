@@ -234,7 +234,6 @@
 
 ---
 
-## ⚙️ 二、性能优化篇
 
 > ### 4️⃣ 图片太多，加载太慢怎么办？
 
@@ -356,9 +355,7 @@ imgs.forEach(img => observer.observe(img));
 
 浏览器根据支持的格式自动选择最合适的 `<source>`。
 
----
 
-## 🎨 三、格式与编码篇
 
 > ### 7️⃣ 常见图片格式区别？
 
@@ -430,9 +427,8 @@ Base64 是把图片**二进制数据**编码成**文本**（ASCII 字符串）�
 
 ---
 
-> ### 🧩 四、Canvas / 图片处理篇
 
-### 1️⃣1️⃣ 如何使用 Canvas 压缩图片？
+> ### 1️⃣1️⃣ 如何使用 Canvas 压缩图片？
 
 ```js
 function compressImage(img, quality = 0.7) {
@@ -451,6 +447,9 @@ function compressImage(img, quality = 0.7) {
 
 **答：**
 
+#### ✅ **方式 1：使用 `new Image()`（你已经写的方式）**
+这是最标准、最干净的做法，适合预加载图片。
+
 ```js
 const img = new Image();
 img.onload = () => console.log("加载完成");
@@ -458,9 +457,76 @@ img.onerror = () => console.log("加载失败");
 img.src = "test.jpg";
 ```
 
+#### ✅ **方式 2：判断页面中已有的 `<img>` 是否加载完成**
+
+有时候 `<img>` 已在 HTML 中，你要判断它是否已经加载。
+
+```html
+<img id="photo" src="test.jpg">
+```
+
+```js
+const img = document.getElementById("photo");
+
+if (img.complete) {
+  console.log("已经加载完成（来自缓存或已经渲染）");
+} else {
+  img.onload = () => console.log("加载完成");
+  img.onerror = () => console.log("加载失败");
+}
+```
+
+###### `img.complete` 是关键：
+
+| 状态     | `img.complete` | `img.naturalWidth` |
+| ------ | -------------- | ------------------ |
+| 图片加载完成 | true           | > 0                |
+| 图片加载失败 | true           | 0                  |
+| 图片尚未加载 | false          | 0                  |
+
 ---
 
-> ### 1️⃣ 3️⃣ 图片跨域 Canvas 报错如何解决？
+#### ✅ **方式 3：判断图片是否加载失败**
+
+可以结合 naturalWidth 判断：
+
+```js
+const img = document.getElementById("photo");
+
+img.onload = () => {
+  if (img.naturalWidth > 0) {
+    console.log("加载成功");
+  }
+};
+
+img.onerror = () => console.log("加载失败");
+```
+
+---
+
+#### ✅ **方式 4：使用 Promise 封装图片加载（更现代）**
+
+适合 React / Vue / Node SSR 图片预处理。
+
+```js
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+loadImage("test.jpg")
+  .then(() => console.log("加载完成"))
+  .catch(() => console.log("加载失败"));
+```
+
+
+---
+
+> ### 1️⃣3️⃣ 图片跨域 Canvas 报错如何解决？
 
 **答：**
 
@@ -480,23 +546,19 @@ img.src = "test.jpg";
 
 ---
 
-> ### 💡 五、开放题（常考思维题）
 
 > ### 1️⃣4️⃣ 如何实现一个图片懒加载组件？
 
-实现图片懒加载组件的关键就一句话：**图片进入（或即将进入）视口时再真正请求资源**。推荐 IntersectionObserver（现代方案），再加一个 scroll 降级兜底。
 
----
+#### 核心实现（IntersectionObserver 版）
 
-## 核心实现（IntersectionObserver 版）
-
-### 思路
+###### 思路
 
 1. 初始 `img` 只放占位图/空 src，把真实地址放 `data-src`。
 2. 用 `IntersectionObserver` 观察图片元素。
 3. 当元素进入视口（`isIntersecting`）时，把 `data-src` 赋给 `src`，然后取消观察。
 
-### 原生 JS 组件示例
+##### 原生 JS 组件示例
 
 ```html
 <img class="lazy" data-src="real.jpg" src="placeholder.jpg" alt="" />
@@ -541,16 +603,10 @@ function initLazyImages({
 initLazyImages();
 ```
 
-### 面试加分点
-
-* `rootMargin` 做“提前加载”，避免滚到那一瞬间才白屏。
-* 加 `error` fallback。
-* 加 `loaded` class 做淡入动画或骨架屏结束。
-
 ---
 
 
-## React/Vue 组件一句话版（原理一致）
+##### React/Vue 组件一句话版（原理一致）
 
 * `ref` 拿到 DOM
 * `useEffect/onMounted` 注册 IO
@@ -558,7 +614,7 @@ initLazyImages();
 
 ---
 
-## 一句话总结（面试可背）
+##### 一句话总结（面试可背）
 
 > 我会用 IntersectionObserver 监听图片元素，默认先渲染占位图，把真实地址放 data-src；当图片进入视口（配合 rootMargin 提前 200px）时再把 data-src 赋给 src 并取消监听；不支持 IO 的浏览器用 scroll + throttle + getBoundingClientRect 做降级，同时补上 error fallback 和 loaded 动画状态。
 
