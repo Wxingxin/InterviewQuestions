@@ -32,23 +32,22 @@
 4. **`margin: auto` 居中失效**🛜。
 5. **图片与文本的行高/间距异常**📶：图片下方常出现额外空隙。
 
-
 > ### HTML5 新特性
 
-| 分类                                    | 特性简述                                         |
-| --------------------------------------- | ------------------------------------------------ |
-| 语义标签 <font color=red>💯新增 💯</font> | header, section, article 等结构清晰              |
-| 多媒体 <font color=red>💯新增 💯</font>   | video, audio 标签直接播放                        |
-| 无障碍 <font color=red>🤣加强 🤣</font>   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
-| 表单 <font color=red>🤣加强 🤣</font>     | 更丰富的**输入类型**和**验证功能**               |
-| 存储 <font color=red>😂浏览器 😂</font>   | localStorage 和 sessionStorage                   |
-| 图形 <font color=red>😂浏览器 😂</font>   | canvas 与 SVG 绘图能力                           |
-| API <font color=red>😂浏览器 😂</font>    | 地理定位、拖拽、多线程、WebSocket                |
+| 分类                                       | 特性简述                                         |
+| ------------------------------------------ | ------------------------------------------------ |
+| 语义标签 <font color=red>💯 新增 💯</font> | header, section, article 等结构清晰              |
+| 多媒体 <font color=red>💯 新增 💯</font>   | video, audio 标签直接播放                        |
+| 无障碍 <font color=red>🤣 加强 🤣</font>   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
+| 表单 <font color=red>🤣 加强 🤣</font>     | 更丰富的**输入类型**和**验证功能**               |
+| 存储 <font color=red>😂 浏览器 😂</font>   | localStorage 和 sessionStorage                   |
+| 图形 <font color=red>😂 浏览器 😂</font>   | canvas 与 SVG 绘图能力                           |
+| API <font color=red>😂 浏览器 😂</font>    | 地理定位、拖拽、多线程、WebSocket                |
 
 > ### 简述一下你对 HTML 语义化的理解。
 
 - （1）使用语义化的标签来创建页面结构，如 header,footer,nav，从标签上可以**直观的知道**这个标签的作用
-- （2）HTML 语义化让页面的 ⏏️ 内容结构化 ➡️ 结构更清晰 ➡️ 利于开发和维护。而不是滥用 div；
+- （2）HTML 语义化让页面 ⏏️ 内容结构化 ➡️ 结构更清晰 ➡️ 利于开发和维护。而不是滥用 div；
 - （3）搜索引擎的爬虫也依赖于 HTML **不同的标签**来确定**不同的权重**，有利于 SEO；
 
 > ### 语义化标签 常用的
@@ -99,50 +98,88 @@
 
 ---
 
-
-
 > ### **块级元素**和**行级元素**
 
 #### 常见块级元素：
 
-- `<div>`
-- `<p>`
-- `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, `<h6>`
-- `<section>`
-- `<article>`
-- `<header>`
-- `<footer>`
-- `<main>`
-- `<ul>`, `<ol>`, `<li>`
-- `<form>`
-- `<table>`
-- `<header>`, `<footer>`, `<nav>`
+| 标签           | 含义                           | 默认显示 |
+| -------------- | ------------------------------ | -------- |
+| `<header>`     | 页眉                           | block    |
+| `<nav>`        | 导航                           | block    |
+| `<main>`       | 主要内容                       | block    |
+| `<article>`    | 文章/独立内容                  | block    |
+| `<section>`    | 章节                           | block    |
+| `<aside>`      | 侧边栏                         | block    |
+| `<footer>`     | 页脚                           | block    |
+| `<figure>`     | 图表、图片等独立流内容         | block    |
+| `<figcaption>` | figure 的说明                  | block    |
+| `<details>`    | 可展开的细节                   | block    |
+| `<summary>`    | details 的标题                 | block    |
+| `<address>`    | 联系信息                       | block    |
+| `<h1>`~`<h6>`  | 标题                           | block    |
+| `<p>`          | 段落                           | block    |
+| `<div>`        | 通用容器（虽不强语义但常归类） | block    |
+| `<hr>`         | 水平分隔线                     | block    |
+| `<ul><ol><dl>` | 列表                           | block    |
+| `<blockquote>` | 长引用                         | block    |
+| `<pre>`        | 预格式化文本                   | block    |
+| `<table>`      | 表格                           | block    |
 
-#### 特点：
 
-1. **占据一整行**：块级元素会**自动换行**，并占满父元素的整个宽度。
-2. **可以设置宽高**：你可以对块级元素设置 `width` 和 `height`。
-3. **margin and padding: left and right and top and bottom 都可以使用**
 
-> ### 常见行级元素：
+#### 常见行级元素：
 
-- `<span>`
-- `<a>`
-- `<strong>`
-- `<em>`
-- `<b>`
-- `<i>`
-- `<img>`
-- `<abbr>`
-- `<code>`
-- `<label>`
-- `<q>`
+| 标签            | 含义                 | 默认显示 |
+| --------------- | -------------------- | -------- |
+| `<time>`        | 时间                 | inline   |
+| `<mark>`        | 高亮文本             | inline   |
+| `<span>`        | 通用行内容器         | inline   |
+| `<abbr>`        | 缩写                 | inline   |
+| `<cite>`        | 作品标题             | inline   |
+| `<code>`        | 代码片段             | inline   |
+| `<data>`        | 机器可读数据         | inline   |
+| `<dfn>`         | 定义术语             | inline   |
+| `<em>`          | 强调                 | inline   |
+| `<strong>`      | 重要文本             | inline   |
+| `<q>`           | 短引用               | inline   |
+| `<small>`       | 小号文字（附属信息） | inline   |
+| `<sub>`/`<sup>` | 下标/上标            | inline   |
+| `<var>`         | 变量                 | inline   |
+| `<kbd>`         | 键盘输入             | inline   |
+| `<samp>`        | 示例输出             | inline   |
 
-##### 特点：
+#### 特点
 
-1. **不占满一整行**：行级元素不会强制换行，而是与其他元素**在同一行内显示**。
-2. **无法设置宽高**：行级元素的**宽度和高度**由其**内容决定**，不能通过 `width` 或 `height` 来改变。
-3. **margin and padding: left and right 可以使用 top and bottom 不可以使用**
+
+| 特性                  | 块级元素（block）                          | 行内元素（inline）                          |
+|-----------------------|--------------------------------------------|---------------------------------------------|
+| 是否独占一行          | 是，**默认100%占满父容器宽度**，从上到下垂直排列 | 否，跟文字一样水平排列，不打断行            |
+| 宽度（width）         | 可以设置，默认为父容器可用宽度             | **不可设置**，由内容撑开                    |
+| 高度（height）        | 可以设置（包括 auto）                      | **不可设置**（设置无效），由 line-height 和内容决定 |
+| margin                | 四个方向都生效（margin-top/bottom/left/right） | **垂直方向（top/bottom）无效**，水平方向（left/right）有效 |
+| padding               | 四个方向都生效                             | 四个方向都生效，但**垂直 padding 不会影响周边元素布局**（不会把上下行推开） |
+| 是否可以包含其他元素  | 可以包含块级和行内元素                     | **只能包含行内元素**，不能包含块级元素      |
+| 盒模型类型            | 正常块级盒（block-level box）              | 行内级盒（inline-level box）                |
+| 典型代表              | `<div>、<p>、<h1>~<h6>、<ul>、<li>、<section>、<article>` 等 | `<span>、<a>、<strong>、<em>、<img>、<code>` 等 |
+| vertical-align        | 不生效                                     | 生效（可以控制与文字基线的对齐方式）        |
+| 是否参与行盒（line box）| 不参与，每一个块级元素生成一个或多个行盒的开始 | 参与当前行的行盒布局                        |
+| display 值            | `block`                                    | `inline`                                    |
+
+### 补充：还有一种常见中间形态 —— 行内块元素（inline-block）
+| 特性                  | 行内块元素（inline-block）                 |
+|-----------------------|--------------------------------------------|
+| 是否独占一行          | 否，水平排列                               |
+| width / height        | **可以设置**                               |
+| margin / padding      | 四个方向都完全生效                         |
+| 典型代表              | `<img>、<input>、<button>、<textarea>`（默认就是 inline-block） |
+| display 值            | `display: inline-block`                    |
+
+### 记忆口诀（非常好用）
+- **块级**：独占一行，宽高 margin 随便设。
+- **行内**：不独占一行，宽高设置无效，垂直 margin/padding 不影响布局。
+- **行内块**：不独占一行，但宽高 margin/padding 全都生效（两边好处都占了）。
+
+
 
 > ### iframe 有哪些优点和缺点
 
@@ -234,12 +271,11 @@
 
 ---
 
-
 > ### 4️⃣ 图片太多，加载太慢怎么办？
 
 **答：** 常见优化手段：
 
-1. ✅ **使用 CDN 加速💤网络💤**
+1. ✅ **使用 CDN 加速 💤 网络 💤**
 2. ✅ **懒加载（Lazy Load）🛜code🛜**
 
    ```html
@@ -248,7 +284,7 @@
 
    或使用 IntersectionObserver。
 
-3. ✅ **预加载关键图片🛜code🛜**
+3. ✅ **预加载关键图片 🛜code🛜**
 4. ✅ **压缩图片（TinyPNG、ImageOptim）📶not code📶**
 5. ✅ **图片格式优化（WebP、AVIF）📶not code📶**
 6. ✅ **使用雪碧图（Sprite）📶not code📶** 减少 HTTP 请求。
@@ -260,12 +296,12 @@
 **答：**
 
 - 只有当图片**即将进入视口（用户可见区域）**时，才开始加载真实图片。
-未进入视口时先用占位符，减少初始加载资源，提高性能。
+  未进入视口时先用占位符，减少初始加载资源，提高性能。
 
 ##### **方式 1：原生属性 `loading="lazy"`（最简单）**
 
 ```html
-<img src="image.jpg" loading="lazy" alt="">
+<img src="image.jpg" loading="lazy" alt="" />
 ```
 
 ✔ 浏览器自动在图片即将可见时加载。
@@ -277,32 +313,112 @@
 更精确可控，支持更多 API。
 
 ```html
-<!-- data-src="real.jpg"：真正的图片地址放在 data-src 中，不放在 src。
-class="lazy"：标记这张图片需要懒加载。
-src 没写 → 浏览器不会立刻加载图片。-->
-<img data-src="real.jpg" class="lazy" alt="">
+<img data-src="real.jpg" class="lazy" alt="" />
 
 <script>
-const imgs = document.querySelectorAll('img.lazy');
+  const imgs = document.querySelectorAll("img.lazy");
 
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.classList.remove("lazy");
+        observer.unobserve(img);
+      }
+    });
+  });
+
+  imgs.forEach((img) => observer.observe(img));
+</script>
+```
+---
+
+```html
+<img data-src="real.jpg" class="lazy" alt="">
+```
+**技巧点**：
+- 故意不写 `src` 属性（或者写一个占位图如 1×1 的透明 gif），避免页面加载时立即请求图片
+- 把真实地址存在 `data-src` 自定义属性里
+- 加 `class="lazy"` 作为“需要懒加载”的标记，方便 JS 选中它们
+
+```js
+const imgs = document.querySelectorAll('img.lazy');
+```
+- 选中页面上所有带 `class="lazy"` 的 `<img>` 标签，得到一个 NodeList
+
+```js
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      const img = entry.target;
-      img.src = img.dataset.src;
-      img.classList.remove('lazy');
-      observer.unobserve(img);
+```
+- 创建一个 **交叉观察者（IntersectionObserver）**
+- 它会持续监听“被观察的元素是否进入或即将进入可视区域（viewport）”
+- `entry.isIntersecting === true` → 表示这张图片已经**滚到屏幕里了**（或即将出现）
+
+```js
+      const img = entry.target;                // 当前滚进视口的 img 元素
+      img.src = img.dataset.src;               // 把 data-src 的值赋给 src → 真正开始加载图片
+      img.classList.remove('lazy');            // 加载完后移除 lazy 类（可选，防止重复触发）
+      observer.unobserve(img);                 // 停止观察这张图片（已经加载了，没必要再观察）
+```
+**核心懒加载逻辑就在这四行**：
+1. 把真实地址从 `data-src` → `src`，触发图片下载
+2. 移除 `lazy` 类（方便配合 CSS 做 loading 占位效果）
+3. 取消对这张图的观察，节省性能
+
+```js
     }
   });
 });
-
-imgs.forEach(img => observer.observe(img));
-</script>
 ```
+- 关闭回调函数
+
+```js
+imgs.forEach(img => observer.observe(img));
+```
+- 把页面上所有 `.lazy` 图片都交给 observer 去监视
+- 一旦用户滚动到它们附近，就会自动触发上面的加载逻辑
+
+### 完整工作流程图解
+```
+页面加载 → img 只有 data-src，没有 src → 浏览器不请求图片
+      ↓
+用户向下滚动
+      ↓
+IntersectionObserver 检测到某张 img 进入视口
+      ↓
+自动执行：img.src = img.dataset.src
+      ↓
+浏览器真正开始下载 real.jpg
+      ↓
+图片加载完成并显示
+      ↓
+移除 lazy 类 + 停止观察（避免重复加载）
+```
+
+### 优点（为什么现在都用这个写法）
+| 优点                  | 说明 |
+|-----------------------|------|
+| 原生 API，性能极高     | 不需要 scroll + timer 轮询 |
+| 准确触发               | 只有真正快出现时才加载 |
+| 自动处理动态添加的图片 | 只要再 observe 一下就行 |
+| 兼容性已经很好         | 2025 年所有现代浏览器都支持（包括手机端） |
+
+### 可选增强（生产中常加的）
+```html
+<img data-src="real.jpg" class="lazy" alt="" loading="lazy">  <!-- 浏览器原生也支持！ -->
+```
+现代浏览器已经原生支持 `loading="lazy"` 属性，如果你不追求极致兼容老浏览器，直接写这个就行，**一行属性搞定懒加载**，连 JS 都不用！
+
+但手写 IntersectionObserver 的好处是：
+- 兼容更老的浏览器
+- 可以加加载动画、统计曝光等额外逻辑
+
+
 ##### **方式 3：滚动事件监听（不推荐）**
 
 较老的方式，需要自行判断是否进入可视区。
-
 
 ---
 
@@ -311,31 +427,28 @@ imgs.forEach(img => observer.observe(img));
 **答：**
 有两种方式：
 
- **方式 1：`srcset` + `sizes`（最推荐，现代浏览器通用）**
+**方式 1：`srcset` + `sizes`（最推荐，现代浏览器通用）**
 
 ##### **1）使用不同分辨率的图片**
 
 ```html
-<img 
-  src="img-800.jpg" 
-  srcset="
-    img-400.jpg 400w,
-    img-800.jpg 800w,
-    img-1200.jpg 1200w
-  "
+<img
+  src="img-800.jpg"
+  srcset="img-400.jpg 400w, img-800.jpg 800w, img-1200.jpg 1200w"
   sizes="
     (max-width: 600px) 400px,
     (max-width: 1000px) 800px,
     1200px
   "
-  alt="示例图片">
+  alt="示例图片"
+/>
 ```
 
 ##### **原理：**
 
-* `srcset` 告诉浏览器“有哪些尺寸的图片可用”
-* `sizes` 告诉浏览器“当前布局需要多宽的图片”
-* 浏览器根据设备宽度、DPR（像素密度）自动选择最合适的图片文件。
+- `srcset` 告诉浏览器“有哪些尺寸的图片可用”
+- `sizes` 告诉浏览器“当前布局需要多宽的图片”
+- 浏览器根据设备宽度、DPR（像素密度）自动选择最合适的图片文件。
 
 ---
 
@@ -345,9 +458,9 @@ imgs.forEach(img => observer.observe(img));
 
 ```html
 <picture>
-  <source srcset="img.webp" type="image/webp">
-  <source srcset="img.jpg" type="image/jpeg">
-  <img src="img.jpg" alt="示例图片">
+  <source srcset="img.webp" type="image/webp" />
+  <source srcset="img.jpg" type="image/jpeg" />
+  <img src="img.jpg" alt="示例图片" />
 </picture>
 ```
 
@@ -355,18 +468,16 @@ imgs.forEach(img => observer.observe(img));
 
 浏览器根据支持的格式自动选择最合适的 `<source>`。
 
-
-
 > ### 7️⃣ 常见图片格式区别？
 
-| 格式                                 | 特点                 | 适用场景         |
-| ------------------------------------ | -------------------- | ---------------- |
-| **PNG** 🚩                           | (无损|有损)压缩，支持透明   | 图标、Logo       |
-| **SVG** 🚩                           | 矢量图，可缩放       | 图标、Logo       |
-| **JPEG/JPG** 🏴‍☠️                      | 有损压缩，小体积     | 照片类图片       |
-| **GIF** 🏴‍☠️                           | 动图，最多 256 色    | 表情、动效       |
-| **WebP** <font color=red> 新 </font> | 体积小、支持透明     | 现代 Web（推荐） |
-| **AVIF** <font color=red> 新 </font> | 新一代格式，压缩更强 | 高性能网站       |
+| 格式                                 | 特点                 | 适用场景            |
+| ------------------------------------ | -------------------- | ------------------- | ---------- |
+| **PNG** 🚩                           | (无损                | 有损)压缩，支持透明 | 图标、Logo |
+| **SVG** 🚩                           | 矢量图，可缩放       | 图标、Logo          |
+| **JPEG/JPG** 🏴‍☠️                      | 有损压缩，小体积     | 照片类图片          |
+| **GIF** 🏴‍☠️                           | 动图，最多 256 色    | 表情、动效          |
+| **WebP** <font color=red> 新 </font> | 体积小、支持透明     | 现代 Web（推荐）    |
+| **AVIF** <font color=red> 新 </font> | 新一代格式，压缩更强 | 高性能网站          |
 
 ---
 
@@ -427,7 +538,6 @@ Base64 是把图片**二进制数据**编码成**文本**（ASCII 字符串）�
 
 ---
 
-
 > ### 1️⃣1️⃣ 如何使用 Canvas 压缩图片？
 
 ```js
@@ -448,6 +558,7 @@ function compressImage(img, quality = 0.7) {
 **答：**
 
 #### ✅ **方式 1：使用 `new Image()`（你已经写的方式）**
+
 这是最标准、最干净的做法，适合预加载图片。
 
 ```js
@@ -462,7 +573,7 @@ img.src = "test.jpg";
 有时候 `<img>` 已在 HTML 中，你要判断它是否已经加载。
 
 ```html
-<img id="photo" src="test.jpg">
+<img id="photo" src="test.jpg" />
 ```
 
 ```js
@@ -478,8 +589,8 @@ if (img.complete) {
 
 ###### `img.complete` 是关键：
 
-| 状态     | `img.complete` | `img.naturalWidth` |
-| ------ | -------------- | ------------------ |
+| 状态         | `img.complete` | `img.naturalWidth` |
+| ------------ | -------------- | ------------------ |
 | 图片加载完成 | true           | > 0                |
 | 图片加载失败 | true           | 0                  |
 | 图片尚未加载 | false          | 0                  |
@@ -523,7 +634,6 @@ loadImage("test.jpg")
   .catch(() => console.log("加载失败"));
 ```
 
-
 ---
 
 > ### 1️⃣3️⃣ 图片跨域 Canvas 报错如何解决？
@@ -546,9 +656,7 @@ loadImage("test.jpg")
 
 ---
 
-
 > ### 1️⃣4️⃣ 如何实现一个图片懒加载组件？
-
 
 #### 核心实现（IntersectionObserver 版）
 
@@ -567,30 +675,33 @@ loadImage("test.jpg")
 ```js
 function initLazyImages({
   selector = "img.lazy",
-  rootMargin = "200px 0px",  // 提前 200px 预加载
+  rootMargin = "200px 0px", // 提前 200px 预加载
   threshold = 0.01,
-  errorSrc = ""
+  errorSrc = "",
 } = {}) {
   const imgs = document.querySelectorAll(selector);
   if (!imgs.length) return;
 
   // 不支持 IO 时降级
   if (!("IntersectionObserver" in window)) {
-    imgs.forEach(img => load(img));
+    imgs.forEach((img) => load(img));
     return;
   }
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        load(img);
-        io.unobserve(img);
-      }
-    });
-  }, { rootMargin, threshold });
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          load(img);
+          io.unobserve(img);
+        }
+      });
+    },
+    { rootMargin, threshold }
+  );
 
-  imgs.forEach(img => io.observe(img));
+  imgs.forEach((img) => io.observe(img));
 
   function load(img) {
     const realSrc = img.dataset.src;
@@ -605,12 +716,11 @@ initLazyImages();
 
 ---
 
-
 ##### React/Vue 组件一句话版（原理一致）
 
-* `ref` 拿到 DOM
-* `useEffect/onMounted` 注册 IO
-* `isIntersecting` 时 setState / 改 src
+- `ref` 拿到 DOM
+- `useEffect/onMounted` 注册 IO
+- `isIntersecting` 时 setState / 改 src
 
 ---
 
@@ -636,16 +746,16 @@ initLazyImages();
 
 #### 1) 格式优化（收益最大）
 
-* **优先 AVIF / WebP，兜底 JPEG/PNG**
+- **优先 AVIF / WebP，兜底 JPEG/PNG**
   用 `<picture>` 做多格式回退。
-* **透明/无损场景用 PNG**，图标/插画优先 **SVG**。
-* 能裁剪的动图尽量用 **MP4/WebM/Lottie** 替代 GIF。
+- **透明/无损场景用 PNG**，图标/插画优先 **SVG**。
+- 能裁剪的动图尽量用 **MP4/WebM/Lottie** 替代 GIF。
 
 ```html
 <picture>
-  <source srcset="a.avif" type="image/avif">
-  <source srcset="a.webp" type="image/webp">
-  <img src="a.jpg" alt="">
+  <source srcset="a.avif" type="image/avif" />
+  <source srcset="a.webp" type="image/webp" />
+  <img src="a.jpg" alt="" />
 </picture>
 ```
 
@@ -655,12 +765,12 @@ initLazyImages();
 
 核心是：**不要让用户下载比容器大很多的图**。
 
-* 后端/CDN 出多档尺寸（320/640/1280…）
-* 前端用 `srcset + sizes` 选择最合适的
-* 高 DPR 设备自动拿 2x/3x
+- 后端/CDN 出多档尺寸（320/640/1280…）
+- 前端用 `srcset + sizes` 选择最合适的
+- 高 DPR 设备自动拿 2x/3x
 
 ```html
-<img 
+<img
   src="a-640.jpg"
   srcset="a-320.jpg 320w, a-640.jpg 640w, a-1280.jpg 1280w"
   sizes="(max-width: 600px) 320px, (max-width: 1200px) 640px, 1280px"
@@ -671,33 +781,33 @@ initLazyImages();
 
 #### 3) 加载优化
 
-* **懒加载**：IntersectionObserver + rootMargin 预加载下一屏
-* **关键图优先**：首屏 hero 图 `preload` / 框架里的 `priority`
-* 列表大量图片：**虚拟列表** + 懒加载组合
-* `decoding="async"`、`fetchpriority="high"`（支持时）
-* 低网速优先加载低清，再替换高清（渐进式）
+- **懒加载**：IntersectionObserver + rootMargin 预加载下一屏
+- **关键图优先**：首屏 hero 图 `preload` / 框架里的 `priority`
+- 列表大量图片：**虚拟列表** + 懒加载组合
+- `decoding="async"`、`fetchpriority="high"`（支持时）
+- 低网速优先加载低清，再替换高清（渐进式）
 
 ```html
-<link rel="preload" as="image" href="hero.webp">
-<img src="hero.webp" fetchpriority="high" decoding="async">
+<link rel="preload" as="image" href="hero.webp" />
+<img src="hero.webp" fetchpriority="high" decoding="async" />
 ```
 
 ---
 
 #### 4) CDN + 图片处理能力
 
-* **CDN 就近分发**降低 RTT
-* 用 CDN 的**动态裁剪/缩放/格式转换**参数
+- **CDN 就近分发**降低 RTT
+- 用 CDN 的**动态裁剪/缩放/格式转换**参数
   例如：`?w=640&h=360&fit=cover&fm=webp&q=80`
-* 大站常见策略：**同一张原图 + CDN 参数实时出不同版本**，避免存多份。
+- 大站常见策略：**同一张原图 + CDN 参数实时出不同版本**，避免存多份。
 
 ---
 
 #### 5) 缓存策略（减少重复下载）
 
-* 静态图长缓存：`Cache-Control: max-age=31536000, immutable`
-* 文件名带 hash，更新不怕缓存
-* 可选：Service Worker 做离线/二次访问加速（PWA）
+- 静态图长缓存：`Cache-Control: max-age=31536000, immutable`
+- 文件名带 hash，更新不怕缓存
+- 可选：Service Worker 做离线/二次访问加速（PWA）
 
 ---
 
@@ -705,30 +815,30 @@ initLazyImages();
 
 你写的“小图转 Base64”要说清适用边界：
 
-* **适合非常小且高频图标**（比如 < 2KB）
+- **适合非常小且高频图标**（比如 < 2KB）
   避免额外请求、减少 RTT
-* **不适合稍大图片**：Base64 会膨胀约 1/3，且不可独立缓存
-* 更好的替代：**SVG sprite / iconfont / HTTP2 多路复用**。
+- **不适合稍大图片**：Base64 会膨胀约 1/3，且不可独立缓存
+- 更好的替代：**SVG sprite / iconfont / HTTP2 多路复用**。
 
 ---
 
 #### 7) 渲染与体验（面试加分）
 
-* 避免 CLS：给图片明确 `width/height` 或 `aspect-ratio`
-* placeholder：LQIP / blur / blurhash / skeleton
-* 渐进式加载淡入，让视觉更稳
+- 避免 CLS：给图片明确 `width/height` 或 `aspect-ratio`
+- placeholder：LQIP / blur / blurhash / skeleton
+- 渐进式加载淡入，让视觉更稳
 
 ```html
-<img src="a.webp" width="640" height="360" style="aspect-ratio:16/9">
+<img src="a.webp" width="640" height="360" style="aspect-ratio:16/9" />
 ```
 
 ---
 
 #### 8) 监控与迭代（高级加分点）
 
-* 关注 **LCP / CLS / 图片平均大小 / 命中缓存率**
-* 上报图片失败率、加载耗时
-* A/B 测试 WebP/AVIF、不同质量参数收益
+- 关注 **LCP / CLS / 图片平均大小 / 命中缓存率**
+- 上报图片失败率、加载耗时
+- A/B 测试 WebP/AVIF、不同质量参数收益
 
 ---
 
@@ -736,12 +846,12 @@ initLazyImages();
 
 > 图片优化我会按“格式—尺寸—加载—缓存—体验—监控”做：优先 AVIF/WebP + picture 兜底；用 CDN 多尺寸和 srcset/sizes 做分辨率自适应；列表图懒加载、首屏关键图 preload/priority；走 CDN 就近分发并按需裁剪转码；配长缓存和 hash 版本控制；渲染侧用 placeholder 和固定宽高避免 CLS；最后用 LCP/CLS 和体积监控持续优化。
 
-
-# 💯💯💯 第三部分 SEO 面试题 
+# 💯💯💯 第三部分 SEO 面试题
 
 > ## 🧭 一、什么是 SEO？
 
 **SEO（Search Engine Optimization）即“搜索引擎优化”**。
+
 - 是指通过**对网站结构、内容、链接及技术优化**，让网站在搜索引擎（如百度、Google）中的**自然排名更靠前**
 - 从而提升网站的**曝光率、点击率和访问量**。
 
@@ -764,7 +874,6 @@ initLazyImages();
 | **3. 增强品牌可信度**     | 排名靠前的网站更容易获得用户信任。                             |
 | **4. 提升用户体验（UX）** | SEO 优化往往伴随内容结构、性能优化，使网站更易用。             |
 | **5. 改善网站结构**       | 有助于前后端分离项目的内容可爬取性（SSR、静态化）。            |
-
 
 ## 🧭 一、SEO 的关键点（核心六大方面）
 
@@ -897,9 +1006,7 @@ Google 的算法（Core Web Vitals）强烈依赖性能指标。
 
 - 其主要作用是告诉搜索引擎爬虫哪些部分的网站可以被抓取（爬取）以及哪些部分不应该被抓取。
 
-
-
-###  📊 三、面试可用的“总结版回答模板”
+### 📊 三、面试可用的“总结版回答模板”
 
 > SEO 的关键点主要包括内容质量、语义化结构、Meta 优化、URL 设计、性能与移动端适配。
 >
@@ -918,12 +1025,9 @@ Google 的算法（Core Web Vitals）强烈依赖性能指标。
 I
 少用或者尽量不用 iframe，因为搜索引擎不会抓取 iframe 中的内容
 
-
-
 # 💯💯💯 第四部分 html 面试题 script
 
-
->### 1. `<script>`, `defer`, `async` 的区别？
+> ### 1. `<script>`, `defer`, `async` 的区别？
 
 **问：**
 在 HTML 中，`<script>...</script>`、`<script defer>...</script>`、`<script async>...</script>` 有什么区别？
@@ -936,9 +1040,9 @@ I
    <script src="main.js"></script>
    ```
 
-   * **加载：** 浏览器解析 HTML 时遇到 script，就**暂停 DOM 解析**，去下载 JS。
-   * **执行：** 下载完**立即执行**，执行完再继续解析后面的 HTML。
-   * **特点：** 阻塞渲染（render-blocking / parser-blocking）。
+   - **加载：** 浏览器解析 HTML 时遇到 script，就**暂停 DOM 解析**，去下载 JS。
+   - **执行：** 下载完**立即执行**，执行完再继续解析后面的 HTML。
+   - **特点：** 阻塞渲染（render-blocking / parser-blocking）。
 
 2. **`defer` 脚本**
 
@@ -946,12 +1050,13 @@ I
    <script src="main.js" defer></script>
    ```
 
-   * **加载：** 和解析 HTML **并行加载**脚本，不阻塞 HTML 解析。
-   * **执行时机：**
+   - **加载：** 和解析 HTML **并行加载**脚本，不阻塞 HTML 解析。
+   - **执行时机：**
 
-     * 在 DOM **解析完成后**，但在 `DOMContentLoaded` 触发前执行。
-   * **多个 defer 脚本：** 会**按照在页面中出现的顺序**依次执行。
-   * **常用于：** 放在 `<head>` 中加载页面主逻辑脚本，不阻塞页面结构解析。
+     - 在 DOM **解析完成后**，但在 `DOMContentLoaded` 触发前执行。
+
+   - **多个 defer 脚本：** 会**按照在页面中出现的顺序**依次执行。
+   - **常用于：** 放在 `<head>` 中加载页面主逻辑脚本，不阻塞页面结构解析。
 
 3. **`async` 脚本**
 
@@ -959,89 +1064,89 @@ I
    <script src="main.js" async></script>
    ```
 
-   * **加载：** 同样与 HTML **并行加载**。
-   * **执行时机：** 下载完成后**立即执行**，哪怕此时 DOM 还没解析完。
-   * **多个 async 脚本：** 谁先下载完谁先执行，**不保证顺序**。
-   * **常用于：** 广告、统计埋点、独立模块，不依赖 DOM 结构和其它脚本。
+   - **加载：** 同样与 HTML **并行加载**。
+   - **执行时机：** 下载完成后**立即执行**，哪怕此时 DOM 还没解析完。
+   - **多个 async 脚本：** 谁先下载完谁先执行，**不保证顺序**。
+   - **常用于：** 广告、统计埋点、独立模块，不依赖 DOM 结构和其它脚本。
 
 一句话总结：
 
-> * **普通**：边下边执行，阻塞解析。
-> * **defer**：并行下载，等 DOM 解析完再按顺序执行。
-> * **async**：并行下载，谁先下完谁先执行，不等 DOM，也不等其他脚本。
+> - **普通**：边下边执行，阻塞解析。
+> - **defer**：并行下载，等 DOM 解析完再按顺序执行。
+> - **async**：并行下载，谁先下完谁先执行，不等 DOM，也不等其他脚本。
 
 ---
 
->### 2. 它们对 DOM 解析和页面渲染有什么影响？
+> ### 2. 它们对 DOM 解析和页面渲染有什么影响？
 
 **问：**
 `<script>` / `defer` / `async` 对 DOM 解析顺序和页面渲染有什么影响？
 
 **答：**
 
-* **普通 `<script>`：**
+- **普通 `<script>`：**
 
-  * 遇到标签 → **暂停** 解析 HTML → 下载 + 执行 JS → 再继续解析。
-  * 可能导致 **白屏时间变长**，因为渲染要等脚本执行完。
+  - 遇到标签 → **暂停** 解析 HTML → 下载 + 执行 JS → 再继续解析。
+  - 可能导致 **白屏时间变长**，因为渲染要等脚本执行完。
 
-* **`defer`：**
+- **`defer`：**
 
-  * DOM 一直正常解析，脚本在后台下载。
-  * 会在 DOM 解析完成后、`DOMContentLoaded` 事件之前执行。
-  * **不阻塞** DOM 解析，页面首屏更快展示。
+  - DOM 一直正常解析，脚本在后台下载。
+  - 会在 DOM 解析完成后、`DOMContentLoaded` 事件之前执行。
+  - **不阻塞** DOM 解析，页面首屏更快展示。
 
-* **`async`：**
+- **`async`：**
 
-  * DOM 正常解析，脚本在后台下载。
-  * 一旦脚本下载完成就**立即执行**，可能在 DOM 完成前。
-  * 执行时会短暂阻塞当前解析，但总体上**减少了初始阻塞**。
-  * 执行时间不稳定，**可能打断 DOM 解析**的连续性。
+  - DOM 正常解析，脚本在后台下载。
+  - 一旦脚本下载完成就**立即执行**，可能在 DOM 完成前。
+  - 执行时会短暂阻塞当前解析，但总体上**减少了初始阻塞**。
+  - 执行时间不稳定，**可能打断 DOM 解析**的连续性。
 
 ---
 
->### 3. 多个 `defer` / `async` 脚本的执行顺序？
+> ### 3. 多个 `defer` / `async` 脚本的执行顺序？
 
 **问：**
 多个 `defer` 脚本和多个 `async` 脚本的执行顺序是怎样的？
 
 **答：**
 
-* **多个 `defer`：**
+- **多个 `defer`：**
 
   ```html
   <script src="a.js" defer></script>
   <script src="b.js" defer></script>
   ```
 
-  * 即使 `b.js` 先下载完，也会**按出现顺序**：先执行 `a.js` 再 `b.js`。
-  * 都在 DOM 解析完成后执行。
+  - 即使 `b.js` 先下载完，也会**按出现顺序**：先执行 `a.js` 再 `b.js`。
+  - 都在 DOM 解析完成后执行。
 
-* **多个 `async`：**
+- **多个 `async`：**
 
   ```html
   <script src="a.js" async></script>
   <script src="b.js" async></script>
   ```
 
-  * 谁先下载完谁先执行。
-  * **执行顺序不受 HTML 中位置控制**。
-  * 不适合有顺序依赖的脚本（例如必须先加载库再加载插件的场景）。
+  - 谁先下载完谁先执行。
+  - **执行顺序不受 HTML 中位置控制**。
+  - 不适合有顺序依赖的脚本（例如必须先加载库再加载插件的场景）。
 
 ---
 
->### 4. 什么时候用 `defer`，什么时候用 `async`？
+> ### 4. 什么时候用 `defer`，什么时候用 `async`？
 
 **问：**
 实际项目中，分别在什么场景下使用 `defer` 和 `async`？
 
 **答：**
 
-* 使用 **`defer`**：
+- 使用 **`defer`**：
 
-  * 页面**主业务逻辑**脚本。
-  * 依赖 DOM 结构（但不要求 DOM 一解析完立刻执行）。
-  * 多个脚本之间有严格的**依赖顺序**。
-  * 常见写法：在 `<head>` 中
+  - 页面**主业务逻辑**脚本。
+  - 依赖 DOM 结构（但不要求 DOM 一解析完立刻执行）。
+  - 多个脚本之间有严格的**依赖顺序**。
+  - 常见写法：在 `<head>` 中
 
     ```html
     <head>
@@ -1050,11 +1155,11 @@ I
     </head>
     ```
 
-* 使用 **`async`**：
+- 使用 **`async`**：
 
-  * **独立性强**的脚本，不依赖 DOM、不依赖其它脚本，也没人依赖它。
-  * 比如：统计、广告、AB 测试、埋点、监控等。
-  * 常见：
+  - **独立性强**的脚本，不依赖 DOM、不依赖其它脚本，也没人依赖它。
+  - 比如：统计、广告、AB 测试、埋点、监控等。
+  - 常见：
 
     ```html
     <script src="analytics.js" async></script>
@@ -1062,7 +1167,7 @@ I
 
 ---
 
->### 5. `defer` 与 `DOMContentLoaded`、`load` 的关系？
+> ### 5. `defer` 与 `DOMContentLoaded`、`load` 的关系？
 
 **问：**
 `defer` 脚本的执行时机和 `DOMContentLoaded` / `load` 事件的触发顺序是怎样的？
@@ -1083,14 +1188,14 @@ I
 
 ---
 
->### 6. 为什么推荐把 `<script>` 放在 `</body>` 前面？和 `defer` 有什么区别？
+> ### 6. 为什么推荐把 `<script>` 放在 `</body>` 前面？和 `defer` 有什么区别？
 
 **问：**
 很多项目会把 `<script>` 放在 `</body>` 前面，这和使用 `defer` 有什么不同？
 
 **答：**
 
-* 把普通 `<script>` 放在 **`</body>` 前**：
+- 把普通 `<script>` 放在 **`</body>` 前**：
 
   ```html
   ...
@@ -1099,10 +1204,10 @@ I
   </html>
   ```
 
-  * 确保前面大部分 DOM 已经解析完，再开始阻塞下载+执行。
-  * 简单粗暴，但**仍然会阻塞剩余解析**，也不如 `defer` 标准清晰。
+  - 确保前面大部分 DOM 已经解析完，再开始阻塞下载+执行。
+  - 简单粗暴，但**仍然会阻塞剩余解析**，也不如 `defer` 标准清晰。
 
-* 使用 `<head> + defer`：
+- 使用 `<head> + defer`：
 
   ```html
   <head>
@@ -1110,59 +1215,61 @@ I
   </head>
   ```
 
-  * 更语义化，逻辑清晰：脚本在 DOM 完成后执行。
-  * 浏览器可更好地做并行加载和优化。
+  - 更语义化，逻辑清晰：脚本在 DOM 完成后执行。
+  - 浏览器可更好地做并行加载和优化。
 
 总的来说，**现代推荐使用 `defer` 而不是一味把 `<script>` 往页面底部扔。**
 
 ---
 
->### 7. 内联脚本可以用 `defer` / `async` 吗？
+> ### 7. 内联脚本可以用 `defer` / `async` 吗？
 
 **问：**
 内联脚本 `<script>console.log(1)</script>` 可以使用 `defer` 或 `async` 吗？效果如何？
 
 **答：**
 
-* 规范上：`defer` / `async` 主要是为**外部脚本（有 src）**设计的。
-* 实际上：
+- 规范上：`defer` / `async` 主要是为**外部脚本（有 src）**设计的。
+- 实际上：
 
   ```html
   <script defer>
-    console.log('inline');
+    console.log("inline");
   </script>
   ```
 
-  * 大多数浏览器**会忽略**内联 script 上的 `defer` / `async`，当作普通脚本执行。
-* 面试答法：
+  - 大多数浏览器**会忽略**内联 script 上的 `defer` / `async`，当作普通脚本执行。
 
-  * 一般认为：**`defer` / `async` 只对带 `src` 的外部脚本有效**。
-  * 想要延后执行内联脚本，应使用事件（如 `DOMContentLoaded`）、模块脚本或其他方式。
+- 面试答法：
+
+  - 一般认为：**`defer` / `async` 只对带 `src` 的外部脚本有效**。
+  - 想要延后执行内联脚本，应使用事件（如 `DOMContentLoaded`）、模块脚本或其他方式。
 
 ---
 
->### 8. `type="module"` 与 `defer` / `async` 的关系？
+> ### 8. `type="module"` 与 `defer` / `async` 的关系？
 
 **问：**
 使用 `<script type="module">` 时，它的加载和执行行为和 `defer` / `async` 有什么关系？
 
 **答（加分题）：**
 
-* 模块脚本默认类似于带 `defer` 的外部脚本：
+- 模块脚本默认类似于带 `defer` 的外部脚本：
 
   ```html
   <script type="module" src="main.js"></script>
   ```
 
-  * **默认不阻塞 DOM 解析**。
-  * 在 DOM 解析完成后执行（相当于隐式 `defer`）。
-* 也可以结合 `async`：
+  - **默认不阻塞 DOM 解析**。
+  - 在 DOM 解析完成后执行（相当于隐式 `defer`）。
+
+- 也可以结合 `async`：
 
   ```html
   <script type="module" src="main.js" async></script>
   ```
 
-  * 行为类似 `async`：并行加载，下载完成后立刻执行，不保证顺序。
+  - 行为类似 `async`：并行加载，下载完成后立刻执行，不保证顺序。
 
 回答的时候可以说：
 
@@ -1172,83 +1279,79 @@ I
 
 如果你需要，我可以再给你出一套**选择题 / 填空题**版本，或者帮你把上面内容压缩成“3 分钟背诵版”方便面试前快速复习。
 
-
-
 ---
 
 # 💯💯💯 面试题 4 other
 
 > ### 请描述下 SEO 中的 TDK？
 
-
-####  ✅ **TDK = Title + Description + Keywords**
+#### ✅ **TDK = Title + Description + Keywords**
 
 分别对应 HTML 中 `<title>`、`<meta name="description">`、`<meta name="keywords">`。
 
 ---
 
-####  📌 **1. T = Title（网页标题）**
+#### 📌 **1. T = Title（网页标题）**
 
 ```html
 <title>网站标题 - 关键词</title>
 ```
 
-######  作用：
+###### 作用：
 
-* 影响**搜索引擎**对网页**主题**的判断（SEO 最重要的因素之一）
-* 影响用户在**搜索结果**中的**点击率**（CTR）
+- 影响**搜索引擎**对网页**主题**的判断（SEO 最重要的因素之一）
+- 影响用户在**搜索结果**中的**点击率**（CTR）
 
 ##### # 要求：
 
-* **唯一、精准、简短（一般 ≤ 60 字符）**
-* （建议靠前）
+- **唯一、精准、简短（一般 ≤ 60 字符）**
+- （建议靠前）
 
 ---
 
 ### # 📌 **2. D = Description（网页描述）**
 
 ```html
-<meta name="description" content="网页内容的简要描述，通常显示在搜索结果标题下方。">
+<meta
+  name="description"
+  content="网页内容的简要描述，通常显示在搜索结果标题下方。"
+/>
 ```
 
-######  作用：
+###### 作用：
 
-* 作为 **页面摘要** 显示在 **搜索结果** 中
-* 影响 **点击率**，但对排名影响较弱
+- 作为 **页面摘要** 显示在 **搜索结果** 中
+- 影响 **点击率**，但对排名影响较弱
 
-######  要求：
+###### 要求：
 
-* 80–160 字符较合适
-* 自然包含关键词
-* **内容准确**概括页面主题
+- 80–160 字符较合适
+- 自然包含关键词
+- **内容准确**概括页面主题
 
 ---
 
 ### # 📌 **3. K = Keywords（关键词）**
 
 ```html
-<meta name="keywords" content="关键词1, 关键词2, 关键词3">
+<meta name="keywords" content="关键词1, 关键词2, 关键词3" />
 ```
 
-######  作用：
+###### 作用：
 
-* 早期 SEO 的关键字段，现在**主流搜索引擎（如 Google/Bing）已基本忽略**
+- 早期 SEO 的关键字段，现在**主流搜索引擎（如 Google/Bing）已基本忽略**
 
+###### 要求：
 
-######  要求：
-
-
-* 控制 3–5 个相关性最高的关键词
+- 控制 3–5 个相关性最高的关键词
 
 ---
 
-####  📌 面试中怎么回答更加专业？
+#### 📌 面试中怎么回答更加专业？
 
 可以这样回答：
 
 > **TDK 指 Title、Description 和 Keywords，是网页 SEO 的三大基础优化要素。Title 负责页面主题定位，是 SEO 权重最高的字段；Description 主要影响搜索结果展示摘要和点击率；Keywords 虽然在现代搜索引擎权重已大幅降低，但在部分国内场景仍有意义。合理设置 TDK 有助于提升网页在搜索引擎中的可见性与排名。**
-
-
 
 > ### 什么是可替换元素，什么是非可替换元素，它们各自有什么特点？
 

@@ -1,6 +1,3 @@
-下面我给你整理一份 **webpack 常见 loader 使用 & 配置大全**，偏面试 + 实战向，你可以当作小抄用 👇
-
----
 
 ## 一、loader 是什么？怎么配置？
 
@@ -181,82 +178,103 @@ module.exports = {
 
 ---
 
-## 三、JS / TS 相关 loader
+## 三、TS(方法1) 相关 loader
 
-### 1. `babel-loader`（ES6+ 转 ES5）
+###  `ts-loader`（编译 TypeScript）
 
-**核心**：结合 `.babelrc` 或 `babel.config.js`
+### 1. 安装基础依赖
 
-```js
-// webpack.config.js
+```bash
+npm install --save-dev  typescript
+```
+
+### 2. 创建 `tsconfig.json`（示例）
+
+```bash
+npx tsc --init
+```
+
+```jsonc
 {
-  test: /\.[jt]sx?$/,
-  exclude: /node_modules/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      cacheDirectory: true   // 开启缓存，加快二次构建
-    }
-  }
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules", "dist"]
 }
 ```
 
+> 特点：
+> * 使用 TypeScript 官方编译器 `tsc` 做 **语法、类型检查 + 编译**
+> * 速度相对 Babel 可能稍慢一点（项目大时）
+
+### 1. 安装依赖
+
+```bash
+npm install --save-dev ts-loader
+```
+
+**（可选）**再装一个独立做类型检查的插件，以提升构建速度：
+
+```bash
+npm install --save-dev fork-ts-checker-webpack-plugin
+```
+
+### 2. webpack 配置示例（`webpack.config.js`）
+
 ```js
-// babel.config.js
+const path = require("path");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+
 module.exports = {
-  presets: [
-    ['@babel/preset-env', {
-      useBuiltIns: 'usage',
-      corejs: 3
-    }],
-    '@babel/preset-react',        // 若用 React
-    '@babel/preset-typescript'    // 若用 TS，另一种写法
-  ],
+  mode: "development", // 或 "production"
+  entry: "./src/index.tsx", // 你的入口文件
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist")
+  },
+  resolve: {
+    // 支持 import xxx from './file'
+    extensions: [".ts", ".tsx", ".js", ".jsx"]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              // 使用独立线程做类型检查，提升构建速度
+              transpileOnly: true
+            }
+          }
+        ],
+        exclude: /node_modules/
+      }
+    ]
+  },
   plugins: [
-    // 按需加载等插件……
-  ]
+    new ForkTsCheckerWebpackPlugin()
+  ],
+  devtool: "source-map"
 };
 ```
 
----
+### 3. 小结（ts-loader）
 
-### 2. `ts-loader`（编译 TypeScript）
+* ✅ 类型检查最权威，完全按 TS 编译器来
+* ✅ 对一些高级 TS 特性 / 配置兼容度好
+* ⚠️ 项目大时，纯 ts-loader 可能比较慢，因此常配合 `ForkTsCheckerWebpackPlugin` 做异步类型检查
+* ⚠️ 如果你还要用到很多 Babel 插件/新语法，就要再把 Babel 接进来，配置稍复杂
 
-两种常见方案：
 
-#### 方案 A：单独使用 `ts-loader`（调用 tsc）
-
-```js
-{
-  test: /\.tsx?$/,
-  use: 'ts-loader',
-  exclude: /node_modules/
-}
-```
-
-`tsconfig.json` 负责配置编译选项。
-
-#### 方案 B：`babel-loader` + `@babel/preset-typescript`
-
-好处：可以用 Babel 的生态 & 插件链路（如装饰器、按需加载等）
-
-```js
-{
-  test: /\.tsx?$/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      presets: [
-        '@babel/preset-env',
-        '@babel/preset-react',
-        '@babel/preset-typescript'
-      ]
-    }
-  }
-}
-```
-
----
 
 ## 四、静态资源 loader（图片 / 字体等）
 
@@ -525,67 +543,9 @@ module.exports = {
 }
 ```
 
----
 
-### 4. `markdown-loader` / `raw-loader`
 
-* `raw-loader`：以字符串形式导入文件内容
-* `markdown-loader`：把 MD 转成 HTML 字符串等
 
-```js
-{
-  test: /\.md$/,
-  use: [
-    'html-loader',
-    'markdown-loader'
-  ]
-}
-```
-
----
-
-## 八、典型规则组织方式示例（含 oneOf）
-
-面试中经常问“你们项目的 loader 大概是怎么组织的”。
-
-```js
-module.exports = {
-  module: {
-    rules: [
-      {
-        oneOf: [
-          // JS / TS
-          {
-            test: /\.[jt]sx?$/,
-            exclude: /node_modules/,
-            use: 'babel-loader'
-          },
-          // 样式
-          {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader']
-          },
-          // 图片
-          {
-            test: /\.(png|jpe?g|gif|svg)$/,
-            type: 'asset',
-            parser: {
-              dataUrlCondition: {
-                maxSize: 8 * 1024
-              }
-            }
-          },
-          // 其他资源
-          {
-            exclude: /\.(js|mjs|jsx|ts|tsx|css|scss|sass|less|html|json)$/,
-            type: 'asset/resource'
-          }
-        ]
-      }
-    ]
-  }
-};
-```
 
 ---
 
@@ -601,9 +561,6 @@ module.exports = {
 >
 > 在配置上，统一写在 `module.rules` 里，通过 `test` 匹配文件，`use` 或 `loader+options` 指定处理链路，注意 loader 执行是从右到左的。
 
----
-
-如果你需要，我还可以帮你出一套 **“webpack loader 专项面试题 + 参考答案”**，方便你系统刷题巩固。
 
 # 💯💯💯 手写loader
 

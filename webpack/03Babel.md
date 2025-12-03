@@ -182,17 +182,6 @@ Babel 大致分 3 步：
 
   * 不处理 polyfill；只做语法转换。
 
----
-
-### 11. `core-js@2` 和 `core-js@3` 的区别？实际项目中推荐哪个？
-
-**考点要点：**
-
-* `core-js@3` 增加了更多 ES 特性（例如 ES2019+ 等）、修复了一些问题。
-* Babel 7.4 起更推荐与 `core-js@3` 搭配。
-* 新项目普遍推荐直接用 `core-js@3`。
-
----
 
 ## 三、babel-loader & 性能优化
 
@@ -330,66 +319,6 @@ Babel 大致分 3 步：
 
 ---
 
-## 五、提案阶段语法 & 插件
-
-### 17. 如果想使用“类属性语法”（class fields）如 `class A { state = {} }`，Babel 需要做什么配置？
-
-**考点要点：**
-
-* 安装插件：
-
-  ```bash
-  npm i -D @babel/plugin-proposal-class-properties
-  ```
-
-* 在 `.babelrc` 中：
-
-  ```json
-  {
-    "plugins": [
-      "@babel/plugin-proposal-class-properties"
-    ]
-  }
-  ```
-
-* 有的 preset（如新版 preset-env + 某些配置 / 或 preset-typescript）可能已经内置了。
-
----
-
-
-## 六、与 TypeScript / React / Webpack 深度结合
-
-### 19. 使用 Webpack+ Babel 编译 TypeScript 有哪两种主流方式？差别在哪？
-
-**考点要点：**
-
-1. **`ts-loader` + TypeScript 编译器**：
-
-   * 完整类型检查 & 编译。
-   * 更严格也更慢。
-2. **`babel-loader` + `@babel/preset-typescript`**：
-
-   * Babel 只负责**擦除类型并转译语法**，不做类型检查。
-   * 通常会搭配 `tsc --noEmit` 或 ESLint 做单独的类型检查。
-   * 优点是快，和现有 Babel 流水线整合度高。
-
----
-
-### 20. 如果你的 React 项目用的是 `createRoot`（React 18），Babel 需要特别配置吗？
-
-**考点要点：**
-
-* 语法层面不需要特殊配置。
-* 仍然只需要：
-
-  * `@babel/preset-react` 支持 JSX；
-  * `@babel/preset-env` 做语法降级。
-* 真正与 React 18 相关的是：
-
-  * 你项目代码里 `ReactDOM.createRoot` 的用法；
-  * 对 Concurrent/StrictMode 等特性的理解。
-
----
 
 ## 七、调试与 Source Map
 
@@ -410,81 +339,6 @@ Babel 大致分 3 步：
   * 要保证每个阶段都正确生成并传递 Source Map 以方便 debuggers 对应回原始源码。
 
 ---
-
-## 八、实际项目问法 / 开放问答
-
-这类是面试时经常会以“开放性问题”形式出现的，你可以准备自己的项目经验回答。
-
-### 22. 你在项目里遇到过哪些与 Babel 相关的坑？怎么排查和解决的？
-
-**可以从以下角度准备：**
-
-* 某些代码在低版本浏览器（比如 IE11）报错，但在现代浏览器没问题：
-
-  * 怀疑是 polyfill 不足 / 目标配置不当。
-  * 调整 `targets` 或 `useBuiltIns`。
-* 某个依赖包是 ESModule/ES6 源码导致构建或运行有问题：
-
-  * 把该包包含进 `babel-loader` 的转译范围。
-* 打包体积过大：
-
-  * 查看是不是引入了整个 `core-js` / `@babel/polyfill`。
-  * 优化 `preset-env` 的目标、使用 `usage` 模式。
-
----
-
-### 23. 在一个大型前端项目中，你会如何设计 Babel 的配置以兼顾：**兼容性、打包体积、构建速度**？
-
-**答题方向：**
-
-* 兼容性：
-
-  * 根据用户群/业务范围设定合理的 `targets`。
-  * 区分现代浏览器和老旧浏览器（可拆“现代包”和“遗留包”）。
-* 打包体积：
-
-  * `useBuiltIns: "usage"` + `corejs: 3`。
-  * 避免无谓的 polyfill。
-* 构建速度：
-
-  * `exclude: /node_modules/`，仅包含必要的源码目录。
-  * `cacheDirectory: true`。
-  * 使用 `thread-loader` / `fork-ts-checker-webpack-plugin` 等配合 TypeScript。
-* 管理复杂度：
-
-  * 封装成一个团队内部的 `babel-preset-*`，所有项目统一使用。
-
----
-
-### 24. 如何在 Monorepo（多包）项目中复用 Babel 配置？
-
-**答题方向：**
-
-* 使用根目录 `babel.config.js`，对整个 repo 生效。
-* 各子包必要时可以通过 `overrides` 指定不同的配置。
-* 或封装一个共享 preset，例如 `@company/babel-preset-app`，各包中统一引用。
-
----
-
-### 25. 如果构建日志中发现 Babel 转译占了很长时间，你会做哪些优化？
-
-**答题方向：**
-
-* 分析：
-
-  * 打印 `babel-loader` 处理了哪些目录，可以检查是否误转 `node_modules`。
-* 优化：
-
-  * 缩小 `include` 范围，只对 `src`、特定 npm 包转译。
-  * 开启 `cacheDirectory`。
-  * 使用 `thread-loader`。
-  * 检查 .babelrc 是否加载了不必要的插件（比如很多 proposal 插件）。
-
-
-
-
-下面给你一个 **不太深入但足够面试使用的 Babel 核心机制与执行原理解释**。
-既能回答面试官，也不会复杂到编译器原理级。
 
 ---
 

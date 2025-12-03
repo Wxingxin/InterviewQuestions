@@ -12,10 +12,14 @@
 ### 1. 安装基础依赖
 
 ```bash
-npm install --save-dev webpack webpack-cli typescript
+npm install --save-dev  typescript
 ```
 
 ### 2. 创建 `tsconfig.json`（示例）
+
+```bash
+npx tsc --init
+```
 
 ```jsonc
 {
@@ -36,72 +40,6 @@ npm install --save-dev webpack webpack-cli typescript
 ---
 
 ## 二、方案一：使用 ts-loader
-
-> 特点：
->
-> * 使用 TypeScript 官方编译器 `tsc` 做 **语法、类型检查 + 编译**
-> * 类型检查更「完整」，和 `tsc` 命令行结果一致
-> * 速度相对 Babel 可能稍慢一点（项目大时）
-
-### 1. 安装依赖
-
-```bash
-npm install --save-dev ts-loader
-```
-
-**（可选）**再装一个独立做类型检查的插件，以提升构建速度：
-
-```bash
-npm install --save-dev fork-ts-checker-webpack-plugin
-```
-
-### 2. webpack 配置示例（`webpack.config.js`）
-
-```js
-const path = require("path");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-
-module.exports = {
-  mode: "development", // 或 "production"
-  entry: "./src/index.tsx", // 你的入口文件
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "dist")
-  },
-  resolve: {
-    // 支持 import xxx from './file'
-    extensions: [".ts", ".tsx", ".js", ".jsx"]
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              // 使用独立线程做类型检查，提升构建速度
-              transpileOnly: true
-            }
-          }
-        ],
-        exclude: /node_modules/
-      }
-    ]
-  },
-  plugins: [
-    new ForkTsCheckerWebpackPlugin()
-  ],
-  devtool: "source-map"
-};
-```
-
-### 3. 小结（ts-loader）
-
-* ✅ 类型检查最权威，完全按 TS 编译器来
-* ✅ 对一些高级 TS 特性 / 配置兼容度好
-* ⚠️ 项目大时，纯 ts-loader 可能比较慢，因此常配合 `ForkTsCheckerWebpackPlugin` 做异步类型检查
-* ⚠️ 如果你还要用到很多 Babel 插件/新语法，就要再把 Babel 接进来，配置稍复杂
 
 ---
 

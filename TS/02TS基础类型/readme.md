@@ -1,24 +1,325 @@
-下面是 TypeScript 所有基础类型 + 常考类型的完整总结（2025 年最新语法），直接复制粘贴就能用，带示例 + 面试常问点。
+## 1. **Boolean 类型**
 
-| 类型           | 写法示例                                                                                                        | 说明 + 常见坑 + 面试重点                                                                                                     |
-| -------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **Boolean**    | `let isDone: boolean = false;`                                                                                  | 最简单的 true/false                                                                                                          |
-| **Number**     | `let num: number = 42;`<br>`let hex: number = 0xff;`<br>`let bin: number = 0b1010;`                             | 支持十进制、十六进制、二进制、ES2021+ 还支持 BigInt（`let big: bigint = 100n;`）                                             |
-| **String**     | `let name: string = "Alice";`<br>`let str: string = `age: ${num}`;`                                             | 模板字符串也要符合 string 类型                                                                                               |
-| **Symbol**     | `const sym1: symbol = Symbol('key');`<br>`const sym2: unique symbol = Symbol('key');`                           | `unique symbol` 是字面量类型，常用于常量键（TS 3.7+）                                                                        |
-| **Array**      | `let list1: number[] = [1, 2, 3];`<br>`let list2: Array<number> = [1, 2, 3];`                                   | 两种写法等价，推荐第一种更简洁                                                                                               |
-| **Tuple** 元组 | `let tuple: [string, number, boolean] = ["hello", 10, true];`                                                   | 长度和类型都固定！越界赋值会报错<br>`tuple.push(999)` 可以（历史遗留 bug）<br>TS 4.0+ 可选/剩余元素：`[string, ...number[]]` |
-| **Enum** 枚举  | `enum Color { Red, Green = 5, Blue }`<br>`let c: Color = Color.Blue; // 6`                                      | 默认从 0 开始，可手动赋值<br>常数枚举 `const enum` 编译后会被内联<br>字符串枚举：`enum Direction { Up = "UP" }`              |
-| **Any**        | `let anything: any = 4; anything = "string";`                                                                   | 关闭类型检查，什么都能赋，尽量避免！                                                                                         |
-| **Unknown**    | `let userInput: unknown = "maybe string";`<br>`if (typeof userInput === "string") { userInput.toUpperCase(); }` | 更安全的 any，必须先做类型缩小才能操作（TS 3.0+ 推荐代替 any）                                                               |
-| **Void**       | `function log(msg: string): void { console.log(msg); }`                                                         | 只能赋 `undefined` 和 `null`（非严格模式下）<br>永远不会有返回值                                                             |
-| **Null**       | `let n: null = null;`                                                                                           | 本身就是一个类型，只有值 null                                                                                                |
-| **Undefined**  | `let u: undefined = undefined;`                                                                                 | 同上，只有值 undefined                                                                                                       |
-| **Never**      | `function error(msg: string): never { throw new Error(msg); }`<br>`type T = string & never;`                    | 表示永远不会出现的值<br>1. 死循环 2. 总是抛错 3. 穷尽性检查（switch 里漏了 case）                                            |
-| **Object**     | `let obj: object = { name: "Alice" };`<br>`obj = [1,2,3]; obj = () => {}`                                       | 表示非原始类型（不是 number/string/boolean/symbol/null/undefined）<br>不推荐用，信息太少                                     |
-| **object**     | 小写 object：表示所有非原始类型（不推荐）                                                                       | 同上                                                                                                                         |
-| **Object**     | 大写 Object：JS 原生的 Object 构造函数类型（包含所有原型方法）                                                  | 几乎不用，面试偶尔考区别                                                                                                     |
-| **{}**         | `let empty: {} = 123; empty = "hello";`                                                                         | 空对象类型，但可以赋任何值（除了 null/undefined），因为所有值都有 toString() 等方法<br>常被误用！                            |
+代表真与假，只有两种值：`true` 与 `false`。
+
+```ts
+let isDone: boolean = true;
+```
+
+适用于条件判断、状态标识等。
+
+---
+
+## 2. **Number 类型**
+
+JavaScript 与 TypeScript 使用双精度 64 位浮点数，统一都叫 `number`。
+
+```ts
+let count: number = 42;
+let price: number = 9.99;
+let hex: number = 0xff;
+let binary: number = 0b1010;
+```
+
+---
+
+## 3. **String 类型**
+
+字符串，用单引号、双引号或模板字符串表示。
+
+```ts
+let name: string = "Alice";
+let greeting: string = `Hello, ${name}`;
+```
+
+---
+
+## 4. **Symbol 类型**
+
+用来创建 **唯一的值**，常用于对象属性的唯一键。
+
+```ts
+let key: symbol = Symbol("id");
+```
+
+---
+
+## 5. **Array 类型**
+
+有两种写法：
+
+```ts
+let list: number[] = [1, 2, 3];
+let list2: Array<number> = [1, 2, 3];
+```
+
+`list: T[]` 更常用。
+
+---
+
+## 6. **Enum 类型（枚举）**
+
+给一组可能的值起名字。
+
+```ts
+enum Color {
+  Red,
+  Green,
+  Blue,
+}
+
+let c: Color = Color.Green;
+```
+
+也可以手动设置值：
+
+```ts
+enum Status {
+  Ok = 200,
+  NotFound = 404,
+}
+```
+
+---
+
+## 7. **Any 类型**
+
+代表“随便什么类型都可以”，**放弃类型检查**。
+
+```ts
+let value: any = 123;
+value = "hello";
+value = true;
+```
+
+⚠️ 滥用 `any` 会导致 TypeScript 失去意义。
+
+---
+
+## 8. **Unknown 类型**
+
+比 `any` 更安全：你可以赋任何类型给它，但不能直接使用它。
+
+```ts
+let input: unknown;
+
+input = 123;
+input = "hello";
+
+// ❌ 错误：不能直接当 string 来用
+// console.log(input.toUpperCase());
+
+// ✔️ 必须先缩小类型
+if (typeof input === "string") {
+  console.log(input.toUpperCase());
+}
+```
+
+---
+
+## 9. **Tuple 类型（元组）**
+
+固定长度、固定类型的数组。
+
+```ts
+let person: [string, number];
+person = ["Alice", 20]; // ✔️
+```
+
+---
+
+## 10. **Void 类型**
+
+表示没有返回值的函数。
+
+```ts
+function log(msg: string): void {
+  console.log(msg);
+}
+```
+
+---
+
+## 11. **Null 和 Undefined 类型**
+
+两种特殊类型：`null` 和 `undefined`。
+
+```ts
+let u: undefined = undefined;
+let n: null = null;
+```
+
+在 `strictNullChecks: true` 下才有意义，否则它们属于所有类型。
+
+---
+
+## 12. **object、Object 和 {} 类型**
+
+这三者容易混：
+
+| 类型     | 含义                                 |
+| -------- | ------------------------------------ |
+| `object` | 非原始类型，如数组、函数、对象       |
+| `Object` | 所有能转成对象的类型（包括原始类型） |
+| `{}`     | 非 null 和 undefined 的所有值        |
+
+例子：
+
+```ts
+let a: object = { x: 1 }; // ✔️
+let b: Object = 123; // ✔️ number 可包装成对象
+let c: {} = "hi"; // ✔️ 字符串也可以
+```
+
+---
+
+在 TypeScript 中，`object`、`Object` 和 `{}` 这三个类型经常让人混淆，它们看起来很像，但实际含义和使用场景完全不同。下面我详细对比解释清楚（基于 TypeScript 5.x 最新行为）。
+
+| 类型写法 | 实际含义                                                                                         | 能赋值什么值？                                                                     | 典型错误场景                               | 推荐使用场景                           |
+| -------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------------------------------------------ | -------------------------------------- |
+| object   | 表示“所有非原始类型的值”（即不是 number、string、boolean、symbol、bigint、null、undefined 的值） | 对象（{}、数组、函数、实例、new String() 等）、数组、函数、Map、Set、正则、Date 等 | 不能赋原始值：let x: object = 123; // 错误 | 明确表示“一定是一个对象，不是原始值”时 |
+| Object   | 几乎等同于所有类型（包括原始类型），因为所有类型都继承自 Object.prototype                        | 几乎任何值都可以（123、"abc"、true、null、undefined、对象、数组、函数等）          | 几乎不会报错，所以失去了类型检查意义       | 几乎不推荐使用（历史遗留，几乎无用）   |
+| {}       | 空对象类型，但由于原始值会被“装箱”（boxing），实际行为和 Object 几乎一样                         | 几乎任何值都可以（同 Object）                                                      | 同上，几乎没约束力                         | 几乎不推荐使用（常被误用）             |
+
+### 详细解释 + 代码演示
+
+```ts
+// 1. object 类型（推荐用于表示“非原始值”）
+let a: object = { name: "zs" }; // OK
+let b: object = [1, 2, 3]; // OK
+let c: object = () => {}; // OK
+let d: object = new Map(); // OK
+
+// 以下全部报错，这就是 object 的意义所在！
+let e: object = 123; // Error
+let f: object = "hello"; // Error
+let g: object = true; // Error
+let h: object = null; // Error（strictNullChecks 为 true 时）
+let i: object = undefined; // Error（strictNullChecks 为 true 时）
+```
+
+```ts
+// 2. Object 类型（大写 O，几乎没用）
+let x: Object = 123; // OK（装箱成 new Number(123)）
+let y: Object = "abc"; // OK
+let z: Object = true; // OK
+let w: Object = { a: 1 }; // OK
+let v: Object = null; // strictNullChecks=true 时报错，否则OK
+// 基本上啥都能放，完全失去类型保护作用，几乎没人用
+```
+
+```ts
+// 3. {} 空对象类型（最容易被误解）
+let p: {} = 123; // OK！因为 number 会被装箱成 new Number(123)，而 Number 实例有 .toString() 等方法，满足 {} 的要求
+let q: {} = "abc"; // OK
+let r: {} = null; // strictNullChecks=true 时错误
+// 所以 {} 实际上和 Object 差不多，没什么约束力
+```
+
+### 那到底该怎么用才正确？
+
+#### 场景 1：你只想表示“这是一个对象，不是原始值”
+
+```ts
+function logObj(obj: object) {
+  console.log(obj);
+}
+
+logObj({}); // OK
+logObj([]); // OK
+logObj(() => {}); // OK
+logObj(123); // Error 正确！这就是我们想要的
+```
+
+→ 用 `object`（小写 o）
+
+#### 场景 2：你想表示“任意非 null/undefined 的值”（类似 any 但更安全）
+
+```ts
+function stringify(value: Object) {
+  return String(value);
+}
+// 或者更现代的写法：
+function stringify(value: unknown) { ... }
+```
+
+→ 基本不用 `Object`，直接用 `unknown` 更好
+
+#### 场景 3：你想接受任意值（包括原始值和 null/undefined）
+
+```ts
+let anything: any = ...;     // 最宽松
+let something: unknown = ...; // 推荐，安全版 any
+```
+
+#### 场景 4：你想精确描述一个对象结构（最常见、最推荐！）
+
+```ts
+interface User {
+  name: string;
+  age: number;
+}
+
+function printUser(user: User) { ... }
+
+printUser({ name: "ls", age: 18 }); // OK
+printUser({ name: "ww" });          // Error，缺少 age
+```
+
+→ 用 `interface` 或 `type`，而不是模糊的 object/Object/{}
+
+### 总结表格（记住这张表就够了）
+
+| 写法                    | 含义                          | 能放原始值？ | 能放 null/undefined？ | 推荐度 | 备注                             |
+| ----------------------- | ----------------------------- | ------------ | --------------------- | ------ | -------------------------------- |
+| object                  | 非原始类型对象                | 不能         | strict 下不能         | ★★★★★  | 推荐！明确表示“是一个对象”       |
+| Object                  | 几乎所有类型（装箱机制）      | 能           | strict 下 null 不能   | ★☆☆☆☆  | 基本废弃，几乎不用               |
+| {}                      | 空对象（装箱机制，同 Object） | 能           | strict 下 null 不能   | ★☆☆☆☆  | 最容易误用，很多新手以为是空对象 |
+| Record<string, unknown> | 键为 string 的对象            | 不能         | 不能                  | ★★★★☆  | 常用于 { [key: string]: xxx }    |
+| unknown                 | 任意值，但使用前必须类型检查  | 能           | 能                    | ★★★★★  | 现代替代 any 的首选              |
+| any                     | 任意值，无检查                | 能           | 能                    | ★★☆☆☆  | 能不用就不用                     |
+
+### 结论（背下来就行）
+
+- 想说“一定是个对象，不是 number/string 等原始值” → 用 `object`（小写）
+- 想接受任意值 → 用 `unknown`（而不是 Object 或 {}）
+- 想精确描述对象结构 → 用 `interface` 或 `type`
+- `Object` 和 `{}` 基本是历史遗留坑，现代 TypeScript 项目几乎不用
+
+## 13. **never 类型**
+
+用于：永远不会有返回值的情况。
+
+### 常见两种场景：
+
+① 抛错函数
+
+```ts
+function fail(msg: string): never {
+  throw new Error(msg);
+}
+```
+
+② 死循环
+
+```ts
+function infinite(): never {
+  while (true) {}
+}
+```
+
+③ 不可能到达的分支
+
+```ts
+function foo(x: string | number) {
+  if (typeof x === "string") {
+  } else if (typeof x === "number") {
+  } else {
+    // x 是 never
+    const _never: never = x;
+  }
+}
+```
 
 ### 面试高频真题代码示例
 
@@ -51,20 +352,3 @@ function eat(fruit: Fruit) {
 declare const sym: unique symbol;
 type MyKey = typeof sym; // 只能是这个具体 symbol
 ```
-
-### 一句话总结记忆口诀（背下来面试无敌）
-
-```
-boolean number string symbol → 原始
-[] / Array<T> → 普通数组
-[x,y,z] → tuple 元组
-enum → 枚举
-any → 啥都行（别用）
-unknown → 啥都行但必须先检查（推荐）
-void → 没返回值
-null & undefined → 两个“空”
-never → 永远到不了
-object / {} / Object → 三个“坑”，慎用
-```
-
-需要我出 20 道选择/代码填空题帮你练手吗？随时说！
