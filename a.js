@@ -1,28 +1,13 @@
-function ajax(options){
-  return new Promise((resolve,reject) => {
-    const xhr = new XMLHttpRequest()
+function a(thisArg, ...args) {
+  const ctx =
+    thisArg === null || thisArg === undefined ? globalThis : Object(thisArg);
 
-    const defaluts = {
-      url:"",
-      method: "GET",
-      data:null,
-      headers:{}
-    }
+  const key = Symbol("tempFn");
+  ctx[key] = this;
 
-    const opts = Object.assign({},defaluts,optiions)
+  const result = ctx[key](...args);
 
-    xhr.onreadystatechange = function(){
-      if(xhr.readyState === 4){
-        if(xhr.status >= 200 && xhr.status < 300){
-          try {
-            resolve(JSON.parse(xhr.responseText))
-          } catch (error) {
-            resolve(xhr.responseText)
-          }
-        } else {
-          reject({status:xhr.status,message:xhr.statusText})
-        }
-      }
-    }
-  })
+  delete ctx[key];
+
+  return result;
 }
