@@ -125,8 +125,6 @@
 | `<pre>`        | 预格式化文本                   | block    |
 | `<table>`      | 表格                           | block    |
 
-
-
 #### 常见行级元素：
 
 | 标签            | 含义                 | 默认显示 |
@@ -150,36 +148,35 @@
 
 #### 特点
 
-
-| 特性                  | 块级元素（block）                          | 行内元素（inline）                          |
-|-----------------------|--------------------------------------------|---------------------------------------------|
-| 是否独占一行          | 是，**默认100%占满父容器宽度**，从上到下垂直排列 | 否，跟文字一样水平排列，不打断行            |
-| 宽度（width）         | 可以设置，默认为父容器可用宽度             | **不可设置**，由内容撑开                    |
-| 高度（height）        | 可以设置（包括 auto）                      | **不可设置**（设置无效），由 line-height 和内容决定 |
-| margin                | 四个方向都生效（margin-top/bottom/left/right） | **垂直方向（top/bottom）无效**，水平方向（left/right）有效 |
-| padding               | 四个方向都生效                             | 四个方向都生效，但**垂直 padding 不会影响周边元素布局**（不会把上下行推开） |
-| 是否可以包含其他元素  | 可以包含块级和行内元素                     | **只能包含行内元素**，不能包含块级元素      |
-| 盒模型类型            | 正常块级盒（block-level box）              | 行内级盒（inline-level box）                |
-| 典型代表              | `<div>、<p>、<h1>~<h6>、<ul>、<li>、<section>、<article>` 等 | `<span>、<a>、<strong>、<em>、<img>、<code>` 等 |
-| vertical-align        | 不生效                                     | 生效（可以控制与文字基线的对齐方式）        |
-| 是否参与行盒（line box）| 不参与，每一个块级元素生成一个或多个行盒的开始 | 参与当前行的行盒布局                        |
-| display 值            | `block`                                    | `inline`                                    |
+| 特性                     | 块级元素（block）                                            | 行内元素（inline）                                                          |
+| ------------------------ | ------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| 是否独占一行             | 是，**默认 100%占满父容器宽度**，从上到下垂直排列            | 否，跟文字一样水平排列，不打断行                                            |
+| 宽度（width）            | 可以设置，默认为父容器可用宽度                               | **不可设置**，由内容撑开                                                    |
+| 高度（height）           | 可以设置（包括 auto）                                        | **不可设置**（设置无效），由 line-height 和内容决定                         |
+| margin                   | 四个方向都生效（margin-top/bottom/left/right）               | **垂直方向（top/bottom）无效**，水平方向（left/right）有效                  |
+| padding                  | 四个方向都生效                                               | 四个方向都生效，但**垂直 padding 不会影响周边元素布局**（不会把上下行推开） |
+| 是否可以包含其他元素     | 可以包含块级和行内元素                                       | **只能包含行内元素**，不能包含块级元素                                      |
+| 盒模型类型               | 正常块级盒（block-level box）                                | 行内级盒（inline-level box）                                                |
+| 典型代表                 | `<div>、<p>、<h1>~<h6>、<ul>、<li>、<section>、<article>` 等 | `<span>、<a>、<strong>、<em>、<img>、<code>` 等                             |
+| vertical-align           | 不生效                                                       | 生效（可以控制与文字基线的对齐方式）                                        |
+| 是否参与行盒（line box） | 不参与，每一个块级元素生成一个或多个行盒的开始               | 参与当前行的行盒布局                                                        |
+| display 值               | `block`                                                      | `inline`                                                                    |
 
 ### 补充：还有一种常见中间形态 —— 行内块元素（inline-block）
-| 特性                  | 行内块元素（inline-block）                 |
-|-----------------------|--------------------------------------------|
-| 是否独占一行          | 否，水平排列                               |
-| width / height        | **可以设置**                               |
-| margin / padding      | 四个方向都完全生效                         |
-| 典型代表              | `<img>、<input>、<button>、<textarea>`（默认就是 inline-block） |
-| display 值            | `display: inline-block`                    |
+
+| 特性             | 行内块元素（inline-block）                                      |
+| ---------------- | --------------------------------------------------------------- |
+| 是否独占一行     | 否，水平排列                                                    |
+| width / height   | **可以设置**                                                    |
+| margin / padding | 四个方向都完全生效                                              |
+| 典型代表         | `<img>、<input>、<button>、<textarea>`（默认就是 inline-block） |
+| display 值       | `display: inline-block`                                         |
 
 ### 记忆口诀（非常好用）
+
 - **块级**：独占一行，宽高 margin 随便设。
 - **行内**：不独占一行，宽高设置无效，垂直 margin/padding 不影响布局。
 - **行内块**：不独占一行，但宽高 margin/padding 全都生效（两边好处都占了）。
-
-
 
 > ### iframe 有哪些优点和缺点
 
@@ -332,19 +329,23 @@
   imgs.forEach((img) => observer.observe(img));
 </script>
 ```
+
 ---
 
 ```html
-<img data-src="real.jpg" class="lazy" alt="">
+<img data-src="real.jpg" class="lazy" alt="" />
 ```
+
 **技巧点**：
+
 - 故意不写 `src` 属性（或者写一个占位图如 1×1 的透明 gif），避免页面加载时立即请求图片
 - 把真实地址存在 `data-src` 自定义属性里
 - 加 `class="lazy"` 作为“需要懒加载”的标记，方便 JS 选中它们
 
 ```js
-const imgs = document.querySelectorAll('img.lazy');
+const imgs = document.querySelectorAll("img.lazy");
 ```
+
 - 选中页面上所有带 `class="lazy"` 的 `<img>` 标签，得到一个 NodeList
 
 ```js
@@ -352,17 +353,20 @@ const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
 ```
+
 - 创建一个 **交叉观察者（IntersectionObserver）**
 - 它会持续监听“被观察的元素是否进入或即将进入可视区域（viewport）”
 - `entry.isIntersecting === true` → 表示这张图片已经**滚到屏幕里了**（或即将出现）
 
 ```js
-      const img = entry.target;                // 当前滚进视口的 img 元素
-      img.src = img.dataset.src;               // 把 data-src 的值赋给 src → 真正开始加载图片
-      img.classList.remove('lazy');            // 加载完后移除 lazy 类（可选，防止重复触发）
-      observer.unobserve(img);                 // 停止观察这张图片（已经加载了，没必要再观察）
+const img = entry.target; // 当前滚进视口的 img 元素
+img.src = img.dataset.src; // 把 data-src 的值赋给 src → 真正开始加载图片
+img.classList.remove("lazy"); // 加载完后移除 lazy 类（可选，防止重复触发）
+observer.unobserve(img); // 停止观察这张图片（已经加载了，没必要再观察）
 ```
+
 **核心懒加载逻辑就在这四行**：
+
 1. 把真实地址从 `data-src` → `src`，触发图片下载
 2. 移除 `lazy` 类（方便配合 CSS 做 loading 占位效果）
 3. 取消对这张图的观察，节省性能
@@ -372,15 +376,18 @@ const observer = new IntersectionObserver(entries => {
   });
 });
 ```
+
 - 关闭回调函数
 
 ```js
-imgs.forEach(img => observer.observe(img));
+imgs.forEach((img) => observer.observe(img));
 ```
+
 - 把页面上所有 `.lazy` 图片都交给 observer 去监视
 - 一旦用户滚动到它们附近，就会自动触发上面的加载逻辑
 
 ### 完整工作流程图解
+
 ```
 页面加载 → img 只有 data-src，没有 src → 浏览器不请求图片
       ↓
@@ -398,23 +405,27 @@ IntersectionObserver 检测到某张 img 进入视口
 ```
 
 ### 优点（为什么现在都用这个写法）
-| 优点                  | 说明 |
-|-----------------------|------|
-| 原生 API，性能极高     | 不需要 scroll + timer 轮询 |
-| 准确触发               | 只有真正快出现时才加载 |
-| 自动处理动态添加的图片 | 只要再 observe 一下就行 |
+
+| 优点                   | 说明                                      |
+| ---------------------- | ----------------------------------------- |
+| 原生 API，性能极高     | 不需要 scroll + timer 轮询                |
+| 准确触发               | 只有真正快出现时才加载                    |
+| 自动处理动态添加的图片 | 只要再 observe 一下就行                   |
 | 兼容性已经很好         | 2025 年所有现代浏览器都支持（包括手机端） |
 
 ### 可选增强（生产中常加的）
+
 ```html
-<img data-src="real.jpg" class="lazy" alt="" loading="lazy">  <!-- 浏览器原生也支持！ -->
+<img data-src="real.jpg" class="lazy" alt="" loading="lazy" />
+<!-- 浏览器原生也支持！ -->
 ```
+
 现代浏览器已经原生支持 `loading="lazy"` 属性，如果你不追求极致兼容老浏览器，直接写这个就行，**一行属性搞定懒加载**，连 JS 都不用！
 
 但手写 IntersectionObserver 的好处是：
+
 - 兼容更老的浏览器
 - 可以加加载动画、统计曝光等额外逻辑
-
 
 ##### **方式 3：滚动事件监听（不推荐）**
 
@@ -470,14 +481,14 @@ IntersectionObserver 检测到某张 img 进入视口
 
 > ### 7️⃣ 常见图片格式区别？
 
-| 格式                                 | 特点                 | 适用场景            |
-| ------------------------------------ | -------------------- | ------------------- | ---------- |
-| **PNG** 🚩                           | (无损                | 有损)压缩，支持透明 | 图标、Logo |
-| **SVG** 🚩                           | 矢量图，可缩放       | 图标、Logo          |
-| **JPEG/JPG** 🏴‍☠️                      | 有损压缩，小体积     | 照片类图片          |
-| **GIF** 🏴‍☠️                           | 动图，最多 256 色    | 表情、动效          |
-| **WebP** <font color=red> 新 </font> | 体积小、支持透明     | 现代 Web（推荐）    |
-| **AVIF** <font color=red> 新 </font> | 新一代格式，压缩更强 | 高性能网站          |
+| 格式                                 | 特点                        | 适用场景         |
+| ------------------------------------ | --------------------------- | ---------------- |
+| **PNG** 🚩                           | (无损 \ 有损)压缩，支持透明 | 图标、Logo       |
+| **SVG** 🚩                           | 矢量图，可缩放              | 图标、Logo       |
+| **JPEG/JPG** 🏴‍☠️                      | 有损压缩，小体积            | 照片类图片       |
+| **GIF** 🏴‍☠️                           | 动图，最多 256 色           | 表情、动效       |
+| **WebP** <font color=red> 新 </font> | 体积小、支持透明            | 现代 Web（推荐） |
+| **AVIF** <font color=red> 新 </font> | 新一代格式，压缩更强        | 高性能网站       |
 
 ---
 
@@ -536,20 +547,6 @@ Base64 是把图片**二进制数据**编码成**文本**（ASCII 字符串）�
 - ✅ 优点：减少请求数
 - ❌ 缺点：维护成本高。
 
----
-
-> ### 1️⃣1️⃣ 如何使用 Canvas 压缩图片？
-
-```js
-function compressImage(img, quality = 0.7) {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = img.width;
-  canvas.height = img.height;
-  ctx.drawImage(img, 0, 0);
-  return canvas.toDataURL("image/jpeg", quality);
-}
-```
 
 ---
 
@@ -636,99 +633,8 @@ loadImage("test.jpg")
 
 ---
 
-> ### 1️⃣3️⃣ 图片跨域 Canvas 报错如何解决？
 
-**答：**
 
-1. 在前端设置：
-
-   ```js
-   const img = new Image();
-   img.crossOrigin = "anonymous";
-   img.src = "https://example.com/test.jpg";
-   ```
-
-2. 服务器端添加 CORS 响应头：
-
-   ```
-   Access-Control-Allow-Origin: *
-   ```
-
----
-
-> ### 1️⃣4️⃣ 如何实现一个图片懒加载组件？
-
-#### 核心实现（IntersectionObserver 版）
-
-###### 思路
-
-1. 初始 `img` 只放占位图/空 src，把真实地址放 `data-src`。
-2. 用 `IntersectionObserver` 观察图片元素。
-3. 当元素进入视口（`isIntersecting`）时，把 `data-src` 赋给 `src`，然后取消观察。
-
-##### 原生 JS 组件示例
-
-```html
-<img class="lazy" data-src="real.jpg" src="placeholder.jpg" alt="" />
-```
-
-```js
-function initLazyImages({
-  selector = "img.lazy",
-  rootMargin = "200px 0px", // 提前 200px 预加载
-  threshold = 0.01,
-  errorSrc = "",
-} = {}) {
-  const imgs = document.querySelectorAll(selector);
-  if (!imgs.length) return;
-
-  // 不支持 IO 时降级
-  if (!("IntersectionObserver" in window)) {
-    imgs.forEach((img) => load(img));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const img = entry.target;
-          load(img);
-          io.unobserve(img);
-        }
-      });
-    },
-    { rootMargin, threshold }
-  );
-
-  imgs.forEach((img) => io.observe(img));
-
-  function load(img) {
-    const realSrc = img.dataset.src;
-    if (!realSrc) return;
-    img.src = realSrc;
-    img.onload = () => img.classList.add("loaded");
-    img.onerror = () => errorSrc && (img.src = errorSrc);
-  }
-}
-initLazyImages();
-```
-
----
-
-##### React/Vue 组件一句话版（原理一致）
-
-- `ref` 拿到 DOM
-- `useEffect/onMounted` 注册 IO
-- `isIntersecting` 时 setState / 改 src
-
----
-
-##### 一句话总结（面试可背）
-
-> 我会用 IntersectionObserver 监听图片元素，默认先渲染占位图，把真实地址放 data-src；当图片进入视口（配合 rootMargin 提前 200px）时再把 data-src 赋给 src 并取消监听；不支持 IO 的浏览器用 scroll + throttle + getBoundingClientRect 做降级，同时补上 error fallback 和 loaded 动画状态。
-
----
 
 > ### 1️⃣5️⃣ 如果需要上传图片前进行压缩，你会怎么做？
 
@@ -832,15 +738,6 @@ initLazyImages();
 <img src="a.webp" width="640" height="360" style="aspect-ratio:16/9" />
 ```
 
----
-
-#### 8) 监控与迭代（高级加分点）
-
-- 关注 **LCP / CLS / 图片平均大小 / 命中缓存率**
-- 上报图片失败率、加载耗时
-- A/B 测试 WebP/AVIF、不同质量参数收益
-
----
 
 #### 一段“标准面试总结”
 

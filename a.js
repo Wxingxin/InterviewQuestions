@@ -1,13 +1,5 @@
-function a(thisArg, ...args) {
-  const ctx =
-    thisArg === null || thisArg === undefined ? globalThis : Object(thisArg);
-
-  const key = Symbol("tempFn");
-  ctx[key] = this;
-
-  const result = ctx[key](...args);
-
-  delete ctx[key];
-
-  return result;
+function getType(val){
+  return Object.prototype.toString.call(val).slice(8, -1)
 }
+
+console.log(getType(123))
