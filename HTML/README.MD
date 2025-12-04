@@ -40,9 +40,9 @@
 | 多媒体 <font color=red>💯 新增 💯</font>   | video, audio 标签直接播放                        |
 | 无障碍 <font color=red>🤣 加强 🤣</font>   | HTML5 在无障碍方面进行了加强，加入了无障碍属性。 |
 | 表单 <font color=red>🤣 加强 🤣</font>     | 更丰富的**输入类型**和**验证功能**               |
-| 存储 <font color=red>😂 浏览器 😂</font>   | localStorage 和 sessionStorage                   |
-| 图形 <font color=red>😂 浏览器 😂</font>   | canvas 与 SVG 绘图能力                           |
-| API <font color=red>😂 浏览器 😂</font>    | 地理定位、拖拽、多线程、WebSocket                |
+| 存储 <font color=red>✈️ 浏览器 ✈️</font>   | localStorage 和 sessionStorage                   |
+| 图形 <font color=red>✈️ 浏览器 ✈️</font>   | canvas 与 SVG 绘图能力                           |
+| API <font color=red>✈️ 浏览器 ✈️</font>    | 地理定位、拖拽、多线程、WebSocket                |
 
 > ### 简述一下你对 HTML 语义化的理解。
 
@@ -282,9 +282,9 @@
    或使用 IntersectionObserver。
 
 3. ✅ **预加载关键图片 🛜code🛜**
-4. ✅ **压缩图片（TinyPNG、ImageOptim）📶not code📶**
-5. ✅ **图片格式优化（WebP、AVIF）📶not code📶**
-6. ✅ **使用雪碧图（Sprite）📶not code📶** 减少 HTTP 请求。
+4. ✅ **压缩图片（TinyPNG、ImageOptim）🫨not code🫨**
+5. ✅ **图片格式优化（WebP、AVIF）🫨not code🫨**
+6. ✅ **使用雪碧图（Sprite）🫨not code🫨** 减少 HTTP 请求。
 
 ---
 
