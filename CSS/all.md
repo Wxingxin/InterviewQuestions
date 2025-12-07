@@ -1,18 +1,6 @@
 # 大全
+
 **CSS (层叠样式表) 知识图谱**
-
-# **一、基础 (Basics)**
-1. **简介 (Introduction)**
-
-- CSS 是什么？(What is CSS?)
-- CSS 的作用 (Purpose of CSS: 分离内容与表现)
-- CSS 历史与版本 (History and Versions: CSS1, CSS2.1, CSS3+)
-
-2. **语法 (Syntax)**
-
-- 规则集 (Rule Set): 选择器 { 属性: 值; }
-- 声明 (Declaration): property: value
-- 注释 (Comments): /_ comment _/
 
 3. **引入方式 (Linking Methods)**
 
@@ -25,7 +13,7 @@
 - 元素选择器 (Element Selector): p, div, h1
 - 类选择器 (Class Selector): .classname
 - ID 选择器 (ID Selector): #idname
-- 通用选择器 (Universal Selector): 
+- 通用选择器 (Universal Selector):
 - 属性选择器 (Attribute Selectors):
 - `[attr]  `
 - `[attr=value]  `
@@ -77,8 +65,6 @@
 - 其他单位: 角度 (deg, rad), 时间 (s, ms)
 
 # **二、核心概念 (Core Concepts)**
-
-
 
 1. **层叠 (Cascade)**
 
@@ -137,9 +123,7 @@
 - 颜色函数: rgb(), rgba(), hsl(), hsla()
 - 数学函数: min(), max(), clamp()
 
-
 # **三、布局 (Layout)**
-
 
 1. **传统布局 (Traditional Layout)**
 
@@ -214,8 +198,6 @@
 
 # **五、常用属性分类 (Common Properties by Category)**
 
-
-
 1. **文本样式 (Text Styling)**
 
 - font-family, font-size, font-weight, font-style, font-variant
@@ -258,46 +240,92 @@
 - border-radius (圆角)
 - outline (轮廓)
 
-# **六、高级特性 (Advanced Features)**
-
-
-
-1. **CSS 变量 (Custom Properties)**
+# 💯💯💯 动画
+### 1. **CSS 变量 (Custom Properties)**
 
 - 声明: --variable-name: value;
 - 使用: var(--variable-name, fallback_value)
 - 作用域 (Scoping)
 
-2. **变换 (Transforms)**
+### 2. **变换 (Transforms)**
 
-- transform: translate(), rotate(), scale(), skew(), matrix()
-- transform-origin
+##### transform: `transform 用于对元素进行几何变换，不会影响文档流。`
+
+- translate():将元素在水平、垂直方向移动。`transform: translate(50px, 20px);`
+- rotate():以元素中心为轴心旋转。`transform: rotate(45deg);`
+- scale(),:按比例放大或缩小元素。`transform: scale(1.5);`
+- skew(), 让元素在 X/Y 方向倾斜。`transform: skew(20deg, 10deg);`
+- matrix()将上述所有变换组合进一个 2D 变换矩阵（高级用法）。`transform: matrix(1, 0.2, 0.3, 1, 30, 20);`
+- transform-origin:控制变形的参考点（默认是元素中心）。`transform-origin: left top;transform: rotate(45deg);`
 - 2D 与 3D 变换
+  | 特性 | 2D 变换 | 3D 变换 |
+  | ---- | --------------------------------- | ---------------------------------------------- |
+  | 维度 | 平面（x,y） | 带 z 轴深度 |
+  | 常用函数 | translate / rotate / scale / skew | translate3d / rotate3d / scale3d / perspective |
+  | 视觉效果 | 平面的 | 立体、透视、深度感 |
 
 3. **过渡 (Transitions)**
 
-- transition-property
-- transition-duration
-- transition-timing-function
-- transition-delay
-- transition (简写)
+- transition-property 指定哪些属性参与过渡`transition-property: width, transform;`
+- transition-duration 过渡持续时间。`transition-duration: 0.5s;`
+- transition-timing-function 过渡速率曲线（运动方式）
+- - linear 匀速
+- - ease（默认）慢 → 快 → 慢
+- - ease-in 由慢变快
+- - ease-out 由快变慢
+- - cubic-bezier() 自定义曲线
+
+- transition-delay 延迟多少秒开始执行`transition-delay: 0.2s;`
+- transition (简写) 将以上所有属性合并`transition: transform 0.5s ease-in-out 0s;`
 
 4. **动画 (Animations)**
 
-- @keyframes 规则
-- animation-name
-- animation-duration
-- animation-timing-function
-- animation-delay
-- animation-iteration-count
+- @keyframes 规则定义动画的每个阶段状态。
+- animation-name指定要使用的关键帧名称。
+- animation-duration动画持续时间。
+- animation-timing-function与过渡的 timing-function 类似，控制动画速率。
+- animation-delay动画开始前的延迟时间。
+- animation-iteration-count动画播放次数
 - animation-direction
-- animation-fill-mode
-- animation-play-state
+动画方向
+
+normal 正向
+
+reverse 反向
+
+alternate 正 → 反 循环
+
+alternate-reverse 反 → 正 循环
+- animation-fill-mode动画前后保留状态。
+- animation-play-state暂停或运行动画。
 - animation (简写)
+# 💯💯💯 **六、高级特性 (Advanced Features)**
 
-5. **滤镜 (Filters)**
+| 滤镜              | 作用        |
+| --------------- | --------- |
+| `blur()`        | 模糊        |
+| `brightness()`  | 亮度        |
+| `contrast()`    | 对比度       |
+| `grayscale()`   | 灰度黑白      |
+| `hue-rotate()`  | 色相旋转      |
+| `invert()`      | 颜色反相      |
+| `opacity()`     | 不透明度      |
+| `saturate()`    | 饱和度增强/降低  |
+| `sepia()`       | 复古棕色      |
+| `drop-shadow()` | 投影，可适用非矩形 |
 
-- filter: blur(), brightness(), contrast(), grayscale(), hue-rotate(), invert(), opacity(), saturate(), sepia(), drop-shadow()
+
+### **滤镜 (Filters)**filter:
+#### blur(), 让元素变得模糊，类似景深效果。
+#### brightness(), 调整元素明暗程度。
+#### contrast(), 增强或降低对比度。
+#### grayscale(), 转换为黑白照片效果。
+#### hue-rotate(), 改变色调，使颜色围绕色轮旋转。
+#### invert(),将颜色反转（类似底片效果）。
+####  opacity(), （与 opacity 属性效果相同，但可与其他滤镜组合使用。）
+#### saturate(),控制颜色浓度。
+####  sepia(),类似复古照片的棕褐色。
+####  drop-shadow()与 box-shadow 类似，但可应用到透明区域。
 
 6. **混合模式 (Blend Modes)**
 
@@ -321,80 +349,3 @@
 - writing-mode
 - 逻辑属性 (Logical Properties): margin-block-start, padding-inline-end, etc.
 
-# **七、CSS 预处理器与后处理器 (Preprocessors & Postprocessors)**
-
-1. **预处理器 (Preprocessors): Sass/SCSS, Less, Stylus**
-
-- 变量 (Variables)
-- 嵌套 (Nesting)
-- 混合 (Mixins)
-- 继承 (@extend)
-- 函数 (Functions)
-- 模块化 (@import, @use, @forward - Sass)
-
-2. **后处理器 (Postprocessors): PostCSS**
-
-- Autoprefixer (自动添加浏览器前缀)
-- CSS Modules
-- Linters (Stylelint)
-- Minifiers (CSSNano)
-
-# **八、CSS 架构与方法论 (Architecture `&` Methodologies)**
-
-1. **OOCSS (Object-Oriented CSS)**
-2. **SMACSS (Scalable and Modular Architecture for CSS)**
-3. **BEM (Block, Element, Modifier)**
-4. **Atomic CSS / Utility-First CSS (e.g., Tailwind CSS)**
-5. **ITCSS (Inverted Triangle CSS)**
-
-# **九、CSS 框架与库 (Frameworks & Libraries)**
-
-1. **UI 框架 (UI Frameworks): Bootstrap, Foundation, Bulma, Materialize**
-2. **功能优先框架 (Utility-First Frameworks): Tailwind CSS**
-3. **CSS-in-JS: Styled Components, Emotion**
-
-# **十、性能优化与最佳实践 (Performance & Best Practices)**
-
-1. **减少 HTTP 请求 (Reduce HTTP Requests)**
-
-- 合并文件 (Concatenation)
-
-2. **压缩 CSS (Minify CSS)**
-3. **使用 CDN (Use CDN)**
-4. **避免使用 @import (Avoid @import)**
-5. **优化选择器性能 (Optimize Selector Performance)**
-
-- 避免深层嵌套, 避免通用选择器作为键选择器
-
-6. **减少重绘与回流 (Reduce Repaints & Reflows)**
-
-- 使用 transform 和 opacity 进行动画
-- 避免频繁改变布局相关属性
-
-7. **代码组织与可维护性 (Code Organization & Maintainability)**
-8. **可访问性 (Accessibility - A11y)**
-
-- 颜色对比度, :focus 样式, ARIA 属性配合
-
-9. **浏览器兼容性 (Browser Compatibility)**
-
-- 使用 Can I Use 查看支持情况
-- 渐进增强与优雅降级
-
-10. **代码检查 (Linting)**
-
-- Stylelint
-
-11. **Reset CSS / Normalize CSS**
-
-# **十一、CSS 新特性与未来趋势 (New Features & Future Trends)**
-
-1. **容器查询 (Container Queries): @container**
-2. **级联层 (@layer)**
-3. **作用域 CSS (@scope - 实验性)**
-4. **新的颜色空间与函数: lch(), oklch(), color-mix(), color-contrast()**
-5. **CSS Houdini (提供底层 API，允许开发者扩展 CSS)**
-6. **嵌套选择器 (Nesting Selectors - 原生支持)**
-7. **滚动驱动动画 (Scroll-driven Animations)**
-8. **三角函数: sin(), cos(), tan(), etc.**
-9. **视图过渡 API (View Transitions API)**
