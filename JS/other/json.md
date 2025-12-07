@@ -1,31 +1,49 @@
-### 1. **JSON 基础**
 
-#### 1.1 什么是 JSON？
 
 - **定义**: JSON 是一种轻量级的数据交换格式，易于人阅读和编写，也易于机器解析和生成。它是基于 JavaScript 对象表示法的文本格式。
-- **语法结构**:
 
-  - **对象**: `{}` 包裹的键值对集合，键必须是字符串。
-  - **数组**: `[]` 包裹的有序数据集合。
-  - **数据类型**: 字符串、数字、布尔值、数组、对象、`null`。
+JSON（JavaScript Object Notation）是一种轻量级的数据交换格式，语法非常严格。下面用得好看、用得规范是前端面试和日常开发的必备技能。
+
+下面给你整理一份最全、最清晰、最实用的 **JSON 格式总结**，直接背下来就行！
+
+### 1. JSON 的合法数据类型（只有这 6 种！）
+
+| 类型          | 写法示例                              | 说明                                      |
+|---------------|------------------------------------------------|-------------------------------------------|
+| 数字 number   | `123`、`-50`、`3.14`、`0`、`-0`、`3e8`         | 不区分整数/浮点数，不允许前导 0（除了0本身）|
+| 字符串 string | `"hello"`、`"中文"`、`"\"转义\""`、`""`         | 必须用双引号，单引号非法                  |
+| 布尔 boolean  | `true`、`false`                                | 必须小写，`True`/`FALSE` 非法             |
+| 空值 null     | `null`                                         | 必须小写，`NULL`/`undefined` 非法         |
+| 数组 array    | `[]`、`[1, "hi", true, null]`                  | 有序集合                                  |
+| 对象 object   | `{}`、`{"name":"张三","age":18}`                | 无序的键值对集合，键必须是字符串          |
+
+**注意：JSON 中不允许出现 undefined、function、Symbol、Date 对象等**
+
+### 2. 正确的 JSON 示例
 
 ```json
 {
-  "name": "John",
-  "age": 30,
+  "name": "name": "张三",
+  "age": 18,
   "isStudent": false,
-  "courses": ["Math", "Science"],
+  "score": null,
+  "hobbies": ["游戏", "篮球", "编程"],
   "address": {
-    "street": "123 Main St",
-    "city": "New York"
-  }
+    "province": "广东",
+    "city": "深圳",
+    "postcode": "518000"
+  },
+  "friends": [
+    { "id": 1, "name": "李四" },
+    { "id": 2, "name": "王五" }
+  ],
+  "gpa": 3.88,
+  "graduated": true
 }
 ```
 
-#### 1.2 JSON 和 JavaScript 对象的区别
 
-- JSON 只能表示数据结构（没有方法和函数等）。
-- JavaScript 对象包含方法和属性，可以执行代码。
+# 💯💯💯 JSON.parse() AND JSON.stringify()
 
 ### 2. **JSON 的解析与生成**
 
@@ -51,115 +69,6 @@ const jsonString = JSON.stringify(obj);
 console.log(jsonString); // '{"name":"John","age":30}'
 ```
 
-### 3. **JSON 与前端的应用**
-
-#### 3.1 通过 Fetch API 获取 JSON 数据
-
-- **从服务器获取 JSON 数据并解析**：
-
-```js
-fetch("https://api.example.com/data")
-  .then((response) => response.json()) // 解析 JSON
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Error:", error));
-```
-
-#### 3.2 将 JSON 数据发送到后端
-
-- **POST 请求发送 JSON 数据**：
-
-```js
-const data = {
-  name: "John",
-  age: 30,
-};
-
-fetch("https://api.example.com/submit", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(data), // 将 JavaScript 对象转换为 JSON 字符串
-})
-  .then((response) => response.json())
-  .then((result) => console.log("Success:", result))
-  .catch((error) => console.error("Error:", error));
-```
-
-### 4. **JSON 进阶使用**
-
-#### 4.1 JSON Schema
-
-- **JSON Schema** 用于描述 JSON 数据的结构，可以帮助进行数据验证和约束。
-- **示例**: 一个简单的 JSON Schema 描述用户数据。
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "age": {
-      "type": "integer"
-    }
-  },
-  "required": ["name", "age"]
-}
-```
-
-#### 4.2 使用 JSONP 实现跨域请求
-
-- **JSONP** (JSON with Padding) 是一种通过 `<script>` 标签进行跨域请求的技术，主要用于早期的跨域问题。
-
-```js
-function handleResponse(data) {
-  console.log(data);
-}
-
-const script = document.createElement("script");
-script.src = "https://api.example.com/jsonp?callback=handleResponse";
-document.body.appendChild(script);
-```
-
-#### 4.3 序列化与反序列化
-
-- **深度拷贝**: 使用 `JSON.parse()` 和 `JSON.stringify()` 可以进行对象的深度拷贝。
-
-```js
-const obj = { name: "John", details: { age: 30 } };
-const deepCopy = JSON.parse(JSON.stringify(obj));
-```
-
-### 5. **性能优化与注意事项**
-
-#### 5.1 JSON 大数据的处理
-
-- 对于大数据量的 JSON，可以通过流式处理、分页加载等方式避免一次性加载大量数据导致性能问题。
-
-#### 5.2 JSON 与浏览器存储
-
-- JSON 数据通常被用来在前端存储和读取数据，例如 `localStorage` 和 `sessionStorage`。
-
-```js
-// 存储
-localStorage.setItem("user", JSON.stringify({ name: "John", age: 30 }));
-
-// 读取
-const user = JSON.parse(localStorage.getItem("user"));
-console.log(user.name); // "John"
-```
-
-### 6. **工具与库**
-
-- **JSONLint**: 在线工具，用于验证 JSON 的正确性。
-- **AJV**: 一个 JSON Schema 验证器库。
-- **json-server**: 用于快速构建一个假的 REST API，支持 JSON 数据作为数据库。
-
----
-
-`JSON.parse()` 和 `JSON.stringify()` 是 JavaScript 中处理 JSON 数据的两个核心方法。它们在前端开发中被广泛使用，尤其是在数据交换、存储和传输过程中。下面是这两个方法的详细使用方法大全。
 
 ### 1. **`JSON.parse()`**
 
@@ -387,3 +296,95 @@ console.log(jsonStringToSend); // '{"name":"John","age":30}'
 - **`JSON.parse()`**: 用于将 JSON 字符串转换为 JavaScript 对象，可以通过 `reviver` 函数控制数据的转换过程。
 - **`JSON.stringify()`**: 用于将 JavaScript 对象转换为 JSON 字符串，可以通过 `replacer` 过滤数据，使用 `space` 参数进行格式化输出。
 - 这两个方法在前后端通信、存储数据等场景中有着广泛的应用，掌握它们可以帮助你更高效地处理 JSON 数据。
+
+# 💯💯💯
+
+
+
+### 3. **JSON 与前端的应用**
+
+#### 3.1 通过 Fetch API 获取 JSON 数据
+
+- **从服务器获取 JSON 数据并解析**：
+
+```js
+fetch("https://api.example.com/data")
+  .then((response) => response.json()) // 解析 JSON
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Error:", error));
+```
+
+#### 3.2 将 JSON 数据发送到后端
+
+- **POST 请求发送 JSON 数据**：
+
+```js
+const data = {
+  name: "John",
+  age: 30,
+};
+
+fetch("https://api.example.com/submit", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(data), // 将 JavaScript 对象转换为 JSON 字符串
+})
+  .then((response) => response.json())
+  .then((result) => console.log("Success:", result))
+  .catch((error) => console.error("Error:", error));
+```
+
+### 4. **JSON 进阶使用**
+
+#### 4.1 JSON Schema
+
+- **JSON Schema** 用于描述 JSON 数据的结构，可以帮助进行数据验证和约束。
+- **示例**: 一个简单的 JSON Schema 描述用户数据。
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer"
+    }
+  },
+  "required": ["name", "age"]
+}
+```
+
+---
+
+`JSON.parse()` 和 `JSON.stringify()` 是 JavaScript 中处理 JSON 数据的两个核心方法。它们在前端开发中被广泛使用，尤其是在数据交换、存储和传输过程中。下面是这两个方法的详细使用方法大全。
+
+
+
+### 3. 常见的非法 JSON（面试常考！）
+
+| 错误写法                             | 错误原因                        | 正确写法                  |
+|--------------------------------------|----------------------------------|---------------------------|
+| `{ name: "张三" }`                   | 键没有加双引号                   | `{"name": "张三"}`        |
+| `{'name': '张三'}`                   | 单引号非法                      | `{"name": "张三"}`        |
+| `{ "age": 018 }`                     | 数字前导0非法（八进制误解）      | `{"age": 18}`             |
+| `{ "data": undefined }`              | undefined 不能出现在JSON中       | `{"data": null}`          |
+| `{ "say": function(){} }`            | 函数不能出现在JSON中             | 删掉或转为字符串          |
+| `{ "date": new Date() }`             | Date 对象会变成字符串，但不标准  | 手动转为 `"2025-12-07"`   |
+| `// 注释` 或 `/* 注释 */`            | JSON 不支持注释！                | 去掉注释                  |
+| `{ "trailing comma": "bad", }`       | 结尾多余逗号（某些解析器报错）   | 删除最后一个逗号          |
+
+### 4. 面试高频问题速答表
+
+| 面试问                              | 标准答案                                      |
+|-------------------------------------|-----------------------------------------------|
+| JSON 字符串的引号必须用什么？        | 必须用双引号，单引号非法                      |
+| JSON 支持注释吗？                   | 不支持，一点注释都不行                        |
+| JSON 中可以放函数吗？               | 不可以，函数、undefined、Symbol 都会丢失或报错 |
+| JSON 和 JavaScript 对象的区别？     | JSON 是纯数据格式，JS 对象可以有方法和 undefined |
+| JSON.parse('{"a": 018}') 会怎样？   | 报错！因为前导0的数字被认为是八进制（严格模式禁止） |
+| JSON.stringify(new Date()) 结果？   | 得到字符串，如 "2023-12-07T00:00:00.000Z"     |
