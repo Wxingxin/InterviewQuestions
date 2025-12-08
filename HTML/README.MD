@@ -487,8 +487,8 @@ IntersectionObserver 检测到某张 img 进入视口
 | **SVG** 🚩                           | 矢量图，可缩放              | 图标、Logo       |
 | **JPEG/JPG** 🏴‍☠️                      | 有损压缩，小体积            | 照片类图片       |
 | **GIF** 🏴‍☠️                           | 动图，最多 256 色           | 表情、动效       |
-| **WebP** <font color=red> 新 </font> | 体积小、支持透明            | 现代 Web（推荐） |
-| **AVIF** <font color=red> 新 </font> | 新一代格式，压缩更强        | 高性能网站       |
+| **WebP** 🦋 | 体积小、支持透明            | 现代 Web（推荐） |
+| **AVIF** 🦋 | 新一代格式，压缩更强        | 高性能网站       |
 
 ---
 
