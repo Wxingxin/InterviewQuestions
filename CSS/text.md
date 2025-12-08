@@ -6,64 +6,21 @@
 
 ## 1. `list-style-type`
 
-设置列表项前的标记类型（项目符号、编号等）。
 
 ### **常用取值：**
 
-**无序列表：**
-
-* `disc`（默认 ●）
-* `circle`（○）
-* `square`（■）
-* `none`（无符号）
-
-**有序列表：**
-
-* `decimal`（1,2,3）
-* `decimal-leading-zero`（01,02,03）
-* `lower-alpha`（a,b,c）
-* `upper-alpha`（A,B,C）
-* `lower-roman`（i, ii, iii）
-* `upper-roman`（I, II, III）
-
-### **示例：**
-
-```css
-list-style-type: square;
-```
 
 ---
 
 ## 2. `list-style-image`
 
-使用图像作为列表项标记。
 
-### **示例：**
-
-```css
-list-style-image: url("icon.png");
-```
-
-⚠️ 图片太大时无法自动缩放，较少使用。
 
 ---
 
 ## 3. `list-style-position`
 
-控制项目符号的位置。
 
-### **取值：**
-
-| 值             | 说明                |
-| ------------- | ----------------- |
-| `outside`（默认） | 符号在文本外；文本换行会与左侧对齐 |
-| `inside`      | 符号在文本内部；换行文本会缩进   |
-
-### 示例：
-
-```css
-list-style-position: inside;
-```
 
 ---
 
@@ -93,24 +50,6 @@ list-style: none;
 
 ## 1. `border-collapse`
 
-设置单元格边框是否合并。
-
-### **取值：**
-
-| 值              | 说明                         |
-| -------------- | -------------------------- |
-| `collapse`     | 边框合并（常用于简洁表格）              |
-| `separate`（默认） | 边框独立，允许设置 `border-spacing` |
-
-### 示例：
-
-```css
-table {
-  border-collapse: collapse;
-}
-```
-
----
 
 ## 2. `border-spacing`
 
@@ -189,8 +128,4 @@ table {
 * 列宽按表格总宽度 + 第一行宽度来分配
 * 内容溢出时会换行或隐藏
 
----
 
-# 📌 如需 Demo 示例我可以写一个
-
-我可以提供一个包含所有列表和表格属性的 **完整 HTML + CSS 示例**，也可以做成对照效果图。如果你想要可视化示例，告诉我即可。

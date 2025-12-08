@@ -651,16 +651,84 @@ outline-offset: 5px; /* 离元素的距离 */
 
 > ## **列表样式 (List Styling)**
 
-- list-style-type
-- list-style-image
-- list-style-position
-- list-style (简写)
+> #### list-style-type
+
+设置列表项前的标记类型（项目符号、编号等）。
+
+**无序列表：**
+
+* `disc`（默认 ●）
+* `circle`（○）
+* `square`（■）
+* `none`（无符号）
+
+**有序列表：**
+
+* `decimal`（1,2,3）
+* `decimal-leading-zero`（01,02,03）
+* `lower-alpha`（a,b,c）
+* `upper-alpha`（A,B,C）
+* `lower-roman`（i, ii, iii）
+* `upper-roman`（I, II, III）
+
+
+```css
+list-style-type: square;
+```
+> #### list-style-image
+使用图像作为列表项标记。
+
+```css
+list-style-image: url("icon.png");
+```
+
+⚠️ 图片太大时无法自动缩放，较少使用。
+
+> #### list-style-position
+
+控制项目符号的位置。
+
+
+
+| 值             | 说明                |
+| ------------- | ----------------- |
+| `outside`（默认） | 符号在文本外；文本换行会与左侧对齐 |
+| `inside`      | 符号在文本内部；换行文本会缩进   |
+
+```css
+list-style-position: inside;
+```
+> #### list-style (简写)
 
 > ## **表格样式 (Table Styling)**
 
-- border-collapse, border-spacing
-- caption-side, empty-cells
-- table-layout
+> #### border-collapse, 
+
+设置单元格边框是否合并。
+
+### **取值：**
+
+| 值              | 说明                         |
+| -------------- | -------------------------- |
+| `collapse`     | 边框合并（常用于简洁表格）              |
+| `separate`（默认） | 边框独立，允许设置 `border-spacing` |
+
+### 示例：
+
+```css
+table {
+  border-collapse: collapse;
+}
+```
+
+---
+> #### border-spacing
+
+> ####  caption-side, 
+
+> #### empty-cells
+
+> ####  table-layout
 
 # 💯💯💯 动画
 
